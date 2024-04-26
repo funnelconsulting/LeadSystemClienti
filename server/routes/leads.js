@@ -7,7 +7,6 @@ const router = express.Router();
 const {getLeadsFb, getLeadsManual, getAllLead, calculateFatturatoByUtente, calculateFatturatoByOrientatore, calculateFatturatoByOrientatoreUser, getLeadsManualWhatsapp, updateLeadRecall, getLeadsManualBase, getOtherLeads, getOrientatoreLeads, getOtherLeadsOri} = require('../controllers/leads');
 const { createOrientatore, deleteOrientatore, createLead, deleteLead, updateLead, getOrientatori, getLeadDeleted, updateOrientatore, deleteRecall } = require('../controllers/orientatore');
 const { getAllLeadForCounter, LeadForMarketing } = require('../controllers/superAdmin');
-const { getDataCap } = require('../controllers/comparadentista');
 
 router.post("/get-leads-fb", getLeadsFb);
 router.post("/get-leads-manual", getLeadsManual);
@@ -34,8 +33,6 @@ router.post('/delete-recall', deleteRecall);
 router.get('/get-all-leads-for-counter', getAllLeadForCounter);
 
 router.get('/leads-for-marketing', LeadForMarketing);
-
-router.post("/lead-cap", getDataCap);
 
 router.post('/modify-daily-cap', dailyCap);
 
