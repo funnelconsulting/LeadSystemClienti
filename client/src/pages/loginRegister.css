@@ -1,0 +1,25 @@
+.register, .login{
+    font-family: "Poppins", sans-serif;
+}
+.register {
+    margin-top: 30px;
+    min-height: 120vh;
+}
+.a-login{
+    color: #3471CC;
+}
+.button-reg{
+    background: #3471CC;
+    border-radius: 10px;
+    border: none;
+    color: white;
+    padding: 6px 25px;
+}
+.salta-login{
+    border: 2px solid #3471CC;
+    background-color: white;
+    cursor: pointer;
+    border-radius: 7px;
+    margin-right: 10px;
+    padding: 6px 12px;
+}
