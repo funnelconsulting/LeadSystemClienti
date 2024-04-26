@@ -445,7 +445,7 @@ const resetDailyCap = async () => {
   console.log('Eseguito il reset del daily Lead');
 });*/
 
-cron.schedule('10,46,20 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () => {
+/*cron.schedule('10,46,20 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () => {
   getDentistaLead();
   console.log('Prendo i lead di Bluedental 3.0');
 });
@@ -468,7 +468,7 @@ cron.schedule('8,49,18 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () 
 cron.schedule('15,58,25,40 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () => {
   calculateAndAssignLeadsEveryDay();
   console.log('Assegno i lead di bludental');
-});
+});*/
 
 /*cron.schedule('12 8,9,10,11,12,14,15,16,17,18,19,20,21,22,23 * * *', () => {
   //getTagLeads();
