@@ -89,10 +89,7 @@ export default function LeadEntry({ secref, id, index, data, handleModifyPopup, 
               </p>
           </div>
           <div className="modifica" onClick={() => handleModifyPopup(data)}>+ Info</div>
-          <hr style={{width: '70%'}}/>
-          <div className='date-recall'>
-            <p>Chiamate effettuate <span>{data.tentativiChiamata ? data.tentativiChiamata: '0'}</span></p>
-          </div>
+          <hr style={{width: '100%'}}/>
           <div className='options'>
             <div className="sposta" onClick={() => handleModifyPopupEsito(data)}>Sposta</div>
           </div>

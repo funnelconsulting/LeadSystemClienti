@@ -427,6 +427,10 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
 
       const [openPage, setOpenPage] = useState("scheda");
       const [chooseMotivo, setChooseMotivo] = useState(false);
+      const [expanded, setExpanded] = useState(false);
+      const MAX_CHARS = 100;
+      const fullText = lead?.summary || "Nessuna analisi disponibile";
+      const displayedText = expanded ? fullText : fullText.substring(0, MAX_CHARS) + (fullText.length > MAX_CHARS ? '...' : '');
 
     return (
         <>
@@ -546,7 +550,7 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                         <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
                                         {esito === "Fissato" && fatturato !== "0" && <span>{fatturato}€</span>}
                                     </p>
-                                    {motivo && motivo !== "" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
+                                    {motivo && motivo !== "" && lead.esito === "Non interessato" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
                                 </div>
                             </div>
                             <div className='popup-middle-top2'>
@@ -568,19 +572,16 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                             
                         </div>
                         <hr className='linea-che-serve' />
-                        <div className='maggiori-informazioni'>
-                            <h4>TENTATIVI DI CONTATTO</h4>
-                            <div className='tentativi-contatto'>
-                                <p>Numero tentativi di chiamata:</p>
-                                <div>
-                                    <button onClick={() => setTentativiChiamata("1")} className={tentativiChiamata === "1" ? "tent-active" : ""}>1</button>
-                                    <button onClick={() => setTentativiChiamata("2")} className={tentativiChiamata === "2" ? "tent-active" : ""}>2</button>
-                                    <button onClick={() => setTentativiChiamata("3")} className={tentativiChiamata === "3" ? "tent-active" : ""}>3</button>
-                                    <button onClick={() => setTentativiChiamata("4")} className={tentativiChiamata === "4" ? "tent-active" : ""}>4</button>
-                                    <button onClick={() => setTentativiChiamata("5")} className={tentativiChiamata === "5" ? "tent-active" : ""}>5</button>
-                                    <button onClick={() => setTentativiChiamata("6")} className={tentativiChiamata === "6" ? "tent-active" : ""}>6</button>
-                                </div>
-                            </div>
+                        <div className='sommario'>
+                           <h4>Sommario</h4>
+                           <p>
+                              {displayedText}
+                                {fullText.length > MAX_CHARS && (
+                                <span onClick={() => setExpanded(!expanded)}>
+                                    {expanded ? 'Leggi meno' : 'Leggi di più'}
+                                </span>
+                                )}
+                            </p> 
                         </div>
                         <hr className='linea-che-serve' />
                         <div className='maggiori-informazioni'>
@@ -638,7 +639,7 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                     <input disabled placeholder={lead.città.charAt(0).toUpperCase()} value={città} onChange={(e) => setCittà(e.target.value)} />
                                 </div>
                                 <div className='trat-cont-input'>
-                                    <p>Trattamento</p>
+                                    <p>Campo aggiuntivo</p>
                                     <input className='input-trattamento-hover' disabled placeholder={lead.trattamento.replace(/_/g, ' ')} value={trattamento} onChange={(e) => setTrattamento(e.target.value)} />
                                     <span className="trattamento-fullname">{lead.trattamento.replace(/_/g, ' ')}</span>
                                 </div>

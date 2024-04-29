@@ -13,35 +13,35 @@ const LeggendaEsiti = ({handleNotShow}) => {
                 <span>0</span>
                 <div>
                 <p>Da contattare</p>
-                <p>Lead appena entrata, ancora da lavorare</p>
-                </div>
-            </div>
-            <div className="esiti-item">
-                <span>0</span>
-                <div>
-                <p>Non risponde</p>
-                <p>L’ho provato a contattatare ma non risponde, posso richiamare fino a 5 tentativi</p>
+                <p>Lead generate che devono essere contattati per la prima volta</p>
                 </div>
             </div>
             <div className="esiti-item">
                 <span>0</span>
                 <div>
                 <p>Da richiamare</p>
-                <p>Mi ha risposto, ma ho ripreso appuntamento per risentirlo/a.</p>
+                <p>Lead che non hanno risposto alla telefonata o  che in quel momento non potevano parlare, quindi l’operatore ha concordato con la loro una recall</p>
                 </div>
             </div>
             <div className="esiti-item">
                 <span>0</span>
                 <div>
                 <p>Lead persa</p>
-                <p>Oltre i 6 tentativi di chiamata</p>
+                <p>Lead non interessata, numero errato, o che non ha mai risposto</p>
                 </div>
             </div>
             <div className="esiti-item">
                 <span>0</span>
                 <div>
-                <p>Fissato</p>
-                <p>Fissato appuntamento con il cliente</p>
+                <p>Opportunità</p>
+                <p>Lead interessate al servizio, in fase di trattativa.</p>
+                </div>
+            </div>
+            <div className="esiti-item">
+                <span>0</span>
+                <div>
+                <p>Venduto</p>
+                <p>Lead che ha acquistato il servizio offerto</p>
                 </div>
             </div>
         </div> 

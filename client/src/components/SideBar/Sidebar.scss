@@ -347,22 +347,39 @@ nav .selectedBlue img {
     }
 }
 
-@media screen and (width <=600px) {
+@media screen and (max-width : 600px) {
     .header {
         width: 70vw !important;
+        z-index: 100000 !important;
+        position: fixed !important;
+        left: 0;
+        bottom: 0;
+        top: 0;
+        background-color: white !important;
+        .menu-icon{
+            background-color: white !important;
+        }
     }
 
     .header-mobile {
         z-index: 999;
         transform: translateX(-50px);
         width: 0 !important;
-        position: relative;
+        position: fixed;
+        bottom: 0;
+        top: 0;
 
         .menu-icon {
             top: 0;
-            right: -80px;
-            position: absolute;
-            background-color: var(--bg);
+            right: -100px;
+            z-index: 100000 !important;
+            position: fixed;
+            padding: 12px;
+            background-color: #3471CC;
+            border-bottom-right-radius: 7px;
+        }
+        .menu-icon > * {
+            color: white;
         }
     }
 }

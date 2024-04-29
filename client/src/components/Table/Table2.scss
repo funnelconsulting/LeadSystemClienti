@@ -1056,6 +1056,10 @@ thead {
 
 
 @media screen and (width <=600px) {
+  .table-big-container{
+    width: 65% !important;
+    margin-left: 10px;
+  }
   .Table-admin {
     .filtralead {
       padding: 0 6px !important;

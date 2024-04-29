@@ -10,11 +10,8 @@ import { SidebarContext } from '../../context/SidebarContext';
 const Sidebar = () => {
 
     const { isSidebarOpen, toggleSidebar } = useContext(SidebarContext);
-
     const [state, setState, headerIndex] = useContext(UserContext);
     const [active, setActive] = useState();
-
-
 
     useEffect(() => {
     if (isSidebarOpen) {
@@ -86,7 +83,7 @@ const Sidebar = () => {
 
     return (
         <div className={active ? 'header' : 'header-mobile'} style={{zIndex:headerIndex}}>
-            <div className='menu-icon' onClick={activateNav} style={active ? {margin: '10px', gap: '3.5rem' } : null}>
+            <div className='menu-icon' onClick={activateNav} style={active ? {margin: '0px', gap: '3.5rem' } : null}>
                 <h5 style={{fontFamily: 'Poppins, sans-serif', fontWeight: '500'}}>{active ? state.user.role && state.user.role === "orientatore" ? state.user.nome : state.user.name : null}</h5>
                 {!active ? <IoMdMenu className='menu' /> : <IoMdMenu className='menu' />}
             </div>

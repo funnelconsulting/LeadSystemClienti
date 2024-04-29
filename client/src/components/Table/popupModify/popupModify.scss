@@ -25,6 +25,23 @@
     box-shadow: 0px 0px 20px 2000px rgba(0, 0, 0, 0.767);
     overflow-y: auto;
 }
+.sommario{
+    padding: 5px 30px;
+    margin-top: 20px;
+}
+.sommario > h4 {
+    color: #3471CC;
+    font-size: 15px;
+}
+.sommario > p {
+    font-size: 14px;
+}
+.sommario span {
+    margin-left: 10px;
+    text-decoration: underline;
+    color: #3471CC;
+    cursor: pointer;
+}
 .popup-modify::-webkit-scrollbar{
     width: 5px;
 }
@@ -565,21 +582,6 @@ textarea {
     }
 }
 
-// @media screen and (max-width: 500px) {
-//     .popup-modify {
-//         left: 0;
-//         width: 100%;
-//         margin: 0 auto !important;
-//     }
-
-//     .popup-middle-top {
-//         flex-wrap: wrap;
-//     }
-
-//     .popup-middle-bottom {
-//         flex-wrap: wrap;
-//     }
-// }
 .maggiori-informazioni{
     padding: 20px 0;
 }
@@ -1246,3 +1248,35 @@ textarea {
     border-radius: 5px;
     font-weight: 500;
   }
+
+  @media screen and (max-width: 600px) {
+    .popup-modify,
+    .popup-modify-calendar {
+        position: fixed !important;
+        top: 1vh;
+        left: 1% !important;
+        width: 98% !important;
+        height: 95vh;
+        background-color: white;
+        color: black;
+        z-index: 1000;
+        border-radius: 10px;
+        font-family: 'Poppins', sans-serif;
+        box-shadow: 0px 0px 20px 2000px rgba(0, 0, 0, 0.767);
+        overflow-y: auto;
+    }
+    .popup-middle-top {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .popup-middle-top2 {
+        gap: 0rem;
+    }
+    .choose-esito-popup, .choose-esito-popup-calendar{
+        width: 95% !important;
+        position: fixed;
+        left: 2%;
+        z-index: 10100;
+    }
+ }

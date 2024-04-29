@@ -16,10 +16,15 @@ const AuthRouteWithLayout = ({ component: Component, ...rest }) => {
     return <Navigate to="/login" />;
   }
 
+  const isMobile = () => {
+    const mobileBreakpoint = 768;
+    return window.innerWidth <= mobileBreakpoint;
+  };
+
   return state && state.token ? (
     <div className="big-container">
       <Sidebar />
-      <div  className={`${isSidebarOpen ? 'boost-container' : 'boost-container-closed'}`} style={containerStyle}>
+      <div className={isMobile() ? 'container-mobile' : `${isSidebarOpen ? 'boost-container' : 'boost-container-closed'}`} style={containerStyle}>
         <Component {...rest} />
       </div>
     </div>

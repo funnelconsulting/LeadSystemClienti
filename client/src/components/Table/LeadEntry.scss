@@ -301,11 +301,19 @@
         }
         
         .options {
-
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
             .sposta {
                 display: block !important;
             }
         }
+    }
+    .recPeg{
+        position: absolute;
+        left: 15px;
+        bottom: 10px !important; 
     }
 }
 

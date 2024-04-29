@@ -998,7 +998,8 @@
 
     .filtralead {
         .wrapperwrapper {
-            flex-direction: column !important;
+            flex-direction: row !important;
+            flex-wrap: wrap !important;
             gap: 0.3rem !important;
 
             .leadslinks {
@@ -1153,13 +1154,58 @@
     }
 }
 
-@media screen and (width <=700px) {
+@media screen and (max-width : 700px) {
     .sectionswrapper {
+        width: 70%;
         .secwrap {
-            min-width: 90% !important;
+            min-width: 80% !important;
         }
     }
-
+    .table-main-mobile {
+        width: 80% !important;
+    }
+    .home-mob{
+        width: 100%;
+    }
+    .leggenda-visibile{
+        width: 90%;
+        position: fixed;
+        background-color: #ffffff;
+        border-radius: 10px;
+        height: auto;
+        max-height: auto;
+        top: 20px;
+        z-index: 1000;
+        padding-top: 0;
+        left: 3%;
+        transform: translateY(0%);
+        transition: 0.3s all;
+        box-shadow: 0 0 10px 2px rgba(0, 0, 0, 0.352);
+    }
+    .leggenda-slide-cont{
+        width: 90%;
+        position: fixed;
+        background-color: #ffffff;
+        border-radius: 10px;
+        height: 95vh;
+        max-height: 95vh;
+        top: 0px;
+        z-index: 0;
+        padding-top: 0;
+        left:3%;
+        transform: translateY(-150%);
+        transition: 0.3s all;
+    }
+    .btn-legenda-visibile{
+        width: fit-content;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-left: 10px;
+    }
+    .topDash{
+        width: 100% !important;
+    }
     .impostazioni-top {
         .impostazioni-button {
             transform: translateY(0px) !important;
@@ -1167,27 +1213,33 @@
     }
 }
 
-@media screen and (width <=600px) {
+@media screen and (width <=650px) {
     .topDash {
-        align-items: flex-end !important;
-        margin-bottom: 40px !important;
+        align-items: first baseline !important;
+        margin-bottom: 20px !important;
+        flex-wrap: wrap;
+        margin-left: 2.4rem;
 
         #lasttopdashitem {
             margin-top: 20px !important;
         }
 
         #fstdiv {
-            transform: translateY(10px) !important;
+            display: none !important;
+        }
+        #lasttopdashitem #dwrep{
+            display: none !important;
         }
     }
 
     #dashcerca {
         width: 100% !important;
+        font-size: 13px !important;
     }
 
     #fstdashitem,
     #lasttopdashitem {
-        width: 40% !important;
+        width: 50% !important;
     }
 
     .MainDash {
@@ -1197,6 +1249,7 @@
 
     .filtralead {
         .wrapperwrapper {
+            width: 70% !important;
             .wrapper {
                 flex-wrap: wrap !important;
                 gap: 1rem !important;

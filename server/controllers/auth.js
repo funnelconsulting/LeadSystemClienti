@@ -68,14 +68,14 @@ exports.register = async (req, res) => {
         text: `Puoi verificare la tua email con questo codice: ${codeVerifyEmail}.`,
       };
 
-      transporter.sendMail(mailOptionsVerifyEmail, (error, info) => {
+      /*transporter.sendMail(mailOptionsVerifyEmail, (error, info) => {
         if (error) {
           console.log(error);
           return res.status(500).json({ error: 'Si è verificato un errore durante l\'invio dell\'email' });
         }
         console.log('Email inviata:', info.response);
         res.status(200).json({ message: 'Email inviata correttamente' });
-      })
+      })*/
   
       transporter.sendMail(mailOptions, (error, info) => {
         if (error) {

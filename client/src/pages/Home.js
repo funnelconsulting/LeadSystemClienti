@@ -20,7 +20,7 @@ const Home = ({ history, setNextSchedule }) => {
   const [showLegenda, setShowLegenda] = useState(false);
 
   return (
-    <div>
+    <div className="home-mob">
     {isLoading ? 
         <div
         className="d-flex justify-content-center fw-bold"

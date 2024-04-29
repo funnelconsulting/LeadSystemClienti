@@ -159,9 +159,21 @@ button, a {
     cursor: pointer;
   }
 }
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
   body{
     overflow-y: auto;
+    width: 100%;
+  }
+  .container-mobile{
+    width: 100%;
+    padding-bottom: 40px;
+  }
+  .App {
+    overflow-x: hidden;
+    width: 100% !important;
+  }
+  .big-container{
+    overflow-x: hidden;
   }
 }
 

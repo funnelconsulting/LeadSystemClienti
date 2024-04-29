@@ -1454,37 +1454,6 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           </div>
           <div className="secwrap"
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Non risponde")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Non risponde"}
-              refreshate={false}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.nonRisponde && filteredData && filteredData.filter(x => x.status == "Non risponde")
-              .reverse()
-              .sort((a, b) => parseInt(a.tentativiChiamata) - parseInt(b.tentativiChiamata))
-              .map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                  nuovaEtichetta={nuovaEtichetta}
-                  setNuovaEtichetta={setNuovaEtichetta}
-                  selezionOrientatore={openChangeOrientatore}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, "Da richiamare")}
             onDragEnd={handleDragEnd}
           >
@@ -1543,16 +1512,47 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           </div>
           <div className="secwrap"
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Fissato")}
+            onDrop={(e) => handleDrop(e, "Opportunità")}
             onDragEnd={handleDragEnd}
           >
             <LeadHeader
               handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Fissato"}
+              type={"Opportunità"}
               refreshate={false}
               toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
             <div className="entries">
-              {toggles.venduto && filteredData && filteredData.filter(x => x.status == "Fissato").reverse().map((row, k) =>
+              {toggles.nonRisponde && filteredData && filteredData.filter(x => x.status == "Opportunità")
+              .reverse()
+              .sort((a, b) => parseInt(a.tentativiChiamata) - parseInt(b.tentativiChiamata))
+              .map((row, k) =>
+                <LeadEntry
+                  id={JSON.stringify(row)}
+                  index={k}
+                  handleRowClick={handleRowClick} data={row}
+                  handleModifyPopup={handleModifyPopup}
+                  secref={secref}
+                  handleModifyPopupEsito={handleModifyPopupEsito}
+                  handleDelete={handleDelete}
+                  campagna={row.campagna}
+                  nuovaEtichetta={nuovaEtichetta}
+                  setNuovaEtichetta={setNuovaEtichetta}
+                  selezionOrientatore={openChangeOrientatore}
+                />
+              )}
+            </div>
+          </div>
+          <div className="secwrap"
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, "Venduto")}
+            onDragEnd={handleDragEnd}
+          >
+            <LeadHeader
+              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
+              type={"Venduto"}
+              refreshate={false}
+              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
+            <div className="entries">
+              {toggles.venduto && filteredData && filteredData.filter(x => x.status == "Venduto").reverse().map((row, k) =>
                 <LeadEntry
                   id={JSON.stringify(row)}
                   index={k}
