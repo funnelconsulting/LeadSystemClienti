@@ -28,7 +28,7 @@ mongoose
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());
 
-async function loadSavedCredentialsIfExist() {
+/*async function loadSavedCredentialsIfExist() {
   try {
     const content = await fs.readFile(TOKEN_PATH);
     const credentials = JSON.parse(content);
@@ -36,8 +36,8 @@ async function loadSavedCredentialsIfExist() {
   } catch (err) {
     return null;
   }
-}
-async function saveCredentials(client) {
+}*/
+/*sync function saveCredentials(client) {
   const content = await fs.readFile(CREDENTIALS_PATH);
   const keys = JSON.parse(content);
   const key = keys.installed || keys.web;
@@ -62,7 +62,7 @@ async function authorize() {
     await saveCredentials(client);
   }
   return client;
-}
+}*/
 
 async function exportChatbot(auth) {
   try {
