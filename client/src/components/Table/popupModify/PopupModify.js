@@ -39,23 +39,11 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
     const [tentativiChiamata, setTentativiChiamata] = useState(lead.tentativiChiamata ? lead.tentativiChiamata : "0");
 
     const [motivo, setMotivo] = useState(lead.motivo ? lead.motivo : "");
-    const patientTypes = ["Nuovo paziente", "Gia’ paziente"];
-    const treatments = ["Impianti", "Pulizia dei denti", "Protesi Mobile", "Sbiancamento", "Ortodonzia", "Faccette dentali"];
-    const locations = [
-      "Desenzano Del Garda", "Melzo", "Carpi", "Lodi", "Cantù", "Mantova", "Seregno", "Milano Piazza Castelli", "Abbiategrasso",
-      "Pioltello", "Vigevano", "Milano Via Parenzo", "Settimo Milanese", "Cremona", "Milano Lomellina", "Monza", "Busto Arsizio", "Brescia",
-      "Cinisello Balsamo", "Cologno Monzese", "Varese", "Como", "San Giuliano Milanese", "Milano Brianza", "Bergamo", "Roma Marconi",
-      "Roma Balduina", "Roma Prati Fiscali", "Roma Casilina", "Roma Tiburtina", "Roma Torre Angela", "Ostia", "Pomezia",
-      "Ciampino", "Capena", "Cassino", "Frosinone", "Latina", "Valmontone outlet", "Roma Tuscolana", "Civitavecchia",
-      "Terni", "Perugia", "Arezzo", "Firenze", "Lucca", "Prato", "Piacenza", "Ferrara", "Cesena", "Forlì", "Reggio Emilia",
-      "Modena", "Parma", "Bologna", "Rovigo", "Treviso", "Padova", "Verona", "Vicenza", "Mestre", "Torino Chironi",
-      "Settimo Torinese", "Biella", "Torino Botticelli", "Bari", "Genova", "Cagliari", "Sassari", "Pordenone", "Rimini",
-      "Ravenna", "Rho", "Anzio"
-    ];
     const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
-        "Numero Errato", "Non interessato", "Fuori Zona", "Doppio contatto", "⁠Nessuna risposta (6)", "Già paziente"
+        "Numero Errato", "Non interessato", "Non ha mai risposto"
     ]);
 
+    const userFixId = state.user.role && state.user.role === "orientatore" ? state.user.utente : state.user._id;
     function mapCampagnaPerLeadsystem(nomeCampagna) {
         if (nomeCampagna.includes('Gold')){
             return 'Gold';
@@ -212,7 +200,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
 
     useEffect(() => {
         const getOrientatori = async () => {
-            await axios.get(`/utenti/65d3110eccfb1c0ce51f7492/orientatori`)
+            await axios.get(`/utenti/${userFixId}/orientatori`)
                 .then(response => {
                     const data = response.data.orientatori;
 
@@ -251,7 +239,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                         trattamento,
                         tentativiChiamata
                     };
-                    const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+                    const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
                     fetchLeads();
                     setRefreshate(true)
                     setPopupModify(false);
@@ -274,7 +262,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                     trattamento,
                     tentativiChiamata
                 };
-                const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+                const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
                 fetchLeads();
                 setPopupModify(false);
                 setRefreshate(true)
@@ -293,7 +281,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                 nome,
                 cognome,
             };
-            const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+            const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
             onUpdateLead({
                 ...lead,
                 name,
@@ -320,7 +308,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                         fatturato,
                         motivo,
                       };   
-                      const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+                      const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
                       onUpdateLead({
                         ...lead,
                         status: esito,
@@ -348,7 +336,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                         trattPrenotato: treatment, 
                         luogo: location,
                       };   
-                      const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+                      const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
                       onUpdateLead({
                         ...lead,
                         status: esito,
@@ -371,7 +359,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
             fatturato,
             motivo,
             };   
-            const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+            const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
             onUpdateLead({
                 ...lead,
                 status: esito,
@@ -480,46 +468,9 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                             </select>
                                         )}
                                     </div>
-                                    <div className={esito === "Fissato" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Fissato')}>
+                                    <div className={esito === "Venduto" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Venduto')}>
                                         <span><span>o</span></span>
-                                        Fissato
-                                        {esito === "Fissato" && <div className='choose-motivo'>
-                                        {patientTypes.map((opzione, index) => (
-                                            <label key={index}  style={{ fontSize: '14px', color: 'gray', width: '100%', display: 'flex', gap: '10px', alignItems: 'center'}} className="radio-label radio-label-scheda">
-                                                <input
-                                                type="radio"
-                                                name="motivo"
-                                                value={opzione}
-                                                checked={patientType === opzione}
-                                                onChange={() => setPatientType(opzione)}
-                                                />
-                                                {opzione}
-                                            </label>
-                                            ))}
-                                        </div>}
-                                        {esito === 'Fissato' ?
-                                        <>
-                                        <label className='label-not-blue'>Trattamento</label>
-                                                <select className="selectMotivo" value={treatment} onChange={(e) => setTreatment(e.target.value)}>
-                                                <option value='' disabled>Seleziona motivo</option>
-                                                {treatments.map((motivoOption, index) => (
-                                                    <option key={index} value={motivoOption}>{motivoOption}</option>
-                                                ))}
-                                                </select>
-                                                </>
-                                            :
-                                            null}
-                                        {esito === "Fissato" && (
-                                            <>
-                                            <label className='label-not-blue'>Città</label>
-                                                <select className="selectMotivo" value={location} onChange={(e) => setLocation(e.target.value)}>
-                                                <option value='' disabled>Seleziona motivo</option>
-                                                {locations.sort().map((motivoOption, index) => (
-                                                    <option key={index} value={motivoOption}>{motivoOption}</option>
-                                                ))}
-                                                </select>
-                                              </>  
-                                            )}
+                                        Venduto
                                     </div>
                                 </div>
                             <button style={{ fontSize: "14px" }} className='btn-orie' onClick={saveMotivoverify}>Salva modifiche</button>
@@ -548,17 +499,16 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                     <p>{lead.name} {lead.surname} <span onClick={() => setModificaNome(true)} className='span-nome'><FaPencilAlt size={14} style={{marginLeft: '10px'}} /></span></p>: 
                                     <p className='modifica-nome-input'>
                                         <input placeholder={lead.name} value={nome} onChange={(e) => setName(e.target.value)} />
-                                        <FaSave className='salva-nome' onClick={handleSaveName} />
+                                        <input placeholder={lead.surname} value={cognome} onChange={(e) => setSurname(e.target.value)} />
+                                        <FaSave size={30} className='salva-nome' onClick={handleSaveName} />
                                     </p>
                                     }
                                     <p><FiClock color='#30978B' /> Data di <b>creazione lead</b>: <span>{formatDate(lead.date)}</span></p>
                                     <p>{lead.lastModify && lead.lastModify !== null ? <><FiClock color='#3471CC' /> Data <b>ultima modifica</b>: <span>{formatDate(lead.lastModify)}</span></> : ""}</p>
                                     <p style={{margin: '17px 0 10px 0'}}>Stato lead: 
                                         <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
-                                        {esito === "Fissato" && fatturato !== "0" && <span>{fatturato}€</span>}
                                     </p>
-                                    {motivo && motivo !== "" && lead.esito === "Non interessato" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
-                                    {lead.esito === "Fissato" && lead.trattPrenotato ? <p className='motivo-top'>Trattamento <span>{lead.trattPrenotato}</span></p> : null}
+                                    {motivo && motivo !== "" && lead.status === "Non interessato" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
                                 </div>
                             </div>
                             <div className='popup-middle-top2'>

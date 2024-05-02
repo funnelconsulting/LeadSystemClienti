@@ -35,7 +35,7 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
   };
 
     const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
-        "Numero Errato", "Non interessato", "Fuori Zona", "Doppio contatto", "⁠Nessuna risposta (6)", "Già paziente"
+      "Numero Errato", "Non interessato", "Non ha mai risposto"
     ]);
     const [motivoVendutoList, setMotivoVendutoList] = useState([
         "Promozione / sconto", "Convenzione", "Prevalutazione corretta",
@@ -51,7 +51,7 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
             } else {
                 if (motivo !== ""){
                    spostaLead(motivo, leadId, "0", type); 
-                }else {
+                } else {
                     window.alert('Inserisci il motivo')
                     return
                 }
@@ -62,12 +62,12 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
     <div className='popup-motivo'>
         <img onClick={onClose} src={indietro} />
         <div className='popup-motivo-top'>
-            {type === "Fissato" ? (
+            {type === "Venduto" ? (
                 <img src={vendutoImg} />
             ) : (
                 <img src={nonVendImg} />
             )}
-            {type === "Fissato" ? (
+            {type === "Venduto" ? (
              <div>   
                 <h4>Lead Fissata</h4>
                 <p>Lo stato della lead è stato cambiato, specifica queste informazioni:</p>   
@@ -95,41 +95,6 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
             ))}
         </div>) : (
           <div className='motivo-venduto'>
-            <div className='choose-motivo'>
-            <p style={{textAlign: 'center'}}>Tipologia paziente</p>
-            {patientTypes.map((opzione, index) => (
-                <label key={index} className="radio-label">
-                    <input
-                    type="radio"
-                    name="motivo"
-                    value={opzione}
-                    checked={patientType === opzione}
-                    onChange={() => setPatientType(opzione)}
-                    />
-                    {opzione}
-                </label>
-                ))}
-            </div>
-       
-             <div className='venduto-motivo'>
-               <label htmlFor="treatmentSelect">Trattamento:</label>
-               <select id="treatmentSelect" onChange={handleTreatmentChange} value={treatment}>
-                 <option value="">Seleziona</option>
-                 {treatments.map(treatment => (
-                   <option key={treatment} value={treatment}>{treatment}</option>
-                 ))}
-               </select>
-             </div>
-       
-             <div className='venduto-motivo'>
-               <label htmlFor="locationSelect">Luogo Prenotazione:</label>
-               <select id="locationSelect" onChange={handleLocationChange} value={location}>
-                 <option value="">Seleziona</option>
-                 {locations.sort().map(location => (
-                   <option key={location} value={location}>{location}</option>
-                 ))}
-               </select>
-             </div>
          </div>
         )}
         <div className='salva-motivo'>

@@ -74,12 +74,13 @@ export default function Table2({ onResults, searchval, setLeadsPdf, setNextSched
   };
 
 const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
-    "Numero Errato", "Non interessato", "Fuori Zona", "Doppio contatto", "⁠Nessuna risposta (6)", "Già paziente"
+    "Numero Errato", "Non interessato", "Non ha mai risposto"
 ]);
 
   document.addEventListener('mousedown', handleClickOutside);
 
   const userId = state.user._id;
+  const userFixId = state.user.role && state.user.role === "orientatore" ? state.user.utente : state.user._id;
   const handleRowClick = (lead) => {
      setSelectedLead(lead);
      setDeleting(true);
@@ -202,6 +203,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
         return {
           name: lead.nome,
+          surname: lead.cognome,
           email: lead.email,
           date: lead.data,
           telephone: cleanedTelephone,
@@ -302,6 +304,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
         return {
           name: lead.nome,
+          surname: lead.cognome,
           email: lead.email,
           date: lead.data,
           telephone: cleanedTelephone,
@@ -568,6 +571,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
         return {
           name: lead.nome,
+          surname: lead.cognome,
           email: lead.email,
           date: lead.data,
           telephone: cleanedTelephone,
@@ -649,6 +653,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
         return {
           name: lead.nome,
+          surname: lead.cognome,
           email: lead.email,
           date: lead.data,
           telephone: cleanedTelephone,
@@ -737,7 +742,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         orientatori
       };
   
-      const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+      const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
       const updatedLead = response.data.updatedLead;
 
       setOriginalData((prevData) =>
@@ -745,6 +750,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           if (lead.id === leadId) {
             const adaptedLead = {
               name: updatedLead.nome,
+              surname: updatedLead.cognome,
               email: updatedLead.email,
               date: updatedLead.data,
               telephone: updatedLead.numeroTelefono,
@@ -770,6 +776,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         if (lead.id === leadId) {
           const adaptedLead = {
             name: updatedLead.nome,
+            surname: updatedLead.cognome,
             email: updatedLead.email,
             date: updatedLead.data,
             telephone: updatedLead.numeroTelefono,
@@ -833,11 +840,11 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           fatturato,
           motivo,
         }; 
-        const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+        const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
         setPopupModifyEsito(false);
         SETheaderIndex(999);             
         }
-      } else if (esito === "Fissato"){
+      } else if (esito === "Venduto"){
         if (patientType === "" || treatment === "" || location === ""){
           window.alert("Compila i campi")
           return
@@ -849,7 +856,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           trattPrenotato: treatment, 
           luogo: location,
         }; 
-        const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+        const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
         setPopupModifyEsito(false);
         SETheaderIndex(999);             
         }
@@ -860,7 +867,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           fatturato,
           motivo,
         };   
-        const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId}`, modifyLead);
+        const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
         setPopupModifyEsito(false);
         SETheaderIndex(999); 
       }
@@ -989,7 +996,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
     const draggedLeadId = droppedItem.id;
     if (type === draggedLeadId.status) {
       return null
-    } else if (type === "Fissato" || type === "Non valido" || type === "Non interessato" || type === "Lead persa") {
+    } else if (type === "Non valido" || type === "Non interessato" || type === "Lead persa") {
       setPopupMotivi(true);
       setLeadIdMotivo(draggedLeadId);
       setTypeMotivo(type);
@@ -1009,7 +1016,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         esito,
         fatturato,
       };
-      const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId.id}`, modifyLead);
+      const response = await axios.put(`/lead/${userFixId}/update/${leadId.id}`, modifyLead);
 
       toast.success('Il lead è stato modificato con successo.');
       if (state.user.role && state.user.role === "orientatore"){
@@ -1035,7 +1042,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         trattPrenotato, 
         luogo
       };
-      const response = await axios.put(`/lead/65d3110eccfb1c0ce51f7492/update/${leadId.id}`, modifyLead);
+      const response = await axios.put(`/lead/${userFixId}/update/${leadId.id}`, modifyLead);
 
       toast.success('Il lead è stato modificato con successo.');
       if (state.user.role && state.user.role === "orientatore"){
@@ -1521,7 +1528,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
               refreshate={false}
               toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
             <div className="entries">
-              {toggles.nonRisponde && filteredData && filteredData.filter(x => x.status == "Opportunità")
+              {toggles.opportunita && filteredData && filteredData.filter(x => x.status == "Opportunità")
               .reverse()
               .sort((a, b) => parseInt(a.tentativiChiamata) - parseInt(b.tentativiChiamata))
               .map((row, k) =>

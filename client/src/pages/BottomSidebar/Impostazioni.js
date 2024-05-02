@@ -223,20 +223,21 @@ const Impostazioni = () => {
                     </div>
                     :
                     <>
-                      <p><label>Nome:</label>{" " + userImp.name}</p>
+                      {state.user.role && state.user.role === "orientatore" ? <p><label>Nome:</label>{" " + userImp.nome + ' ' + userImp.cognome}</p> : <p><label>Nome:</label>{" " + userImp.name}</p>}
                       <p><label>Email:</label>{" " + userImp.email}</p>
-                      <p><label>P.Iva:</label>{" " + userImp.pIva}</p>
-                      <p><label>SDI:</label>{" " + userImp.codeSdi}</p>
-                      <p><label>ECP:</label>{" " + userImp.nameECP}</p>
-                      <p><label>Indirizzo:</label>{userImp.via ? " " + userImp.via + ', ' + userImp.cap  : ""}</p>
-                      <p><label>Città:</label>{userImp.city ? " " + userImp.city + ', ' + userImp.stato : ""}</p>
-                      <p><label>Email per notifiche:</label>{userImp.emailNotification ? " " + userImp.emailNotification : ""}</p>
+                      {state.user.role && state.user.role === "orientatore" ? <p><label>Cellulare</label>{" " + userImp.telefono}</p> : null}
+                      {state.user.role && state.user.role === "orientatore" ? null : <p><label>P.Iva:</label>{" " + userImp.pIva}</p>}
+                      {state.user.role && state.user.role === "orientatore" ? null : <p><label>Nome azienda:</label>{" " + userImp.nameECP}</p>}
+                      {state.user.role && state.user.role === "orientatore" ? null : <p><label>Indirizzo:</label>{userImp.via ? " " + userImp.via + ', ' + userImp.cap  : ""}</p>}
+                      {state.user.role && state.user.role === "orientatore" ? null : <p><label>Città:</label>{userImp.city ? " " + userImp.city + ', ' + userImp.stato : ""}</p>}
+                      {state.user.role && state.user.role === "orientatore" ? null : <p><label>Email per notifiche:</label>{userImp.emailNotification ? " " + userImp.emailNotification : ""}</p>}
                     </>
                   }
 
+                  {state.user.role && state.user.role !== "orientatore" && 
                   <button type="button" onClick={handleEditClick} className='impostazioni-button'>
                     Modifica
-                  </button>
+                  </button>}
                 </div>
               )}
             </div>
