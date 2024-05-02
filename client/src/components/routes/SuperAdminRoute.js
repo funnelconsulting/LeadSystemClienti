@@ -9,7 +9,7 @@ const SuperAdminRoute = ({ path }) => {
     return <Navigate to="/super-admin" />;
   }
 
-  return state.user.role === 'superadmin' && state && state.token ? path : null;
+  return state.user?.role === 'superadmin' && state && state.token ? path : null;
 };
 
 export default SuperAdminRoute;

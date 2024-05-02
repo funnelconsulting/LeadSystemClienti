@@ -336,9 +336,9 @@ const HomeSuper = () => {
       };
 
       const calculate = () => {
-        const totalLeads = selectUsers.leads.length;
-        const soldLeads = selectUsers.leads.filter((lead) => lead.esito === 'Venduto');
-        const numSoldLeads = soldLeads.length;
+        const totalLeads = selectUsers?.leads?.length;
+        const soldLeads = selectUsers?.leads.filter((lead) => lead.esito === 'Venduto');
+        const numSoldLeads = soldLeads?.length;
         
         const percentageSold = (numSoldLeads / totalLeads) * 100;
       
@@ -364,7 +364,7 @@ const HomeSuper = () => {
                 <div className='select-users-container'>
                   <h3>{selectUsers !== null ? selectUsers.nameECP : null}</h3> 
                   <p>{selectUsers.active ? 'Attivo' : 'Bloccato'} <span></span></p>
-                  <p><ClockCircleOutlined style={{fontSize: '24px'}}/> dal {selectUsers.subscriptions[0] && selectUsers.subscriptions.length > 0 ? moment.unix(selectUsers.subscriptions[0].created).format('DD/MM/YYYY HH:mm') : "Non Attivo"}</p>
+                  <p><ClockCircleOutlined style={{fontSize: '24px'}}/> dal {selectUsers.subscriptions && selectUsers?.subscriptions?.length > 0 ? moment.unix(selectUsers.subscriptions[0].created).format('DD/MM/YYYY HH:mm') : "Non Attivo"}</p>
                 </div>
               </div>
               <div>
@@ -382,10 +382,6 @@ const HomeSuper = () => {
                 <input type='text' placeholder={selectUsers.nameECP} />
               </div>
               <div className='sub-middle2'>
-                <label>Servizi Attivi</label>
-               {selectUsers.subscriptions.map((sub) => (
-                  <p>{sub.plan.nickname}</p>
-               ))}
                 <label>Fatturazione</label>
                 <div>
                   <p>Nome ECP: <strong>{selectUsers.nameECP}</strong></p>
@@ -399,9 +395,9 @@ const HomeSuper = () => {
                 <label>Acquisti</label>
                 <input type='text' placeholder={selectUsers.monthlyLeadFix} />
                 <label>Ultimo Rcquisto</label>
-                <input type='text' placeholder={selectUsers.subscriptions[0] && selectUsers.subscriptions.length > 0 ? moment.unix(selectUsers.subscriptions[0].current_period_start).format('DD/MM/YYYY') : ""} />
+                <input type='text' placeholder={selectUsers.subscriptions && selectUsers?.subscriptions?.length > 0 ? moment.unix(selectUsers.subscriptions[0].current_period_start).format('DD/MM/YYYY') : ""} />
                 <label>Prossimo Rinnovo</label>
-                <input type='text' placeholder={selectUsers.subscriptions[0] && selectUsers.subscriptions.length > 0 ? moment.unix(selectUsers.subscriptions[0].current_period_end).format('DD/MM/YYYY') : ""} />
+                <input type='text' placeholder={selectUsers.subscriptions && selectUsers?.subscriptions?.length > 0 ? moment.unix(selectUsers.subscriptions[0].current_period_end).format('DD/MM/YYYY') : ""} />
               </div>
             </div>
             <div className='bottom-popup-super'>
@@ -456,9 +452,9 @@ const HomeSuper = () => {
     };
 
     const calculateConversionRate = (user) => {
-      const totalLeads = user.leads.length;
+      const totalLeads = user?.leads?.length;
       const soldLeads = user.leads.filter((lead) => lead.esito === 'Venduto');
-      const numSoldLeads = soldLeads.length;
+      const numSoldLeads = soldLeads?.length;
     
       if (totalLeads === 0 || soldLeads === 0) {
         return 0;
@@ -524,18 +520,18 @@ const HomeSuper = () => {
                   <h6>{leadEntrati ? 
                   leadEntrati.filter((lead) => {
                     return lead.assigned === false;
-                  }).length + leadEntratiWo.filter((lead) => {
+                  })?.length + leadEntratiWo.filter((lead) => {
                     return lead.assigned === false;
-                  }).length
+                  })?.length
                   : '0'}</h6>
                 </div>  
                 <div className='counter'>
                   <h4>Lead Entrati</h4>
-                  <h6>{leadEntrati ? leadEntrati.length + leadEntratiWha.length + leadEntratiWo.length : '0'}</h6>
+                  <h6>{leadEntrati ? leadEntrati?.length + leadEntratiWha?.length + leadEntratiWo?.length : '0'}</h6>
                 </div>
                 <div className='counter'>
                   <h4>Lead Assegnati</h4>
-                  <h6>{leadAssegnati && leadAssegnati.length > 0 ? leadAssegnati.length : '0'}</h6>
+                  <h6>{leadAssegnati && leadAssegnati?.length > 0 ? leadAssegnati?.length : '0'}</h6>
                 </div>
               </div>
              </div>
@@ -562,10 +558,10 @@ const HomeSuper = () => {
                     .map((row) => (
                       <tr className='tr-home-super' key={row._id} style={{margin: '10px 0'}}>
                         <td>{row.nameECP} <span style={{margin:'0 10px'}} onClick={() => handlePopupClient(row)}>Edit <FaPencilAlt size={7} /></span></td>
-                        <td>{row.subscriptions[0] && row.subscriptions.length > 0 ? (row.subscriptions[0].plan.amount / 100)+ '€ / mese' : 'Nessuna iscrizione'}</td>
+                        <td>{row?.subscriptions && row?.subscriptions?.length > 0 ? (row.subscriptions[0]?.plan.amount / 100)+ '€ / mese' : 'Nessuna iscrizione'}</td>
                         <td>{row.monthlyLeadFix ? row.monthlyLeadFix + ' / mese' : 0}</td>
                         <td className='td-status'>
-                            {row.subscriptions && row.subscriptions.length > 0 ? (
+                            {row?.subscriptions && row.subscriptions?.length > 0 ? (
                                 <>
                                 {isRenewalNear(row.subscriptions[0]) ? (
                                   <>
@@ -583,7 +579,7 @@ const HomeSuper = () => {
                                 </>
                               )}
                         </td>
-                        <td>{row.leads.length}</td>
+                        <td>{row.leads?.length}</td>
                         <td>
                           {row.monthlyLeadCounter} <span style={{margin:'0 20px'}} onClick={() => handlePopupModifyCounter(row)}>Edit <FaPencilAlt size={7} /></span>
                         </td>

@@ -1150,7 +1150,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
               </label>
             </div>
           </div>
-          <div className="filter-etichette">
+          {/*<div className="filter-etichette">
             <p style={{ color: "gray", fontSize: '13px' }} htmlFor="citySelect">Città di provenienza:</p>
             <select id="citySelect" onChange={handleCityChange} value={selectedCity}>
               <option value="">Seleziona</option>
@@ -1158,7 +1158,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                 <option key={city} value={city}>{city}</option>
               ))}
             </select>
-          </div>
+            </div>*/}
           <button onClick={handleClearFilter} className="button-filter rimuovi-button">Rimuovi filtri</button>
         </div>
       </div>
