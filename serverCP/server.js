@@ -122,8 +122,7 @@ app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
     .catch(console.error);
 };*/
 
-cron.schedule('10 2 * * *', runDailyJob);
-cron.schedule('20 2 * * *', runDailyJobD);
+//cron.schedule('10 2 * * *', runDailyJob);
 
 const port = process.env.PORT || 8001;
 app.listen(port, () => console.log(`Server is running on port ${port}`));
