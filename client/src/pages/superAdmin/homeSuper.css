@@ -24,6 +24,11 @@
     margin: 0 auto;
     padding: 20px 30px;
 }
+.pm-super{
+    overflow-y: scroll;
+    height: 97vh !important;
+    margin-left: 10%;
+}
 .filter-data-super{
     display: flex ;
     justify-content: center;

@@ -204,8 +204,15 @@ exports.createOrientatore = async (req, res) => {
 
   exports.getLeadDeleted = async (req, res) => {
     try {
-      // Cerca tutti i lead nel database
-      const leads = await LeadDeleted.find().populate('orientatori').populate('utente');
+      const leads = await LeadDeleted.find()
+      .populate({
+        path: 'orientatori',
+        select: 'nome cognome'
+      })
+      .populate({
+        path: 'utente',
+        select: 'nameECP'
+      });
     
       res.json(leads);
     } catch (err) {

@@ -43,14 +43,10 @@ exports.updateUserStatus = async (req, res) => {
 
   exports.getAllLeadForCounter = async (req, res) => {
     try {
-      const allLeads = await Lead.find();
-      const allFacebookLeads = await LeadFacebook.find();
-      const allWordpressLeads = await LeadWordpress.find();
+      const allLeads = await Lead.countDocuments();
   
       const leadsData = {
         leads: allLeads,
-        facebookLeads: allFacebookLeads,
-        wordpressLeads: allWordpressLeads,
       };
   
       res.status(200).json(leadsData);

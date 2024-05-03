@@ -65,7 +65,11 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
     const handleDateChange = (date) => {
       setSelectedDate(date);
     };
-
+    const formatDateString = (inputDate) => {
+        const parsedDate = moment(inputDate, 'YY-MM-DD HH:mm');                
+        const formattedDate = parsedDate.format('DD/MM/YYYY HH:mm');        
+        return formattedDate;
+      };
     useEffect(() => {
         if (lead.recallHours && lead.recallHours !== null) {
           const [hours, minutes] = lead.recallHours.split(':').map(Number);
@@ -497,6 +501,7 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                     }
                                     <p><FiClock color='#30978B' /> Data di <b>creazione lead</b>: <span>{formatDate(lead.date)}</span></p>
                                     <p>{lead.lastModify && lead.lastModify !== null ? <><FiClock color='#3471CC' /> Data <b>ultima modifica</b>: <span>{formatDate(lead.date)}</span></> : ""}</p>
+                                    {(lead.provenienza === "AI chatbot" || (lead.appDate && lead?.appDate?.trim() !== "")) && lead.appDate && <h6><FiClock color='#3471CC' /> Data <b>appuntamento:</b> <span>{formatDateString(lead.appDate)}</span></h6>}
                                     <p style={{margin: '17px 0 10px 0'}}>Stato lead: 
                                         <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
                                         {esito === "Fissato" && fatturato !== "0" && <span>{fatturato}€</span>}

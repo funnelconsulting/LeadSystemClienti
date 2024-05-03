@@ -252,11 +252,13 @@ exports.getUsersSuperAdmin = async (req, res) => {
 
     for (const user of users) {
 
-      const leads = await Lead.find({ utente: user._id }).populate('orientatori');
+      const leadCount = await Lead.countDocuments({ utente: user._id });
+      const vendutoCount = await Lead.countDocuments({utente: user._id, esito: "Venduto"});
 
       const userWithPaymentsAndLeads = {
         ...user.toObject(),
-        leads: leads,
+        leadCount: leadCount,
+        vendutoCount: vendutoCount,
       };
 
       usersWithPaymentsAndLeads.push(userWithPaymentsAndLeads);

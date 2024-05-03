@@ -127,22 +127,17 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
           telephone: cleanedTelephone,
           status: lead.esito,
           orientatore: lead.orientatori ? lead.orientatori.nome + ' ' + lead.orientatori.cognome : '',
-          facoltà: lead.facolta ? lead.facolta : '',
-          fatturato: lead.fatturato ? lead.fatturato : '',
-          università: lead.università ? lead.università : '',
           campagna: lead.campagna,
-          corsoDiLaurea: lead.corsoDiLaurea ? lead.corsoDiLaurea : '',
-          oreStudio: lead.oreStudio ? lead.oreStudio : '',
-          provincia: lead.provincia ? lead.provincia : '',
           note: lead.note ? lead.note : '',
           id: lead._id,
-          fequentiUni: lead.frequentiUni ? lead.fequentiUni : false,
           nameCampagna: lead.nameCampagna ? lead.nameCampagna : '',
           adsets: lead.adsets ? lead.adsets : '',
           annunci: lead.annunci ? lead.annunci : '',
           motivo: lead.motivo ? lead.motivo : null,
           recallHours: lead.recallHours ? lead.recallHours : null,
-          recallDate: lead.recallDate ? lead.recallDate : null 
+          recallDate: lead.recallDate ? lead.recallDate : null,
+          appDate: lead.appDate ? lead.appDate : '',
+          summary: lead.summary ? lead.summary : ''
         };
       });
 
@@ -507,6 +502,7 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
       </div>
       <div className="close-page-lead">
         <button onClick={handleClosePopupAll} className="button-scheda-ecp">Chiudi pagina Lead</button>
+        <button style={{margin: '0 10px'}} onClick={fetchLeads} className="button-scheda-ecp">Refresh lead</button>
       </div>
 
 {orientatoriOpen &&
@@ -587,11 +583,11 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
               <label>
                 <input
                   type="checkbox"
-                  checked={selectedStatusEsito.inlavorazione}
-                  onChange={() => toggleFilter('inlavorazione')}
+                  checked={selectedStatusEsito.nonRisponde}
+                  onChange={() => toggleFilter('nonRisponde')}
                 />
                 <h3>
-                  In lavorazione
+                  Da richiamare
                 </h3>
               </label>
               <label>
@@ -601,31 +597,9 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
                   onChange={() => toggleFilter('noninteressato')}
                 />
                 <h3>
-                  Non interessato
+                  Lead persa
                 </h3>
               </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedStatusEsito.nonRisponde}
-                  onChange={() => toggleFilter('nonRisponde')}
-                />
-                <h3>
-                  Non risponde
-                </h3>
-              </label>
-              <label>
-                <input
-                  type="checkbox"
-                  checked={selectedStatusEsito.nonValido}
-                  onChange={() => toggleFilter('nonValido')}
-                />
-                <h3>
-                  Non valido
-                  {/* <h4>Non risponde al telefono</h4> */}
-                </h3>
-              </label>
-
               <label>
                 <input
                   type="checkbox"
@@ -639,23 +613,11 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
               <label>
                 <input
                   type="checkbox"
-                  checked={selectedStatusEsito.invalutazione}
-                  onChange={() => toggleFilter('invalutazione')}
-                />
-                <h3>
-                  In valutazione
-                  {/* <h4>Non risponde al telefono</h4> */}
-                </h3>
-              </label>
-              <label>
-                <input
-                  type="checkbox"
                   checked={selectedStatusEsito.venduto}
                   onChange={() => toggleFilter('venduto')}
                 />
                 <h3>
-                  Iscrizione
-                  {/* <h4>Non risponde al telefono</h4> */}
+                  Venduto
                 </h3>
               </label>
             </div>
@@ -865,7 +827,7 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
 
 
         <div className="sectionswrapper"
-        style={{overflowX: 'scroll', width: '60%', margin: '0 auto'}}
+        style={{overflowX: 'auto', width: '100%', margin: '0 auto'}}
           ref={secref}
         >
           <div className="secwrap"
@@ -894,87 +856,15 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
           </div>
           <div className="secwrap"
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Non risponde")}
+            onDrop={(e) => handleDrop(e, "Da richiamare")}
             onDragEnd={handleDragEnd}
           >
             <LeadHeader
               handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Non risponde"}
+              type={"Da richiamare"}
               toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
             <div className="entries">
-              {toggles.nonRisponde && filteredData && filteredData.filter(x => x.status == "Non risponde").map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Irraggiungibile")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Irraggiungibile"}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.irraggiungibile && filteredData && filteredData.filter(x => x.status == "Irraggiungibile").reverse().map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "In lavorazione")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"In lavorazione"}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.inlavorazione && filteredData && filteredData.filter(x => x.status == "In lavorazione").map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Non valido")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Non valido"}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.nonValido && filteredData && filteredData.filter(x => x.status == "Non valido").map((row, k) =>
+              {toggles.nonRisponde && filteredData && filteredData.filter(x => x.status == "Da richiamare").map((row, k) =>
                 <LeadEntry
                   id={JSON.stringify(row)}
                   index={k}
@@ -998,7 +888,7 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
               type={"Lead persa"}
               toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
             <div className="entries">
-              {toggles.noninteressato && filteredData && filteredData.filter(x => x.status == "Non interessato").map((row, k) =>
+              {toggles.noninteressato && filteredData && filteredData.filter(x => (x.status == "Non interessato" || x.status == "Lead persa")).map((row, k) =>
                 <LeadEntry
                   id={JSON.stringify(row)}
                   index={k}
@@ -1039,30 +929,6 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
           </div>
           <div className="secwrap"
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "In valutazione")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"In valutazione"}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.invalutazione && filteredData && filteredData.filter(x => x.status == "In valutazione").map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  secref={secref}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
             onDrop={(e) => handleDrop(e, "Venduto")}
             onDragEnd={handleDragEnd}
           >
@@ -1085,36 +951,7 @@ export default function TableSuperAdmin({ userId, handleClosePopupAll }) {
               )}
             </div>
           </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Iscrizione posticipata")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Iscrizione posticipata"}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.iscrizionePosticipata && filteredData && filteredData.filter(x => x.status == "Iscrizione posticipata").reverse().map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                />
-              )}
-            </div>
-          </div>
         </div>
-
-
-
-
-
       }
         </>
         }

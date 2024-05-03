@@ -70,17 +70,8 @@ const HomeSuper = () => {
           try {
             const response = await axios.get('/get-all-user-super-admin');
             const usersWithPaymentsAndLeads = response.data;
-            const usersWithAverage = usersWithPaymentsAndLeads.map((user) => {
-              const leads = user.leads || [];
-              const dailyAverage = calculateDailyAverage(leads).toFixed(1);
-        
-              return {
-                ...user,
-                dailyAverage,
-              };
-            });
-            setUsers(usersWithAverage);
-            setOriginalUsers(usersWithAverage);
+            setUsers(usersWithPaymentsAndLeads);
+            setOriginalUsers(usersWithPaymentsAndLeads);
             setIsLoading(false);
           } catch (error) {
             console.error(error);
@@ -124,7 +115,7 @@ const HomeSuper = () => {
         }, []);
 
     const filterDataByDate = (data, startDate, endDate) => {
-      const filteredData = data.filter((row) => {
+      const filteredData = data?.filter((row) => {
         const rowDate = new Date(row.data);
         const formattedRowDate = new Date(rowDate.getFullYear(), rowDate.getMonth(), rowDate.getDate());
 
@@ -141,7 +132,7 @@ const HomeSuper = () => {
     };
 
     const filterDataByDateWha = (data, startDate, endDate) => {
-      const filteredData = data.filter((row) => {
+      const filteredData = data?.filter((row) => {
         const rowDate = new Date(row.timestamp);
         const formattedRowDate = new Date(rowDate.getFullYear(), rowDate.getMonth(), rowDate.getDate());
 
@@ -158,7 +149,7 @@ const HomeSuper = () => {
     };
 
     const filterDataByOneDate = (data, selectedDate) => {
-      const filteredData = data.filter((row) => {
+      const filteredData = data?.filter((row) => {
         const rowDate = new Date(row.data ? row.data : row.timestamp);
         const formattedRowDate = new Date(rowDate.getFullYear(), rowDate.getMonth(), rowDate.getDate());
     
@@ -336,9 +327,8 @@ const HomeSuper = () => {
       };
 
       const calculate = () => {
-        const totalLeads = selectUsers?.leads?.length;
-        const soldLeads = selectUsers?.leads.filter((lead) => lead.esito === 'Venduto');
-        const numSoldLeads = soldLeads?.length;
+        const totalLeads = selectUsers?.leadCount;
+        const numSoldLeads = selectUsers?.vendutoCount;
         
         const percentageSold = (numSoldLeads / totalLeads) * 100;
       
@@ -363,8 +353,6 @@ const HomeSuper = () => {
                 </div>
                 <div className='select-users-container'>
                   <h3>{selectUsers !== null ? selectUsers.nameECP : null}</h3> 
-                  <p>{selectUsers.active ? 'Attivo' : 'Bloccato'} <span></span></p>
-                  <p><ClockCircleOutlined style={{fontSize: '24px'}}/> dal {selectUsers.subscriptions && selectUsers?.subscriptions?.length > 0 ? moment.unix(selectUsers.subscriptions[0].created).format('DD/MM/YYYY HH:mm') : "Non Attivo"}</p>
                 </div>
               </div>
               <div>
@@ -392,27 +380,20 @@ const HomeSuper = () => {
 
               </div>
               <div className='sub-middle2'>
-                <label>Acquisti</label>
-                <input type='text' placeholder={selectUsers.monthlyLeadFix} />
-                <label>Ultimo Rcquisto</label>
-                <input type='text' placeholder={selectUsers.subscriptions && selectUsers?.subscriptions?.length > 0 ? moment.unix(selectUsers.subscriptions[0].current_period_start).format('DD/MM/YYYY') : ""} />
-                <label>Prossimo Rinnovo</label>
-                <input type='text' placeholder={selectUsers.subscriptions && selectUsers?.subscriptions?.length > 0 ? moment.unix(selectUsers.subscriptions[0].current_period_end).format('DD/MM/YYYY') : ""} />
-              </div>
-            </div>
-            <div className='bottom-popup-super'>
-              <div>
                 <div className='cr'>
                   <h4>Conversion Rate</h4>
                   <h6>{cr ? cr : 0}%</h6>
                 </div>
-
+              </div>
+            </div>
+            <div className='bottom-popup-super'>
+              <div>
                 <textarea
                   className='note-ecp'
                     placeholder='Inserisci una nota...'
                     id='textareanote' value={note} onChange={(e) => setNote(e.target.value)} />
 
-                <div className='rating'>
+                {/*<div className='rating'>
                   <h4>Soddisfazione</h4>
                   <Rating
                       initialRating={rating}
@@ -420,7 +401,7 @@ const HomeSuper = () => {
                       fullSymbol="fas fa-star"
                       onClick={handleRatingChange}
                     />
-                </div>
+      </div>*/}
               </div>
               <div className='bottom-popup-super-div'>
                 <button style={{ marginTop: '0px' }} onClick={handleAccountStatus}>
@@ -450,13 +431,12 @@ const HomeSuper = () => {
           console.error(error);
         }
     };
-
+    console.log(users)
     const calculateConversionRate = (user) => {
-      const totalLeads = user?.leads?.length;
-      const soldLeads = user.leads.filter((lead) => lead.esito === 'Venduto');
-      const numSoldLeads = soldLeads?.length;
+      const totalLeads = user?.leadCount;
+      const numSoldLeads = user?.vendutoCount;
     
-      if (totalLeads === 0 || soldLeads === 0) {
+      if (totalLeads === 0 || numSoldLeads === 0) {
         return 0;
       }
     
@@ -478,9 +458,6 @@ const HomeSuper = () => {
 
   return (
     <div className='container-home-super'>
-      <div className='sidebar-super-admin'>
-        <Link to={'/super-admin/dash-marketing'} className='link-super'><img alt='dashboard-marketing' src={dashMarketing} /> <h6>Marketing</h6></Link>
-      </div>
         {isLoading ?
         <div
           className="d-flex justify-content-center fw-bold"
@@ -531,7 +508,7 @@ const HomeSuper = () => {
                 </div>
                 <div className='counter'>
                   <h4>Lead Assegnati</h4>
-                  <h6>{leadAssegnati && leadAssegnati?.length > 0 ? leadAssegnati?.length : '0'}</h6>
+                  <h6>{leadAssegnati && leadAssegnati > 0 ? leadAssegnati : '0'}</h6>
                 </div>
               </div>
              </div>
@@ -540,13 +517,12 @@ const HomeSuper = () => {
                 <thead style={{ zIndex: '5', position: 'sticky', top: '-20px' }}>
                   <tr className='tr-super-thead'>
                     <th style={{ fontWeight: "600" }}>Cliente</th>
-                    <th style={{ fontWeight: '600' }}>Abbonamento</th>
                     <th style={{ fontWeight: "600" }}>Lead Acquistati</th>
-                    <th style={{ fontWeight: "600" }}>Status</th>
+                    {/*<th style={{ fontWeight: "600" }}>Status</th>*/}
                     <th style={{ fontWeight: "600" }}>Lead Recapitati</th>
                     <th style={{ fontWeight: "600" }}>Lead Mancanti</th>
                     <th style={{ fontWeight: "600" }}>Cap Daily</th>
-                    <th style={{ fontWeight: "600" }}>Rating</th>
+                    {/*<th style={{ fontWeight: "600" }}>Rating</th>*/}
                     <th style={{ fontWeight: "600" }}>Media</th>
                     <th style={{ fontWeight: "600" }}>CR%</th>
                     <th style={{ fontWeight: "600" }}></th>
@@ -558,9 +534,8 @@ const HomeSuper = () => {
                     .map((row) => (
                       <tr className='tr-home-super' key={row._id} style={{margin: '10px 0'}}>
                         <td>{row.nameECP} <span style={{margin:'0 10px'}} onClick={() => handlePopupClient(row)}>Edit <FaPencilAlt size={7} /></span></td>
-                        <td>{row?.subscriptions && row?.subscriptions?.length > 0 ? (row.subscriptions[0]?.plan.amount / 100)+ '€ / mese' : 'Nessuna iscrizione'}</td>
                         <td>{row.monthlyLeadFix ? row.monthlyLeadFix + ' / mese' : 0}</td>
-                        <td className='td-status'>
+                        {/*<td className='td-status'>
                             {row?.subscriptions && row.subscriptions?.length > 0 ? (
                                 <>
                                 {isRenewalNear(row.subscriptions[0]) ? (
@@ -578,15 +553,15 @@ const HomeSuper = () => {
                                   <span className="status-dot blocked-status">0</span> Bloccato
                                 </>
                               )}
-                        </td>
-                        <td>{row.leads?.length}</td>
+                        </td>*/}
+                        <td>{row.leadCount}</td>
                         <td>
                           {row.monthlyLeadCounter} <span style={{margin:'0 20px'}} onClick={() => handlePopupModifyCounter(row)}>Edit <FaPencilAlt size={7} /></span>
                         </td>
                         <td>
                           {row.dailyCap ? row.dailyLead + ' / ' + row.dailyCap : 'N/a'} <span style={{margin:'0 20px'}} onClick={() => handlePopupModifyCap(row)}>Edit <FaPencilAlt size={7} /></span>
                         </td>
-                        <td className="fixed-width-cell">{row.rating ? 
+                        {/*<td className="fixed-width-cell">{row.rating ? 
                                           <Rating
                                           initialRating={row.rating}
                                           emptySymbol="far fa-star"
@@ -594,7 +569,7 @@ const HomeSuper = () => {
                                           onClick={(value) => handleChangeRatingByTable(row, value, row.note)}
                                         />
                          : 
-                         ''}</td>
+                        ''}</td>*/}
                         <td style={{cursor: 'pointer'}} className="Details">{row.dailyAverage}/day</td>
                         <td  className="fixed-width-cell">{calculateConversionRate(row)}%</td>
                         <td style={{cursor: 'pointer'}} className="button-add-lead-super button2" onClick={() => handlePopupAddLead(row)}>Aggiunta lead</td>
