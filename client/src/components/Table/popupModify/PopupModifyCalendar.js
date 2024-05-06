@@ -31,6 +31,7 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
     const [fatturato, setFatturato] = useState(lead.fatturato ? lead.fatturato : '0');
     const [oraChiamataRichiesto, setOraChiamataRichiesto] = useState(lead.oraChiamataRichiesto ? lead.oraChiamataRichiesto : '');
     const [mostraCalendar, setMostraCalendar] = useState(false);
+    const [campoPlus, setCampoPlus] = useState(lead.campoPlus ? lead.campoPlus : "");
     const [selectedDate, setSelectedDate] = useState(lead.recallDate && lead.recallDate !== null ? new Date(lead.recallDate) : new Date());
     const [selectedTime, setSelectedTime] = useState({ hours: 7, minutes: 0 });
     const [patientType, setPatientType] = useState('');
@@ -239,7 +240,7 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                         fatturato,
                         motivo,
                         città,
-                        trattamento,
+                        campoPlus,
                         tentativiChiamata
                     };
                     const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
@@ -261,7 +262,7 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                     fatturato,
                     motivo: "",
                     città,
-                    trattamento,
+                    campoPlus,
                     tentativiChiamata
                 };
                 const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
@@ -444,10 +445,6 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                         <span><span>o</span></span>
                                         Da contattare
                                     </div>
-                                    <div className={esito === "Non risponde" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Non risponde')}>
-                                        <span><span>o</span></span>
-                                        Non risponde
-                                    </div>
                                     <div className={esito === "Da richiamare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da richiamare')}>
                                         <span><span>o</span></span>
                                         Da richiamare
@@ -463,6 +460,10 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                             ))}
                                             </select>
                                         )}
+                                    </div>
+                                    <div className={esito === "Opportunità" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Opportunità')}>
+                                        <span><span>o</span></span>
+                                        Opportunità
                                     </div>
                                     <div className={esito === "Venduto" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Venduto')}>
                                         <span><span>o</span></span>
@@ -596,8 +597,8 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                 </div>
                                 <div className='trat-cont-input'>
                                     <p>Campo aggiuntivo</p>
-                                    <input className='input-trattamento-hover' disabled placeholder={lead.trattamento.replace(/_/g, ' ')} value={trattamento} onChange={(e) => setTrattamento(e.target.value)} />
-                                    <span className="trattamento-fullname">{lead.trattamento.replace(/_/g, ' ')}</span>
+                                    <input className='input-trattamento-hover' placeholder={campoPlus} value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} />
+                                    <span className="trattamento-fullname">{campoPlus}</span>
                                 </div>
                             </div>
                         </div>

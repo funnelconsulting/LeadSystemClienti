@@ -24,7 +24,7 @@
 .add-lead-popup #modalclosingicon {
     position: absolute;
     left: 15px;
-    top: 23px;
+    top: 13px;
     height: 30px;
     fill: white;
     cursor: pointer;
@@ -142,8 +142,8 @@
 #popupdeletelead .popup-top {
     padding: 40px 70px;
 }
-.popup-top {
-    background-color: white;
+.add-lead-popup > .popup-top {
+    background-color: #3471CC;
     height: 30px;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
@@ -157,13 +157,13 @@
     z-index: 10;
 }
 
-.popup-top h4 {
+.add-lead-popup > .popup-top h4 {
     margin: 0px 30px 0 20px;
     font-size: 17px;
     font-weight: 400;
     cursor: pointer;
     padding-bottom: 0px;
-    color: #0000007a;
+    color: #ffffff;
     font-weight: 500;
 }
 #popupdeletelead button {

@@ -106,7 +106,7 @@ exports.createOrientatore = async (req, res) => {
         utente.monthlyLeadCounter -= 1;
         const leadData = {
           data: req.body.data,
-          nome: req.body.nome + ' ' + req.body.cognome,
+          nome: req.body.nome,
           cognome: req.body.cognome,
           email: req.body.email,
           numeroTelefono: req.body.numeroTelefono,
@@ -115,7 +115,7 @@ exports.createOrientatore = async (req, res) => {
           utente: utenteId,
           esito: req.body.esito,
           note: req.body.note,
-          trattamento: req.body.trattamento,
+          campoPlus: req.body.campoPlus,
           città: req.body.città,
           manualLead: true,
           utmCampaign: req.body.campagna,
@@ -127,7 +127,7 @@ exports.createOrientatore = async (req, res) => {
     } else {
       const leadData = {
         data: req.body.data,
-        nome: req.body.nome + ' ' + req.body.cognome,
+        nome: req.body.nome,
         cognome: req.body.cognome,
         email: req.body.email,
         numeroTelefono: req.body.numeroTelefono,
@@ -136,7 +136,7 @@ exports.createOrientatore = async (req, res) => {
         utente: utenteId,
         esito: req.body.esito,
         note: req.body.note,
-        trattamento: req.body.trattamento,
+        campoPlus: req.body.campoPlus,
         città: req.body.città,
         manualLead: true,
         utmCampaign: req.body.campagna

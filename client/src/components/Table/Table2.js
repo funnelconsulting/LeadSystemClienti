@@ -213,6 +213,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           provenienza: lead.campagna,
           città: lead.città ? lead.città : '',
           trattamento: lead.trattamento ? lead.trattamento : '',
+          campoPlus: lead.campoPlus ? lead.campoPlus : '',
           note: lead.note ? lead.note : '',
           id: lead._id,
           etichette: lead.etichette ? lead.etichette : null,
@@ -314,6 +315,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           provenienza: lead.campagna,
           città: lead.città ? lead.città : '',
           trattamento: lead.trattamento ? lead.trattamento : '',
+          campoPlus: lead.campoPlus ? lead.campoPlus : '',
           note: lead.note ? lead.note : '',
           id: lead._id,
           etichette: lead.etichette ? lead.etichette : null,
@@ -426,6 +428,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         fatturato: row.fatturato,
         città: row.città ? row.città : '',
         trattamento: row.trattamento ? row.trattamento : '',
+        campoPlus: row.campoPlus ? row.campoPlus : '',
         campagna: row.campagna,
         motivo: row.motivo,
         recallHours: row.recallHours,
@@ -581,6 +584,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           provenienza: lead.campagna,
           città: lead.città ? lead.città : '',
           trattamento: lead.trattamento ? lead.trattamento : '',
+          campoPlus: lead.campoPlus ? lead.campoPlus : '',
           note: lead.note ? lead.note : '',
           id: lead._id,
           etichette: lead.etichette ? lead.etichette : null,
@@ -663,6 +667,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           provenienza: lead.campagna,
           città: lead.città ? lead.città : '',
           trattamento: lead.trattamento ? lead.trattamento : '',
+          campoPlus: lead.campoPlus ? lead.campoPlus : '',
           note: lead.note ? lead.note : '',
           id: lead._id,
           etichette: lead.etichette ? lead.etichette : null,
@@ -788,6 +793,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
             note: updatedLead.note ? updatedLead.note : '',
             id: updatedLead._id,
             trattamento: updatedLead.trattamento,
+            campoPlus: updatedLead.campoPlus ? updatedLead.campoPlus : '',
             tentativiChiamata: updatedLead.tentativiChiamata ? updatedLead.tentativiChiamata : "0",
           };
           return { ...lead, ...adaptedLead };
@@ -1269,10 +1275,6 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                                      <span><span>o</span></span>
                                      Da contattare
                                  </div>
-                                 <div className={esito === "Non risponde" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Non risponde')}>
-                                     <span><span>o</span></span>
-                                     Non risponde
-                                 </div>
                                  <div className={esito === "Da richiamare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da richiamare')}>
                                      <span><span>o</span></span>
                                      Da richiamare
@@ -1289,46 +1291,13 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                                          </select>
                                      )}
                                  </div>
-                                 <div className={esito === "Fissato" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Fissato')}>
+                                 <div className={esito === "Opportunità" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Opportunità')}>
                                      <span><span>o</span></span>
-                                     Fissato
-                                     {esito === "Fissato" && <div className='choose-motivo'>
-                                     {patientTypes.map((opzione, index) => (
-                                         <label key={index} className="radio-label radio-label-scheda">
-                                             <input
-                                             type="radio"
-                                             name="motivo"
-                                             value={opzione}
-                                             checked={patientType === opzione}
-                                             onChange={() => setPatientType(opzione)}
-                                             />
-                                             {opzione}
-                                         </label>
-                                         ))}
-                                     </div>}
-                                     {esito === 'Fissato' ?
-                                     <>
-                                     <label className='label-not-blue'>Trattamento</label>
-                                             <select className="selectMotivo" value={treatment} onChange={(e) => setTreatment(e.target.value)}>
-                                             <option value='' disabled>Seleziona motivo</option>
-                                             {treatments.map((motivoOption, index) => (
-                                                 <option key={index} value={motivoOption}>{motivoOption}</option>
-                                             ))}
-                                             </select>
-                                             </>
-                                         :
-                                         null}
-                                     {esito === "Fissato" && (
-                                         <>
-                                         <label className='label-not-blue'>Città</label>
-                                             <select className="selectMotivo" value={location} onChange={(e) => setLocation(e.target.value)}>
-                                             <option value='' disabled>Seleziona motivo</option>
-                                             {locations.sort().map((motivoOption, index) => (
-                                                 <option key={index} value={motivoOption}>{motivoOption}</option>
-                                             ))}
-                                             </select>
-                                           </>  
-                                         )}
+                                     Opportunità
+                                 </div>
+                                 <div className={esito === "Venduto" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Venduto')}>
+                                     <span><span>o</span></span>
+                                     Venduto
                                  </div>
                              </div>
                          <button style={{ fontSize: "14px" }} className='btn-orie' onClick={updateLeadEsito}>Salva modifiche</button>
@@ -1345,10 +1314,10 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                   <option style={{fontSize: '16px'}} value='' disabled>{esitoToFilter ? esitoToFilter : "Seleziona esito"}</option>
                   <option style={{fontSize: '16px'}} value="Nessun filtro">Nessun filtro</option>
                   <option style={{fontSize: '16px'}} value='Da contattare'>Da contattare</option>
-                  <option style={{fontSize: '16px'}} value='Non risponde'>Non risponde</option>
                   <option style={{fontSize: '16px'}} value="Da richiamare">Da richiamare</option>
                   <option style={{fontSize: '16px'}} value='Non interessato'>Lead persa</option>
-                  <option style={{fontSize: '16px'}} value='Fissato'>Fissato</option>
+                  <option style={{fontSize: '16px'}} value="Opportunità">Opportunità</option>
+                  <option style={{fontSize: '16px'}} value='Venduto'>Venduto</option>
                 </select>
               </div>
             </div>

@@ -89,7 +89,6 @@ const LeadSchema = new Schema({
     recallDate: Date,
     recallHours: String,
     tipo: String, 
-    trattPrenotato: String, 
     luogo: String,
     tag: String,
     appDate: String,

@@ -28,6 +28,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
     const [orientatoriOptions, setOrientatoriOptions] = useState([]);
     const [esito, setEsito] = useState(lead.status);
     const [trattamento, setTrattamento] = useState(lead.trattamento ? lead.trattamento.replace(/_/g, ' ') : "");
+    const [campoPlus, setCampoPlus] = useState(lead.campoPlus ? lead.campoPlus : "");
     const [fatturato, setFatturato] = useState(lead.fatturato ? lead.fatturato : '0');
     const [oraChiamataRichiesto, setOraChiamataRichiesto] = useState(lead.oraChiamataRichiesto ? lead.oraChiamataRichiesto : '');
     const [mostraCalendar, setMostraCalendar] = useState(false);
@@ -236,7 +237,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                         fatturato,
                         motivo,
                         città,
-                        trattamento,
+                        campoPlus,
                         tentativiChiamata
                     };
                     const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
@@ -259,7 +260,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                     fatturato,
                     motivo: "",
                     città,
-                    trattamento,
+                    campoPlus,
                     tentativiChiamata
                 };
                 const response = await axios.put(`/lead/${userFixId}/update/${leadId}`, modifyLead);
@@ -452,10 +453,6 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                         <span><span>o</span></span>
                                         Da contattare
                                     </div>
-                                    <div className={esito === "Non risponde" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Non risponde')}>
-                                        <span><span>o</span></span>
-                                        Non risponde
-                                    </div>
                                     <div className={esito === "Da richiamare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da richiamare')}>
                                         <span><span>o</span></span>
                                         Da richiamare
@@ -471,6 +468,10 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                             ))}
                                             </select>
                                         )}
+                                    </div>
+                                    <div className={esito === "Opportunità" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Opportunità')}>
+                                        <span><span>o</span></span>
+                                        Opportunità
                                     </div>
                                     <div className={esito === "Venduto" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Venduto')}>
                                         <span><span>o</span></span>
@@ -603,8 +604,8 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                 </div>
                                 <div className='trat-cont-input'>
                                     <p>Campo aggiuntivo</p>
-                                    <input className='input-trattamento-hover' disabled placeholder={lead.trattamento.replace(/_/g, ' ')} value={trattamento} onChange={(e) => setTrattamento(e.target.value)} />
-                                    <span className="trattamento-fullname">{lead.trattamento.replace(/_/g, ' ')}</span>
+                                    <input className='input-trattamento-hover' placeholder={campoPlus} value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} />
+                                    <span className="trattamento-fullname">{campoPlus}</span>
                                 </div>
                             </div>
                         </div>

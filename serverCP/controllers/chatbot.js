@@ -29,10 +29,10 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
     let canale = '';
     let cognome = '';
     let nome = '';
-    const specificField = custom_fields.find(field => field.id === '720286');
-    const specificFieldApp = custom_fields.find(field => field.id === '562190');
-    const customLastSurname = custom_fields.find(field => field.id === "26189");
-    const customLastName = custom_fields.find(field => field.id === "246801");
+    const specificField = custom_fields.find(field => field.id === '759444');
+    const specificFieldApp = custom_fields.find(field => field.id === '31128');
+    const customLastSurname = custom_fields.find(field => field.id === "500371");
+    const customLastName = custom_fields.find(field => field.id === "940350");
     if (specificField && specificField.type === '0') {
       conversation_summary = specificField.value;
     }
@@ -70,7 +70,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
       if (conversation_summary && specificFieldApp?.value && specificFieldApp?.value !== ""){
-        const userId = '655f707143a59f06d5d4dc3b'; //'64ba3df7e1c3aea9bdc02785'; // UNUSUAL
+        const userId = '6634e06f353945e674c43b70'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
           data: new Date(),
@@ -81,7 +81,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
           campagna: 'AI chatbot',
           esito: 'Da contattare',
           orientatori: null,
-          utente: "655f707143a59f06d5d4dc3b", //"64ba3df7e1c3aea9bdc02785", //UNUSUAL
+          utente: "6634e06f353945e674c43b70", //"662f767d3eda57d593f420fe", TEST ACCOUNT
           note: '',
           fatturato: '',
           utmCampaign: 'AI chatbot',
@@ -97,20 +97,21 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
           tag: "unusual",
         });
         try {
-          lead.assigned = true;
-          await lead.save();
 
           const existingLead = await Lead.findOne({ idLeadChatic: id });
 
           if (!existingLead) {
             if (!isValidPhoneNumber(phone)){
+              console.log("Numero non valido")
               return
             }
+            lead.assigned = true;
+            await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente OneNetwork`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente Unusual`);
             await user.save();
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente OneNetwork`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente Unusual`)
             if (!isValidPhoneNumber(phone)){
               console.log('Numero non valido')
               return
@@ -150,7 +151,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
       await lead.save();
       console.log('Lead salvato con successo nel database!');
       if (conversation_summary && specificFieldApp?.value && specificFieldApp?.value !== ""){
-        const userId ='655f707143a59f06d5d4dc3b'; //'64ba3df7e1c3aea9bdc02785'; UNUSUAL
+        const userId ='6634e06f353945e674c43b70'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
           data: new Date(),
@@ -161,7 +162,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
           campagna: 'AI chatbot',
           esito: 'Da contattare',
           orientatori: null,
-          utente: "655f707143a59f06d5d4dc3b", //"64ba3df7e1c3aea9bdc02785", //UNUSUAL
+          utente: "6634e06f353945e674c43b70", //"662f767d3eda57d593f420fe", TEST ACCOUNT
           note: '',
           fatturato: '',
           utmCampaign: 'AI chatbot',
@@ -177,20 +178,21 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
           tag: "unusual",
         });
         try {
-          lead.assigned = true;
-          await lead.save();
 
           const existingLead = await Lead.findOne({ idLeadChatic: id });
 
           if (!existingLead) {
             if (!isValidPhoneNumber(phone)){
+              console.log("Numero non valido")
               return
             }
+            lead.assigned = true;
+            await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente OneNetwork`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente Unusual`);
             await user.save();
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente OneNetwork`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente Unusual`)
             if (!isValidPhoneNumber(phone)){
               return
             }

@@ -12,6 +12,7 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
   const [cognome, setCognome] = useState('');
   const [trattamento, setTrattamento] = useState('');
   const [email, setEmail] = useState('');
+  const [campoPlus, setCampoPlus] = useState('');
   const [numeroTelefono, setNumeroTelefono] = useState('');
   const [campagna, setCampagna] = useState('');
   const [esito, setEsito] = useState('Da contattare');
@@ -33,10 +34,11 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
   };
 
   const userId = state.user._id;
+  const userFixId = state.user.role && state.user.role === "orientatore" ? state.user.utente : state.user._id;
 
   useEffect(() => {
     const getOrientatori = async () => {
-      await axios.get(`/utenti/65d3110eccfb1c0ce51f7492/orientatori`)
+      await axios.get(`/utenti/${userFixId}/orientatori`)
         .then(response => {
           const data = response.data.orientatori;
 
@@ -66,10 +68,11 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
         note,
         città,
         trattamento,
+        campoPlus,
         from: 'user',
       };
       console.log(newLead);
-      const response = await axios.post(`lead/create/65d3110eccfb1c0ce51f7492`, newLead);
+      const response = await axios.post(`lead/create/${userFixId}`, newLead);
       toast.success('Hai aggiunto il lead!');
       fetchLeads();
       setAddOpen(false);
@@ -134,10 +137,10 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
           <select required value={esito} onChange={(e) => setEsito(e.target.value)}>
             <option value="" disabled>Seleziona un esito</option>
             <option value='Da contattare'>Da contattare</option>
-            <option value='Non risponde'>Non risponde</option>
             <option value="Da richiamare">Da richiamare</option>
             <option value='Non interessato'>Lead persa</option>
-            {/*<option value='Fissato'>Fissato</option>*/}
+            <option value='Opportunità'>Opportunità</option>
+            <option value='Venduto'>Venduto</option>
           </select>
         </label>
         <label>
@@ -150,19 +153,8 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
           </select>
         </label>
         <label>
-          Trattamento:
-          <select required value={trattamento} onChange={(e) => setTrattamento(e.target.value)}>
-            <option value="" disabled>Seleziona un trattamento</option>
-            <option value='Implantologia per singolo dente'>Implantologia per singolo dente</option>
-            <option value='Implantologia a carico immediato'>Implantologia a carico immediato</option>
-            <option value="Implantologia computer guidata">Implantologia computer guidata</option>
-            <option value='Impianti per mancanza di osso (Impianti pterigoidei)'>Impianti per mancanza di osso (Impianti pterigoidei)</option>
-            <option value="Protesi dentale semifissa">Protesi dentale semifissa</option>
-            <option value='Pulizia dei denti'>Pulizia dei denti</option>
-            <option value="Ortodonzia trasparente">Ortodonzia trasparente</option>
-            <option value='Faccette dentali'>Faccette dentali</option>
-            <option value='Sbiancamento'>Sbiancamento</option>
-          </select>
+          Campo aggiuntivo:
+          <input type="email" value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} required />
         </label>
         <label>
           Note:
