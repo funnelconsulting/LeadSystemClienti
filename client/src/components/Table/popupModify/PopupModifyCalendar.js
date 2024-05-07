@@ -590,17 +590,6 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                     </label>
                                 </div>}
                             </div>
-                            <div className='mi-div'>
-                                <div>
-                                    <p>Città</p>
-                                    <input disabled placeholder={lead.città.charAt(0).toUpperCase()} value={città} onChange={(e) => setCittà(e.target.value)} />
-                                </div>
-                                <div className='trat-cont-input'>
-                                    <p>Campo aggiuntivo</p>
-                                    <input className='input-trattamento-hover' placeholder={campoPlus} value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} />
-                                    <span className="trattamento-fullname">{campoPlus}</span>
-                                </div>
-                            </div>
                         </div>
                         <hr className='linea-che-serve' />
                         <div className='popup-bottom maggiori-informazioni'>
@@ -611,57 +600,6 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                                 placeholder='Inserisci una nota...'
                                 id='textareanote' value={note} onChange={(e) => setNote(e.target.value)} />
                         </div>
-                    {/*: (
-                    <div className='maggiori-informazioni'>
-                        <h4>Informazioni inserite dal cliente sul Comparatore</h4>
-                        <div className='mi-div'>
-                            <div>
-                                <p>Tipologia di corso</p>
-                                <input type='text' disabled value={tipologiaCorso} onChange={(e) => setTipologiaCorso(e.target.value)} />
-                            </div>
-                            <div>
-                                <p>Area studi</p>
-                                <input type='text' disabled value={corsoDiLaurea} onChange={(e) => setCorsoDiLaurea(e.target.value)} />
-                            </div>
-                        </div>
-                        <div className='mi-div'>
-                            <div>
-                                <p>Corso di laurea</p>
-                                <input type='text' disabled value={facolta} onChange={(e) => setFacolta(e.target.value)} />
-                            </div>
-                            <div>
-                                <p>Budget</p>
-                                <input type='text' disabled value={budget} onChange={(e) => setBudget(e.target.value)} />
-                            </div>
-                        </div>
-                        <div className='mi-div'>
-                            <div>
-                                <p>Iscrizione</p>
-                                <input type='text' disabled value={enrollmentTime} onChange={(e) => setEnrollmentTime(e.target.value)} />
-                            </div>
-                            <div>
-                                <p>Frequenti l’università</p>
-                                <input type='text' disabled value={frequentiUni} onChange={(e) => setFrequentiUni(e.target.value)} />
-                            </div>
-                        </div>    
-                        <div className='mi-div'>
-                            <div>
-                                <p>Lavori?</p>
-                                <input type='text' disabled value={lavoro} onChange={(e) => setLavoro(e.target.value)} />
-                            </div>
-                            <div>
-                                <p>Tempo disponibile</p>
-                                <input type='text' disabled value={oreStudio} onChange={(e) => setOreStudio(e.target.value)} />
-                            </div>
-                        </div> 
-                        <div className='mi-div'>
-                            <div>
-                                <p>Categoria</p>
-                                <input type='text' disabled value={categories} onChange={(e) => setCategories(e.target.value)} />
-                            </div>
-                        </div>     
-                    </div>
-                )*/}
                 <div className='popup-bottom'>
                     <div className='popup-bottom-button'>
                         <a onClick={updateLead}>Salva scheda lead</a>

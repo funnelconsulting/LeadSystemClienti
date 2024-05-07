@@ -517,12 +517,7 @@ const HomeSuper = () => {
                 <thead style={{ zIndex: '5', position: 'sticky', top: '-20px' }}>
                   <tr className='tr-super-thead'>
                     <th style={{ fontWeight: "600" }}>Cliente</th>
-                    <th style={{ fontWeight: "600" }}>Lead Acquistati</th>
-                    {/*<th style={{ fontWeight: "600" }}>Status</th>*/}
                     <th style={{ fontWeight: "600" }}>Lead Recapitati</th>
-                    <th style={{ fontWeight: "600" }}>Lead Mancanti</th>
-                    <th style={{ fontWeight: "600" }}>Cap Daily</th>
-                    {/*<th style={{ fontWeight: "600" }}>Rating</th>*/}
                     <th style={{ fontWeight: "600" }}>Media</th>
                     <th style={{ fontWeight: "600" }}>CR%</th>
                     <th style={{ fontWeight: "600" }}></th>
@@ -534,42 +529,7 @@ const HomeSuper = () => {
                     .map((row) => (
                       <tr className='tr-home-super' key={row._id} style={{margin: '10px 0'}}>
                         <td>{row.nameECP} <span style={{margin:'0 10px'}} onClick={() => handlePopupClient(row)}>Edit <FaPencilAlt size={7} /></span></td>
-                        <td>{row.monthlyLeadFix ? row.monthlyLeadFix + ' / mese' : 0}</td>
-                        {/*<td className='td-status'>
-                            {row?.subscriptions && row.subscriptions?.length > 0 ? (
-                                <>
-                                {isRenewalNear(row.subscriptions[0]) ? (
-                                  <>
-                                  <span className="status-dot pending-status">0</span> In scadenza
-                                  </>
-                                ): (
-                                  <>
-                                  <span className="status-dot active-status">0</span> Attivo
-                                  </>
-                                )}
-                                </>
-                              ) : (
-                                <>
-                                  <span className="status-dot blocked-status">0</span> Bloccato
-                                </>
-                              )}
-                        </td>*/}
                         <td>{row.leadCount}</td>
-                        <td>
-                          {row.monthlyLeadCounter} <span style={{margin:'0 20px'}} onClick={() => handlePopupModifyCounter(row)}>Edit <FaPencilAlt size={7} /></span>
-                        </td>
-                        <td>
-                          {row.dailyCap ? row.dailyLead + ' / ' + row.dailyCap : 'N/a'} <span style={{margin:'0 20px'}} onClick={() => handlePopupModifyCap(row)}>Edit <FaPencilAlt size={7} /></span>
-                        </td>
-                        {/*<td className="fixed-width-cell">{row.rating ? 
-                                          <Rating
-                                          initialRating={row.rating}
-                                          emptySymbol="far fa-star"
-                                          fullSymbol="fas fa-star"
-                                          onClick={(value) => handleChangeRatingByTable(row, value, row.note)}
-                                        />
-                         : 
-                        ''}</td>*/}
                         <td style={{cursor: 'pointer'}} className="Details">{row.dailyAverage}/day</td>
                         <td  className="fixed-width-cell">{calculateConversionRate(row)}%</td>
                         <td style={{cursor: 'pointer'}} className="button-add-lead-super button2" onClick={() => handlePopupAddLead(row)}>Aggiunta lead</td>

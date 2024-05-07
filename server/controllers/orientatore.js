@@ -35,7 +35,7 @@ exports.createOrientatore = async (req, res) => {
         }
       });
 
-      const url = "https://bluedental-leadsystem.netlify.app/login"
+      const url = "https://ai.leadsystem.app/login"
   
       const mailOptions = {
         from: process.env.EMAIL_GMAIL,
@@ -45,7 +45,7 @@ exports.createOrientatore = async (req, res) => {
           <html>
             <body>
               <p>Gentile ${nome},</p>
-              <p>Ti diamo il benvenuto come nel tuo LeadSystem di Bluedental! Di seguito trovi le tue informazioni di accesso:</p>
+              <p>Ti diamo il benvenuto come nel tuo LeadSystem! Di seguito trovi le tue informazioni di accesso:</p>
               <p>Email: ${email}</p>
               <p>Password: 12345678</p>
               <a href="${url}" style="display: inline-block; padding: 10px 20px; background-color: #3471CC; color: #fff; text-decoration: none; border-radius: 5px;">Cambia password</a>

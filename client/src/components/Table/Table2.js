@@ -223,6 +223,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           lastModify: lead.lastModify ? lead.lastModify : null, 
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
+          appDate: lead.appDate ? lead.appDate : null,
+          summary: lead.summary ? lead.summary : ''
         };
       });
 
@@ -325,6 +327,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           lastModify: lead.lastModify ? lead.lastModify : null, 
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
+          appDate: lead.appDate ? lead.appDate : null,
+          summary: lead.summary ? lead.summary : ''
         };
       });
 
@@ -594,6 +598,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           lastModify: lead.lastModify ? lead.lastModify : null, 
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
+          appDate: lead.appDate ? lead.appDate : null,
+          summary: lead.summary ? lead.summary : ''
         };
       });
 
@@ -677,6 +683,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           lastModify: lead.lastModify ? lead.lastModify : null, 
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
+          appDate: lead.appDate ? lead.appDate : null,
+          summary: lead.summary ? lead.summary : ''
         };
       });
 

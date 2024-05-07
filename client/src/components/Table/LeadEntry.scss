@@ -8,7 +8,7 @@
     cursor: default;
     .elim {
         position: absolute;
-        right: 15px;
+        right: 10px;
         bottom: 20px;
         svg {
             cursor: pointer;
@@ -36,43 +36,35 @@
     .date-recall{
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         justify-content: flex-start;
-        gap: 1rem;
-        margin-top: -5px;
-        margin-bottom: 10px;
+        gap: 0.6rem;
+        margin-top: 7px;
+        margin-bottom: -3px;
+    }
+    .calendario-icon{
+        background-color: green;
+        color: white;
+        min-width: 33px;
+        min-height: 33px;
+        margin-top: 0;
+        padding: 3px;
+        border-radius: 50%;
+        max-width: 33px;
+        max-height: 33px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .date-recall > p:first-of-type{
-        color: #000000B2;
-        padding: 0px 0px;
-        border-radius: 20px;
-        font-size: 12px;
-    }
-    .date-recall > p:first-of-type > span {
-        background-color: #3471CC;
+        background-color: #C41247;
         color: white;
-        border-radius: 10px;
-        padding: 1px 12px;
-        margin-left: 3px;
-    }
-    .recPeg{
-        position: absolute;
-        left: 15px;
-        bottom: 20px; 
-    }
-    .recPeg img {
-        width: 40px;
-    }
-    .recall-bollettino{
-        background-color: transparent;
-        border: 1px solid #30978B;
-        padding: 3px 10px;
+        padding: 3px 12px;
         border-radius: 20px;
         font-size: 14px;
     }
     .date-recall img {
-        width: 18px;
-        height: 18px;
+        width: 40px;
     }
     .options-etichetta{
         display: flex;
@@ -170,6 +162,12 @@
         align-items: center;
         justify-content: space-between;
       }
+      .top-bollettino > div {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 5px;
+      }
       .topnomelead{
         color: #8C8C8C;
         font-size: 10px;
@@ -197,7 +195,6 @@
       }
     .name {
         font-size: 14px;
-        max-width: 70%;
     }
 
     .phone,
@@ -221,8 +218,7 @@
     }
     .modifica{
         text-decoration: underline;
-        margin-top: -20px;
-        margin-bottom: -5px;
+        margin-top: -10px;
     }
     .options {
         display: flex;
@@ -301,19 +297,11 @@
         }
         
         .options {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 100%;
+
             .sposta {
                 display: block !important;
             }
         }
-    }
-    .recPeg{
-        position: absolute;
-        left: 15px;
-        bottom: 10px !important; 
     }
 }
 

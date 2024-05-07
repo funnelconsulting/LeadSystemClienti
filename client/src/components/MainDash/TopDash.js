@@ -20,6 +20,10 @@ const TopDash = ({ hideexport = false,
 }) => {
   const [state, setState] = useContext(UserContext);
 
+  function getDisplayName(user) {
+    const name = user.role === "orientatore" ? user.nome : user.name;
+    return name.length > 10 ? `${name.substring(0, 10)}...` : name;
+  }
 
   if (hideall)
     return (
@@ -102,7 +106,7 @@ const TopDash = ({ hideexport = false,
           {!hideciao &&
             <div id='fstdiv'>
               <span className='iniziale-top-dash'>{state.user.role && state.user.role === "orientatore" ? state.user.nome.charAt(0) : state.user.name ? state.user.name.charAt(0) : ""}</span>
-              <p>ciao <span><u>{state.user.role && state.user.role === "orientatore" ? state.user.nome : state.user.name}</u></span></p>
+              <p>ciao <span><u>{getDisplayName(state.user)}</u></span></p>
             </div>
           }
         </div>

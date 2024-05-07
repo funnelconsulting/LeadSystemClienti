@@ -143,7 +143,7 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
             <option value='Venduto'>Venduto</option>
           </select>
         </label>
-        <label>
+        {/*<label>
           Città:
           <select required value={città} onChange={(e) => setCittà(e.target.value)}>
             <option value="">Seleziona una città</option>
@@ -151,11 +151,11 @@ const AddLeadPopup = ({ setAddOpen, popupRef, fetchLeads }) => {
               <option key={index} value={motivoOption}>{motivoOption}</option>
             ))}
           </select>
-        </label>
-        <label>
+          </label>*/}
+        {/*<label>
           Campo aggiuntivo:
           <input type="email" value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} required />
-        </label>
+        </label>*/}
         <label>
           Note:
           <textarea type="text" value={note} onChange={(e) => setNote(e.target.value)} />

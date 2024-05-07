@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const fs = require('fs').promises;
+const fs = require('fs');
 require("dotenv").config();
 const {google} = require('googleapis');
 const path = require("path");
 const cron = require('node-cron');
+const { parse } = require('json2csv');
 const LeadChatbot = require('./models/leadChatbot');
 const {authenticate} = require('@google-cloud/local-auth');
 const { saveLeadChatbotUnusual } = require('./controllers/chatbot');
@@ -114,6 +115,22 @@ async function exportChatbot(auth) {
   }
 }
 
+const exportLeadsToCSV = async () => {
+  try {
+      const leads = await LeadChatbot.find({});
+      const csv = parse(leads, {
+          fields: ["idLead", "channel", "data", "fullName", "nome", "cognome", "email", "numeroTelefono", "last_interaction", "appointment_date", "conversation_summary", "assigned"]
+      });
+      fs.writeFileSync('./leadchatbot.csv', csv);
+      console.log('File CSV scritto con successo!');
+  } catch (error) {
+      console.error('Errore durante l\'esportazione dei leads:', error);
+  } finally {
+      mongoose.connection.close();
+  }
+};
+
+//exportLeadsToCSV()
 app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
 
 /*const runDailyJob = () => {

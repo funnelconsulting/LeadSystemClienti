@@ -347,7 +347,7 @@
 }
 
 #looptopdash {
-    scale: 1.5;
+    scale: 1.3;
     color: #00000080;
 }
 
@@ -768,7 +768,12 @@
     }
 
 }
-
+@media screen and (width <= 1400px){
+    .btn-legenda-visibile{
+        font-size: 10px;
+        padding: 6px 10px;
+    }
+}
 @media screen and (width >= 2001px) {
     .topDash {
         gap: 5rem !important;
@@ -800,9 +805,12 @@
         margin-bottom: 20px;
         margin-top: 15px;
         #dashcerca {
-            font-size: 18px !important;
+            font-size: 14px !important;
         }
 
+    }
+    .btn-legenda-visibile{
+        font-size: 12px;
     }
     #dwrep {
         margin-top: 0;
@@ -873,7 +881,7 @@
     #fstdiv {
         p,
         #emoji {
-            font-size: 20px !important;
+            font-size: 16px !important;
         }
     }
     #dwrep {
@@ -898,7 +906,6 @@
     .entries {
         height: 40vh !important;
     }
-
     .topDash {
 
         #fstdashitem {
@@ -924,7 +931,7 @@
         }
 
         #looptopdash {
-            scale: 1.6;
+            scale: 1;
         }
 
         #lasttopdashitem {
@@ -932,7 +939,7 @@
 
                 p,
                 #emoji {
-                    font-size: 18px !important;
+                    font-size: 12px !important;
                 }
             }
 
@@ -964,7 +971,7 @@
     }
 
     .topDash-item label.hideexport {
-        width: 300px;
+        width: 290px;
     }
 
     #lasttopdashitem {

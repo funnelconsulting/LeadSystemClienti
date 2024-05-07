@@ -509,8 +509,8 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                     </p>
                                     }
                                     <p><FiClock color='#30978B' /> Data di <b>creazione lead</b>: <span>{formatDate(lead.date)}</span></p>
-                                    {(lead.provenienza === "AI chatbot" || (lead.appDate && lead?.appDate?.trim() !== "")) && lead.appDate && <h6><FiClock color='#3471CC' /> Data <b>appuntamento:</b> <span>{formatDateString(lead.appDate)}</span></h6>}
                                     <p>{lead.lastModify && lead.lastModify !== null ? <><FiClock color='#3471CC' /> Data <b>ultima modifica</b>: <span>{formatDate(lead.lastModify)}</span></> : ""}</p>
+                                    {(lead.provenienza === "AI chatbot" || (lead.appDate && lead?.appDate?.trim() !== "")) && lead.appDate && <h6><FiClock color='#3471CC' /> Data <b>appuntamento:</b> <span>{formatDateString(lead.appDate)}</span></h6>}
                                     <p style={{margin: '17px 0 10px 0'}}>Stato lead:
                                         <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
                                     </p>
@@ -553,11 +553,11 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                             <div className='mi-div'>
                                 <div>
                                     <p>Telefono</p>
-                                    <input placeholder={lead.telephone} disabled value={numeroTelefono} onChange={(e) => setNumeroTelefono(e.target.value)} />
+                                    <input placeholder={lead.telephone} value={numeroTelefono} onChange={(e) => setNumeroTelefono(e.target.value)} />
                                 </div>
                                 <div>
                                     <p>Email</p>
-                                    <input placeholder={lead.email} disabled value={email} onChange={(e) => setEmail(e.target.value)} />
+                                    <input placeholder={lead.email} value={email} onChange={(e) => setEmail(e.target.value)} />
                                 </div>
                             </div>
                             <div className={lead.leadAmbassador ? 'mi-div mgm-div' : 'mi-div'}>
@@ -597,7 +597,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                     </label>
                                 </div>}
                             </div>
-                            <div className='mi-div'>
+                            {/*<div className='mi-div'>
                                 <div>
                                     <p>Città</p>
                                     <input disabled placeholder={lead.città.charAt(0).toUpperCase()} value={città} onChange={(e) => setCittà(e.target.value)} />
@@ -607,7 +607,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                     <input className='input-trattamento-hover' placeholder={campoPlus} value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} />
                                     <span className="trattamento-fullname">{campoPlus}</span>
                                 </div>
-                            </div>
+                            </div>*/}
                         </div>
                         <hr className='linea-che-serve' />
                         <div className='popup-bottom maggiori-informazioni'>
