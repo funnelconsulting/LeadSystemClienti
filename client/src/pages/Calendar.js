@@ -204,12 +204,13 @@ const CalendarM = () => {
               description: `Data: ${dateTime}, Testo`,
             };
           });
-    
+          console.log(filteredTableLead)
           const mergedArray = filteredTableLead.concat(filteredDoppione);
+          console.log(mergedArray)
           const ori = localStorage.getItem("Ori");
 
           const filteredByRecall = mergedArray.filter((lead) => {
-            return lead.extendedProps.recallDate && lead.extendedProps.recallHours && lead.extendedProps.recallDate !== null;
+            return (lead.extendedProps.recallDate && lead.extendedProps.recallHours && lead.extendedProps.recallDate !== null) || (lead.extendedProps.appDate);
           });
     
           const filteredByOrientatore = filteredByRecall.filter((row) => {
@@ -295,7 +296,7 @@ const CalendarM = () => {
                 const dateTime = (lead.campagna === "AI chatbot" || (lead.appDate && lead.appDate?.trim()  !== '')) ?
                 formatDateString(lead.appDate) :
                 moment(`${lead.recallDate} ${lead.recallHours}`, 'YYYY-MM-DD HH:mm:ss').toDate();
-    
+              console.log(dateTime)
             return {
               id: lead._id,
               title: lead.nome + ' ' + lead.cognome,
