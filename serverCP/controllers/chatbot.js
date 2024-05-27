@@ -4,6 +4,20 @@ const User = require("../models/user")
 const cron = require('node-cron')
 const axios = require('axios')
 const moment = require('moment');
+const { google } = require('googleapis');
+const { createEvent } = require("../server");
+require("dotenv").config();
+
+const scopes = ['https://www.googleapis.com/auth/calendar'];
+const redirect_uris = ["https://leadsystem-production.up.railway.app/","http://localhost:8000/","https://server-chatbot-ai-production.up.railway.app/","http://localhost:8001/"]
+
+const oauth2Client = new google.auth.OAuth2(
+  process.env.CLIENT_ID,
+  process.env.CLIENT_SECRET,
+  redirect_uris,
+);
+
+const calendar = google.calendar({version: 'v3', auth: oauth2Client});
 
 function isValidPhoneNumber(phoneNumber) {
     const phoneRegex = /^(?:\+?39)?(?:\d{10})$/;
@@ -110,6 +124,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
             await newLead.save();
             console.log(`Assegnato il lead ${lead.cognome} all'utente Unusual`);
             await user.save();
+            await createEvent("info@unusualexperience.it", newLead.appDate, nome + ' ' + cognome, conversation_summary)
           } else {
             console.log(`Già assegnato il lead ${lead.cognome} all'utente Unusual`)
             if (!isValidPhoneNumber(phone)){
@@ -191,6 +206,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
             await newLead.save();
             console.log(`Assegnato il lead ${lead.cognome} all'utente Unusual`);
             await user.save();
+            await createEvent("info@unusualexperience.it", newLead.appDate, nome + ' ' + cognome, conversation_summary)
           } else {
             console.log(`Già assegnato il lead ${lead.cognome} all'utente Unusual`)
             if (!isValidPhoneNumber(phone)){

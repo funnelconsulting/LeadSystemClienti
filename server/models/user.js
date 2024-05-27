@@ -74,6 +74,8 @@ const userSchema = new Schema({
   }],
   note: String,
   tag: String,
+  googleAccessToken: String,
+  googleRefreshToken: String,
 });
 
 module.exports = mongoose.model("User", userSchema);

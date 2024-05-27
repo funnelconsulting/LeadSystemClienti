@@ -9,6 +9,8 @@ const cron = require('node-cron');
 const { parse } = require('json2csv');
 const LeadChatbot = require('./models/leadChatbot');
 const {authenticate} = require('@google-cloud/local-auth');
+const Token = require("./models/googleToken")
+const moment = require('moment');
 const { saveLeadChatbotUnusual } = require('./controllers/chatbot');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
@@ -140,6 +142,117 @@ app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
 };*/
 
 //cron.schedule('10 2 * * *', runDailyJob);
+const redirect_uris=["http://localhost:8001","http://localhost:8000","https://server-chatbot-ai-production.up.railway.app"]
+const scopes = ['https://www.googleapis.com/auth/calendar'];
+const CLIENT_SECRET="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"
+const CLIENT_ID="321609978941-3tddpomhn02meoudv8k0giqguka5v18m.apps.googleusercontent.com"
+const REDIRECT_URI = "http://localhost:8001/oauth2callback";
+const serviceAccountAuth = new google.auth.JWT({
+  email: 'calendarleadsystem@leadsystem-comparacorsi.iam.gserviceaccount.com',
+  key: process.env.GOOGLE_PRIVATE_KEY,
+  scopes: ['https://www.googleapis.com/auth/calendar'],
+  subject: 'info@funnelconsulting.it'
+});
+
+const calendar = google.calendar({ version: 'v3', auth: serviceAccountAuth });
+exports.createEvent = async (emailInvitato, dataInizio, nome, summary) => {
+  const dateTimeISO = moment(dataInizio, 'DD-MM-YY HH:mm').toISOString();
+  const endDateTimeISO = moment(inputStartDateTime, 'DD-MM-YY HH:mm').add(30, 'minutes').toISOString();
+
+  const event = {
+      summary: 'Appuntamento con '+nome,
+      description: summary,
+      start: {
+        dateTime: dateTimeISO,
+        timeZone: 'Europe/Rome',
+      },
+      end: {
+          dateTime: endDateTimeISO,
+          timeZone: 'Europe/Rome',
+      },
+      attendees: [
+          { email: 'info@funnelconsulting.it' },
+          { email: emailInvitato },
+      ],
+      reminders: {
+          useDefault: false,
+          overrides: [
+              { method: 'email', minutes: 24 * 60 },
+              { method: 'popup', minutes: 10 },
+          ],
+      },
+  };
+
+  try {
+      const { data } = await calendar.events.insert({
+          calendarId: 'primary',
+          resource: event,
+      });
+
+      console.log(`Evento creato: ${data.htmlLink}`);
+  } catch (error) {
+      console.error('Errore nella creazione dell\'evento:', error);
+  }
+}
+
+async function findEventByTitleAndDate(title, date) {
+  try {
+      const events = await calendar.events.list({
+          calendarId: 'primary',
+          timeMin: moment(date).startOf('day').toISOString(),
+          timeMax: moment(date).endOf('day').toISOString(),
+          q: title,
+          singleEvents: true,
+          orderBy: 'startTime',
+      });
+
+      const event = events.data.items.find(event => event.summary.includes(title));
+
+      if (event) {
+          return event.id;
+      } else {
+          console.log('Evento non trovato');
+          return null;
+      }
+  } catch (error) {
+      console.error('Errore durante la ricerca dell\'evento:', error);
+  }
+}
+
+async function updateEvent(title, date, newStartDateTime, newEndDateTime) {
+  try {
+      const eventId = await findEventByTitleAndDate(title, date);
+
+      if (!eventId) {
+          console.log('Evento non trovato, impossibile aggiornare.');
+          return;
+      }
+
+      const event = await calendar.events.get({
+          calendarId: 'primary',
+          eventId: eventId,
+      });
+
+      event.data.start = {
+          dateTime: moment(newStartDateTime, 'DD-MM-YY HH:mm').toISOString(),
+          timeZone: 'Europe/Rome',
+      };
+      event.data.end = {
+          dateTime: moment(newEndDateTime, 'DD-MM-YY HH:mm').toISOString(),
+          timeZone: 'Europe/Rome',
+      };
+
+      const updatedEvent = await calendar.events.update({
+          calendarId: 'primary',
+          eventId: eventId,
+          resource: event.data,
+      });
+
+      console.log(`Evento aggiornato: ${updatedEvent.data.htmlLink}`);
+  } catch (error) {
+      console.error('Errore durante l\'aggiornamento dell\'evento:', error);
+  }
+}
 
 const port = process.env.PORT || 8001;
 app.listen(port, () => console.log(`Server is running on port ${port}`));
