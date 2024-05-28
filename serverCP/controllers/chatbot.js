@@ -35,8 +35,8 @@ const serviceAccountAuth = new google.auth.JWT({
 const calendar = google.calendar({ version: 'v3', auth: serviceAccountAuth });
 async function createEvent(emailInvitato, dataInizio, nome, summary, phoneNumber, email){
   const formattedDate = moment(dataInizio, 'YY-MM-DD HH:mm').format('DD-MM-YY HH:mm');
-  const dateTimeISO = moment(formattedDate, 'DD-MM-YY HH:mm').toISOString();
-  const endDateTimeISO = moment(formattedDate, 'DD-MM-YY HH:mm').add(30, 'minutes').toISOString();
+  const dateTimeISO = moment.tz(formattedDate, 'DD-MM-YY HH:mm', 'Europe/Rome').toISOString();
+  const endDateTimeISO = moment.tz(formattedDate, 'DD-MM-YY HH:mm', 'Europe/Rome').add(30, 'minutes').toISOString();
   let descriptionTot = `Summary: ${summary}\nNome: ${nome}\nCellulare: ${phoneNumber}`;
   if (email) {
       descriptionTot += `\nEmail: ${email}`;
