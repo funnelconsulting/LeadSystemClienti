@@ -54,10 +54,10 @@ async function createEvent(emailInvitato, dataInizio, nome, summary, phoneNumber
       },
       attendees: [
           { email: 'marketing@funnelconsulting.it' },
-          { email: "andrea.c@funnelconsulting.it"},
+          //{ email: "andrea.c@funnelconsulting.it"},
           { email: "info@funnelconsulting.it"},
-          //{ email: emailInvitato },
-          { email: "mattianoris23@gmail.com"}
+          { email: emailInvitato },
+          //{ email: "mattianoris23@gmail.com"}
       ],
       reminders: {
           useDefault: false,
