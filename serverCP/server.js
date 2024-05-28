@@ -155,46 +155,6 @@ const serviceAccountAuth = new google.auth.JWT({
 });
 
 const calendar = google.calendar({ version: 'v3', auth: serviceAccountAuth });
-exports.createEvent = async (emailInvitato, dataInizio, nome, summary) => {
-  const dateTimeISO = moment(dataInizio, 'DD-MM-YY HH:mm').toISOString();
-  const endDateTimeISO = moment(inputStartDateTime, 'DD-MM-YY HH:mm').add(30, 'minutes').toISOString();
-
-  const event = {
-      summary: 'Appuntamento con '+nome,
-      description: summary,
-      start: {
-        dateTime: dateTimeISO,
-        timeZone: 'Europe/Rome',
-      },
-      end: {
-          dateTime: endDateTimeISO,
-          timeZone: 'Europe/Rome',
-      },
-      attendees: [
-          { email: 'info@funnelconsulting.it' },
-          { email: emailInvitato },
-      ],
-      reminders: {
-          useDefault: false,
-          overrides: [
-              { method: 'email', minutes: 24 * 60 },
-              { method: 'popup', minutes: 10 },
-          ],
-      },
-  };
-
-  try {
-      const { data } = await calendar.events.insert({
-          calendarId: 'primary',
-          resource: event,
-      });
-
-      console.log(`Evento creato: ${data.htmlLink}`);
-  } catch (error) {
-      console.error('Errore nella creazione dell\'evento:', error);
-  }
-}
-
 async function findEventByTitleAndDate(title, date) {
   try {
       const events = await calendar.events.list({

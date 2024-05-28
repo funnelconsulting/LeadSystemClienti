@@ -5,19 +5,78 @@ const cron = require('node-cron')
 const axios = require('axios')
 const moment = require('moment');
 const { google } = require('googleapis');
-const { createEvent } = require("../server");
 require("dotenv").config();
-
+/*
+{
+  "type": "service_account",
+  "project_id": "leadsystem-calendar",
+  "private_key_id": "bf75055c7f23311636998eb8fd98ecc3bf790c98",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDEAwZt1ngBwN+m\nocMrAgXFrLBOlwov4SD6SiMuxA4coSrMgj5PFEqnaJuppuPikL70EIqbNO7TBtBt\n/3EfnRBGzFpRrukKAdUG1cKQ5MfRX9Q62g+3nxyJl7AvP8DH3u30ZtPZ58TBG6JS\nmK7DlQf5gB+zGFK6LW9gvhOxU6q5qZ4SovaEfcqcxm2Lfw0arsI3d0IQIHftObBL\nCeALGAL/TFm6ofxgg+4Tf33TPjM+WRadZZD0Bdc1vf2lUvDKoyEbhK/PgPhu9f1r\n7F+OEUOVmH5aYgeaJiZUk5ubf/AlBMCoc46ajIwJGEyLPBlggLjMdh/iHjXn9DEP\nUfAVna3xAgMBAAECggEAAQrqE6lsSH72L075wa/GCCh45Jz72bW00qpLOEJI7sn7\nZOgGBgopjn9XDzRbPHccJFlImuQ/S/iRalTx+sdkNYXqHFzoJFyp6yy110ZlaLSG\n9951brrdC/YtNNlrpQ/1DAFfl1Qa44DKKcnP6ZnHKdTX0cCZMOmMvpU+ihJ4d9XZ\nEjdRqny3AGsaj8rwAJohMzye2fu5J+XJX/6ybW2n+VyASoEXWogC5hYAmDILqdKw\nyBHPocuAJbvL1D4zZSjgnlnR0Sxq+AjZjxgjAFVYt77ThCw8pbIc0wHaHO3VgliM\n8d6olnn4VdPVTGBJ0aYAolRcxyQytX4K66wab+81xQKBgQDy6MWjV52DsBHIZQ6z\nmtV1sIv3jLDFf5+fLDpKchOFdMrACMiqf+A7XI6KaQ3I/2i3PD6Tr76CBWXOlliz\nxWbZL12ohqTGgr+JeEWTX+QsItB/qbxelixPCuQifW0QluYenA/riXQc5YMWabJ3\n/4+U02378Zo8WY8AIoyMh3bHzQKBgQDOkz7y9dW3QtyukBt5BW4SUqZNWS61q5DK\nzy+UPy6GZJMCDBpqDB4maIsO6aCV+9ple6A4EW6wathwfevX4y0uBr1KKwZrqBqI\nB7PXPmrYLJeZCRuabi/1XFWcQ8zyC0hbMIhVT14tqw1DnYAmf/6Y4lkg665jekcy\n+FiFBO4StQKBgA0e7a4JCYUXeZ5tdwHUlzsoMidI/jNs1V5vsSZcSxmmWV1OHCi5\nh48tTLXFPu1gfnOHWYn4sD2ttPYXwOrU+t04ZcK4oyXl4hq22GtBfr2zk7eRn48s\nZXBPkksao02GGSAGJgX/Arqc2xvW0cERmNvdH8/AGSixXbwQIa9lkdDxAoGAVW7Q\nOesx1/jvC8LNmd+FBk7oOFUJ3Fh4KWhGZSk8NJijs9UNl44rafcSi7hTkbP3PsFC\nIe4TuSJ3IQ7y2vY5WS+wWVwx65Q6ZMfKuNo3le/bQo9huxyW+QKW5Wmk+PVxl0Ub\nHS0V5g04Dx60QTfuM4xpEBRoqvuHNq0+7sR7MYECgYBJ/uxpGzVCpDxvwJQBS5wX\nlWdYaZmGkvXAfTqJHLg1lrAbcxJCwnTUMDwUMIiZlJCMni0PJ/WKHTksM5AJ8xbF\n6t1zwdOMVBVIet5UCA5SQqmUR9sB+bYVqM+GUDH4JxnGDhHAYnkOzBEtcZ2Zk/f/\nUISIJCXh3SEWNW7P+6x/IA==\n-----END PRIVATE KEY-----\n",
+  "client_email": "calendar@leadsystem-calendar.iam.gserviceaccount.com",
+  "client_id": "101383022317471814766",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/calendar%40leadsystem-calendar.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+*/
 const scopes = ['https://www.googleapis.com/auth/calendar'];
 const redirect_uris = ["https://leadsystem-production.up.railway.app/","http://localhost:8000/","https://server-chatbot-ai-production.up.railway.app/","http://localhost:8001/"]
+const key = process.env.GOOGLE_PRIVATE_KEY.split(String.raw`\n`).join('\n');
 
-const oauth2Client = new google.auth.OAuth2(
-  process.env.CLIENT_ID,
-  process.env.CLIENT_SECRET,
-  redirect_uris,
-);
+const serviceAccountAuth = new google.auth.JWT({
+  email: 'calendar@leadsystem-calendar.iam.gserviceaccount.com',
+  key: key,
+  scopes: ['https://www.googleapis.com/auth/calendar'],
+  subject: 'marketing@funnelconsulting.it'
+});
 
-const calendar = google.calendar({version: 'v3', auth: oauth2Client});
+const calendar = google.calendar({ version: 'v3', auth: serviceAccountAuth });
+async function createEvent(emailInvitato, dataInizio, nome, summary, phoneNumber, email){
+  const dateTimeISO = moment(dataInizio, 'DD-MM-YY HH:mm').toISOString();
+  const endDateTimeISO = moment(dataInizio, 'DD-MM-YY HH:mm').add(30, 'minutes').toISOString();
+  let descriptionTot = `Summary: ${summary}\nNome: ${nome}\nCellulare: ${phoneNumber}`;
+  if (email) {
+      descriptionTot += `\nEmail: ${email}`;
+  }
+  const event = {
+      summary: 'Appuntamento con '+nome,
+      description: descriptionTot,
+      start: {
+        dateTime: dateTimeISO,
+        timeZone: 'Europe/Rome',
+      },
+      end: {
+          dateTime: endDateTimeISO,
+          timeZone: 'Europe/Rome',
+      },
+      attendees: [
+          { email: 'info@funnelconsulting.it' },
+          { email: emailInvitato },
+          { email: "mattianoris23@gmail.com"}
+      ],
+      reminders: {
+          useDefault: false,
+          overrides: [
+              { method: 'email', minutes: 24 * 60 },
+              { method: 'popup', minutes: 10 },
+          ],
+      },
+  };
+
+  try {
+      const { data } = await calendar.events.insert({
+          calendarId: 'primary',
+          resource: event,
+          sendUpdates: 'all'
+      });
+
+      console.log(`Evento creato: ${data.htmlLink}`);
+  } catch (error) {
+      console.error('Errore nella creazione dell\'evento:', error);
+  }
+}
 
 function isValidPhoneNumber(phoneNumber) {
     const phoneRegex = /^(?:\+?39)?(?:\d{10})$/;
@@ -124,7 +183,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
             await newLead.save();
             console.log(`Assegnato il lead ${lead.cognome} all'utente Unusual`);
             await user.save();
-            await createEvent("info@unusualexperience.it", newLead.appDate, nome + ' ' + cognome, conversation_summary)
+            await createEvent("info@unusualexperience.it", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
             console.log(`Già assegnato il lead ${lead.cognome} all'utente Unusual`)
             if (!isValidPhoneNumber(phone)){
@@ -206,7 +265,7 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
             await newLead.save();
             console.log(`Assegnato il lead ${lead.cognome} all'utente Unusual`);
             await user.save();
-            await createEvent("info@unusualexperience.it", newLead.appDate, nome + ' ' + cognome, conversation_summary)
+            await createEvent("info@unusualexperience.it", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
             console.log(`Già assegnato il lead ${lead.cognome} all'utente Unusual`)
             if (!isValidPhoneNumber(phone)){
@@ -235,3 +294,5 @@ exports.saveLeadChatbotUnusual = async (req, res) => {
     res.status(500).json({ error: error, message: 'Errore' });
   }
 };
+
+//createEvent("andrea.c@funnelconsulting.it", "24-05-29 18:00", "Mattia Noris", "Il cliente vuole prenotare", "3313869850", "mattianoris23@gmail.com")
