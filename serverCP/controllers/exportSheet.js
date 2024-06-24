@@ -8,6 +8,7 @@ const fs = require("fs").promises;
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
 const SPREADSHEET_ID = '1XlFKrMhiYy9zZemzEkcG3mzb1AH4zorSGV6LmX4k7mQ';
+const RANGE = 'Sheet1'; 
 
 async function loadSavedCredentialsIfExist() {
     try {
@@ -77,33 +78,79 @@ exports.appendToGoogleSheet = async (lead) => {
   try {
     const authClient = await authorize();
     const sheets = google.sheets({ version: 'v4', auth: authClient });
- 
-    const newRow = {
-      Data: new Date().toLocaleString(),
-      Nome: lead.nome ? lead.nome : "",
-      Cognome: lead.cognome ? lead.cognome : "",
-      Email: lead.email ? lead.email : "",
-      Telefono: lead.numeroTelefono ? lead.numeroTelefono : "",
-      "Data appuntamento": lead.appDate ? lead.appDate : "",
-      Master: lead.master ? lead.master : "",
-      Sommario: lead.summary ? lead.summary : "",
-    };
 
-    const values = [Object.values(newRow)];
-
-    const request = {
+    // Step 1: Leggere tutte le righe
+    const getRows = await sheets.spreadsheets.values.get({
       spreadsheetId: SPREADSHEET_ID,
-      range: "Sheet1!A1",
-      valueInputOption: 'RAW',
-      insertDataOption: 'INSERT_ROWS',
-      resource: {
-        values: values,
-      },
-    };
+      range: RANGE,
+    });
 
-    const response = await sheets.spreadsheets.values.append(request);
-    console.log(`${response.data.updates.updatedCells} cells appended.`);
+    const rows = getRows.data.values;
+
+    const newRow = [
+      new Date().toLocaleString(),
+      lead.nome ? lead.nome : "",
+      lead.cognome ? lead.cognome : "",
+      lead.email ? lead.email : "",
+      lead.numeroTelefono ? lead.numeroTelefono : "",
+      lead.appDate ? lead.appDate : "",
+      lead.master ? lead.master : "",
+      lead.summary ? lead.summary : "",
+    ];
+
+    // Se non ci sono righe nel foglio, aggiungere la nuova riga
+    if (!rows || rows.length === 0) {
+      const appendRequest = {
+        spreadsheetId: SPREADSHEET_ID,
+        range: RANGE,
+        valueInputOption: 'RAW',
+        insertDataOption: 'INSERT_ROWS',
+        resource: {
+          values: [newRow],
+        },
+      };
+
+      const response = await sheets.spreadsheets.values.append(appendRequest);
+      console.log(`${response.data.updates.updatedCells} cells appended.`);
+      return;
+    }
+
+    let rowIndex = -1;
+    for (let i = 0; i < rows.length; i++) {
+      if (rows[i][4] === lead.numeroTelefono) { // Modifica qui il criterio di ricerca
+        rowIndex = i;
+        break;
+      }
+    }
+
+    if (rowIndex === -1) {
+      const appendRequest = {
+        spreadsheetId: SPREADSHEET_ID,
+        range: RANGE,
+        valueInputOption: 'RAW',
+        insertDataOption: 'INSERT_ROWS',
+        resource: {
+          values: [newRow],
+        },
+      };
+
+      const response = await sheets.spreadsheets.values.append(appendRequest);
+      console.log(`${response.data.updates.updatedCells} cells appended.`);
+    } else {
+      // Step 4: Aggiornare la riga trovata
+      const updateRequest = {
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${RANGE}!A${rowIndex + 1}`, // Aggiungere 1 perché gli indici delle righe di Google Sheets partono da 1
+        valueInputOption: 'RAW',
+        resource: {
+          values: [newRow],
+        },
+      };
+
+      const response = await sheets.spreadsheets.values.update(updateRequest);
+      console.log(`${response.data.updatedCells} cells updated.`);
+    }
   } catch (err) {
-    console.error('Errore nell\'aggiunta della riga al foglio di calcolo:', err.message);
+    console.error('Errore nell\'aggiunta o aggiornamento della riga nel foglio di calcolo:', err.message);
   }
 }
