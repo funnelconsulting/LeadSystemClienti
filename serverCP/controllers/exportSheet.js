@@ -3,7 +3,7 @@ const { GoogleSpreadsheet } = require('google-spreadsheet');
 const doc = new GoogleSpreadsheet('YOUR_SPREADSHEET_ID');
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 const path = require("path")
-const fs = require("fs")
+const fs = require("fs").promises;
 
 const TOKEN_PATH = path.join(process.cwd(), 'token.json');
 const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
