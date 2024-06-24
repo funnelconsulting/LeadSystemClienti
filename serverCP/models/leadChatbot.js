@@ -42,6 +42,7 @@ const LeadChatbotSchema = new Schema({
       default: false
     },
     tag: String,
+    master: String,
   });
 
 const LeadChatbot = mongoose.model('LeadChatbot', LeadChatbotSchema);
