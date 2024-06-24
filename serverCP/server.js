@@ -11,7 +11,7 @@ const LeadChatbot = require('./models/leadChatbot');
 const {authenticate} = require('@google-cloud/local-auth');
 const Token = require("./models/googleToken")
 const moment = require('moment');
-const { saveLeadChatbotUnusual, saveLeadSMC } = require('./controllers/chatbot');
+const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss } = require('./controllers/chatbot');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -135,6 +135,7 @@ const exportLeadsToCSV = async () => {
 //exportLeadsToCSV()
 app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
 app.post('/api/save-chatbot-smc', saveLeadSMC);
+app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 
 /*const runDailyJob = () => {
   authorize()
