@@ -637,6 +637,7 @@ exports.saveLeadLuiss = async (req, res) => {
             existingLead.cognome = cognome && cognome !== "" ? cognome : last_name;
             existingLead.master = master; 
             await existingLead.save()
+            await appendToGoogleSheet(existingLead);
             console.log('Lead aggiornato')
           }
 
@@ -722,6 +723,7 @@ exports.saveLeadLuiss = async (req, res) => {
             existingLead.cognome = cognome && cognome !== "" ? cognome : last_name;
             existingLead.master = master; 
             await existingLead.save()
+            await appendToGoogleSheet(existingLead);
           }
 
         } catch (error) {
