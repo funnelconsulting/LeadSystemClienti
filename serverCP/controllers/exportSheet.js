@@ -77,7 +77,7 @@ exports.appendToGoogleSheet = async (lead) => {
   try {
     const authClient = await authorize();
     const sheets = google.sheets({ version: 'v4', auth: authClient });
-
+ 
     const newRow = {
       Data: new Date().toLocaleString(),
       Nome: lead.nome ? lead.nome : "",
@@ -93,7 +93,7 @@ exports.appendToGoogleSheet = async (lead) => {
 
     const request = {
       spreadsheetId: SPREADSHEET_ID,
-      range: RANGE,
+      range: "Sheet1!A1",
       valueInputOption: 'RAW',
       insertDataOption: 'INSERT_ROWS',
       resource: {
