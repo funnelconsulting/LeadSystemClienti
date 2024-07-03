@@ -17,6 +17,7 @@ import './pages/loginRegister.css';
 import Login from "./pages/Login";
 import { FaArrowLeft } from "react-icons/fa";
 import moment from "moment";
+import LeadWA from "./pages/LeadWA";
 
 const LazyRegister = React.lazy(() => import("./pages/Register"));
 const LazyLoginSuperAdmin = React.lazy(() => import("./pages/LoginSuperAdmin"));
@@ -116,6 +117,11 @@ function App() {
               exact
               path="/assistenza"
               element={<AuthRouteWithLayout component={Assistenza} />}
+            />
+            <Route
+            exact
+            path="/chats"
+            element={<AuthRouteWithLayout component={LeadWA} />}
             />
           <Route
             exact

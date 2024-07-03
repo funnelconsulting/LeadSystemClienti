@@ -5,6 +5,7 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { UserProvider } from "./context";
 import { SidebarProvider } from "./context/SidebarContext";
+import { SocketProvider } from "./context/SocketContext";
 
 /*if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
@@ -22,9 +23,11 @@ import { SidebarProvider } from "./context/SidebarContext";
 createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <UserProvider>
-      <SidebarProvider>
-        <App />
-      </SidebarProvider>
+      <SocketProvider>
+        <SidebarProvider>
+          <App />
+        </SidebarProvider>
+      </SocketProvider>
     </UserProvider>
   </React.StrictMode>
 );

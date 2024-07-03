@@ -27,7 +27,7 @@
   background-color: #F4F8FB !important;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  min-height: 120vh;
+  min-height: auto;
   padding: 0;
   margin: 0;
   overflow-y: auto;
@@ -35,8 +35,8 @@
 .boost-container {
   position: absolute;
   left: 50%;
-  transform: translateX(-40%);
-  width: 70%;
+  transform: translateX(-39%);
+  width: 82%;
   font-family: 'Poppins', sans-serif;
   padding-bottom: 40px;
   transition: 'width 0.3s ease',
@@ -157,6 +157,15 @@ button, a {
     display: flex;
     align-items: center;
     cursor: pointer;
+  }
+  .boost-container {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-39%);
+    width: 80%;
+    font-family: 'Poppins', sans-serif;
+    padding-bottom: 40px;
+    transition: 'width 0.3s ease',
   }
 }
 @media screen and (max-width: 700px) {

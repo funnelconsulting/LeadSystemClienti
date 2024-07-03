@@ -11,6 +11,9 @@
     margin: 40px 0;
     font-family: 'Poppins', sans-serif;
 }
+.home-mob{
+    padding: 0 15px;
+}
 .notify {
     position: fixed;
     /* left: 10%; */
@@ -54,7 +57,7 @@
     max-width: 30px;
     max-height: 30px;
     border-radius: 50%;
-    background-color: #3471CC;
+    background-color: #308C7E;
     color: white;
     display: flex;
     align-items: center;
@@ -79,7 +82,7 @@
 .btn-legenda-visibile{
     cursor: pointer;
     border: none;
-    background-color: #3471CC;
+    background-color: #308C7E;
     padding: 6px 16px;
     color: white;
     margin-left: 50px;
@@ -111,14 +114,14 @@
   }
   
   .legenda-container::-webkit-scrollbar-thumb {
-    background-color: #3471CC;
+    background-color: #308C7E;
   }
   
   .legenda-container::-webkit-scrollbar-track {
     background-color: #ffffff; /* Colore del track (sfondo) */
   }
 .leggenda-top{
-    background-color: #3471CC;
+    background-color: #308C7E;
     color: white;
     margin-top: 0;
     width: 100%;
@@ -146,7 +149,7 @@
 .btn-dentro-legenda > button {
     border-radius: 5px;
     border: none;
-    background-color: #3471CC;
+    background-color: #308C7E;
     color: white;
     cursor: pointer;
     font-weight: 500;
@@ -529,7 +532,7 @@
 
                 button,
                 a {
-                    background-color: #3471CC;
+                    background-color: #308C7E;
                     border: none;
                     outline: none;
                     font-size: 12px;
@@ -551,14 +554,14 @@
                 }
 
                 a {
-                    color: #3471CC;
+                    color: #308C7E;
                     background-color: white;
                     text-decoration: none;
                 }
 
                 #visualbtt {
                     background-color: transparent;
-                    color: #3471CC;
+                    color: #308C7E;
                     text-decoration: underline;
                     display: flex;
                     justify-content: space-around;
@@ -584,7 +587,7 @@
         background-color: var(--bg);
         border: none;
         outline: none;
-        color: #3471CC;
+        color: #308C7E;
         font-size: 20px;
         text-align: end;
         width: fit-content;
@@ -630,7 +633,7 @@
         }
 
         &::-webkit-scrollbar-thumb {
-            background: #3471CC;
+            background: #308C7E;
             border-radius: 56px;
             width: 12px;
             position: absolute;
@@ -689,7 +692,7 @@
                     bottom: -2px;
                     left: auto;
                     font-size: 15pt;
-                    color: #3471CC;
+                    color: #308C7E;
                     font-weight: 500;
                 }
 
@@ -756,7 +759,7 @@
                 }
 
                 &::-webkit-scrollbar-thumb {
-                    background: #3471CC;
+                    background: #308C7E;
                     border-radius: 56px;
                     width: 12px;
                 }

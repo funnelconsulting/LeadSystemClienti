@@ -107,7 +107,7 @@ nav .ul-item li, nav .ul-item > .bottom-sidebar > a {
     color: white;
 }
 .tutorial-link:hover > span {
-    color: #3471CC;
+    color: #308C7E;
 }
 .tutorial-link > svg,
 .tutorial-link > img {
@@ -135,7 +135,7 @@ nav .ul-item li, nav .ul-item > .bottom-sidebar > a {
 }
 
 .bottom-sidebar li:hover>.bottom-icon-arrow, .bottom-sidebar > a:hover>.bottom-icon-arrow {
-    color: #3471CC;
+    color: #308C7E;
 }
 
 .middle-sidebar>p {
@@ -152,7 +152,7 @@ nav .ul-item li, nav .ul-item > .bottom-sidebar > a {
 }
 
 .bottom-sidebar {
-    background-color: #3471CC;
+    background-color: #308C7E;
     color: white;
     width: 100%;
     padding: 25px 0px 25px 0px;
@@ -172,13 +172,13 @@ nav .ul-item li, nav .ul-item > .bottom-sidebar > a {
 }
 
 .bottom-sidebar li:hover .bottom-icon, .bottom-sidebar > a:hover .bottom-icon {
-    fill: #3471CC !important;
+    fill: #308C7E !important;
 }
 .bottom-sidebar li:hover img, .bottom-sidebar > a:hover img {
-    fill: #3471CC !important;
+    fill: #308C7E !important;
 }
 .bottom-sidebar li:hover a {
-    color: #3471CC !important;
+    color: #308C7E !important;
 }
 
 .bottom-icon {
@@ -188,7 +188,7 @@ nav .ul-item li, nav .ul-item > .bottom-sidebar > a {
 }
 
 nav .ul-item li:hover, nav .ul-item > a:hover {
-    background-color: #3471CC;
+    background-color: #308C7E;
     border-radius: 10px;
 }
 
@@ -249,7 +249,7 @@ nav .ul-item li:hover {
 
 
 nav .selected {
-    background-color: #3471cc;
+    background-color: #308C7E;
 }
 
 nav .selected a {
@@ -265,12 +265,12 @@ nav .selectedBlue {
 }
 
 nav .selectedBlue a {
-    color: #3471cc !important;
+    color: #308C7E !important;
 }
 
 nav .selectedBlue svg,
 nav .selectedBlue img {
-    fill: #3471cc !important;
+    fill: #308C7E !important;
 }
 
 .oicon {
@@ -375,7 +375,7 @@ nav .selectedBlue img {
             z-index: 100000 !important;
             position: fixed;
             padding: 12px;
-            background-color: #3471CC;
+            background-color: #308C7E;
             border-bottom-right-radius: 7px;
         }
         .menu-icon > * {

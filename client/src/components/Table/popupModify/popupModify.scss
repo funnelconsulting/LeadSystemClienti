@@ -90,6 +90,7 @@
 }
 .popup-top > div > div {
     margin-top: 40px;
+    margin-right: 10px;
 }
 .popup-top hr {
     color: #000000;
@@ -100,14 +101,14 @@
 }
 .page-scheda{
     padding-bottom: 0px;
-    color: #3471CC !important;
+    color: #4ED35D !important;
 }
 .page-scheda-linea{
     height: 2px;
     font-weight: 500;
-    color: #3471CC !important;
-    border: 1px solid #3471CC !important;
-    background-color: #3471CC !important;
+    color: #4ED35D !important;
+    border: 1px solid #4ED35D !important;
+    background-color: #4ED35D !important;
 }
 .popup-top p {
     position: absolute;
@@ -159,7 +160,7 @@
 }
 .popup-middle-top1>div:first-of-type>p:nth-of-type(3) > span,
 .popup-middle-top1>div:first-of-type>h6> span {
-    color: #3471CC;
+    color: #4ED35D;
 }
 .popup-middle-top1>div:first-of-type>p:nth-of-type(2) > b {
     font-weight: 500;
@@ -184,7 +185,7 @@
 }
 .popup-middle-top1>div:first-of-type>p:nth-of-type(4) > span:nth-of-type(2) {
     font-size: 12px;
-    color: #3471CC;
+    color: #4ED35D;
     background-color: #3471cc30;
     border-radius: 20px;
     padding: 7px 16px;
@@ -255,7 +256,7 @@
 }
 .btnWhats {
     padding: 7px 20px;
-    background: #3471CC;
+    background: #4ED35D;
     border-radius: 30px;
     text-decoration: none;
     color: white !important;
@@ -268,8 +269,8 @@
     font-size: 14px;
 }
 .btcRecall{
-    color: #3471CC;
-    border: 1px solid #3471CC;
+    color: #4ED35D;
+    border: 1px solid #4ED35D;
     background-color: transparent;
     padding: 7px 20px;
     border-radius: 10px;
@@ -346,7 +347,7 @@ textarea {
 }
 .popup-bottom > .popup-bottom-button > a {
     padding: 8px 25px;
-    background: #3471CC;
+    background: #4ED35D;
     border-radius: 10px;
     text-decoration: none;
     color: white !important;
@@ -373,7 +374,7 @@ textarea {
   }
   
   #selectesiti-popup::-webkit-scrollbar-thumb {
-    background-color: #3471CC; /* Colore della parte mobile della scrollbar */
+    background-color: #4ED35D; /* Colore della parte mobile della scrollbar */
     border-radius: 5px; /* Bordo arrotondato per la parte mobile */
   }
   
@@ -392,7 +393,7 @@ textarea {
     font-size: 12px;
     padding: 0px 20px;
     width: 100%;
-    border: 0.6px solid #3471CC !important;
+    border: 0.6px solid #308C7E !important;
     color: #000000;
   }
   .selected-option-motivo #prezzovenditaesito input:focus {
@@ -408,7 +409,7 @@ textarea {
     &:checked,
     &:active,
     &:focus {
-      color: #3471CC;
+      color: #308C7E;
       background-color: white !important;
     }
   
@@ -426,9 +427,9 @@ textarea {
     &:checked::before,
     &:active::before,
     &:focus::before {
-        border: 1px solid #3471CC;
+        border: 1px solid #308C7E;
         padding: 6px;
-        background-color: #3471CC;
+        background-color: #308C7E;
     }
   
   }
@@ -447,7 +448,7 @@ textarea {
   }
   
   .esiti-option-div::-webkit-scrollbar-thumb {
-    background-color: #3471CC; /* Colore della parte mobile della scrollbar */
+    background-color: #4ED35D; /* Colore della parte mobile della scrollbar */
     border-radius: 5px; /* Bordo arrotondato per la parte mobile */
   }
   
@@ -499,14 +500,14 @@ textarea {
     align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
-    color: #3471CC;
+    color: #4ED35D;
     padding-left: 40px;
   }
   .selected-option-motivo > span {
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 1px solid #3471CC !important;
+    border: 1px solid #4ED35D !important;
     position: absolute;
     height: 25px;
     width: 25px;
@@ -517,7 +518,7 @@ textarea {
     background-color: white;
   }
   .selected-option-motivo .selectMotivo{
-    border: 0.6px solid #3471CC;
+    border: 0.6px solid #4ED35D;
     font-size: 12px;
     background-color: white;
     padding: 6px 10px;
@@ -528,8 +529,8 @@ textarea {
     outline: none;
   }
   .selected-option-motivo > span > span {
-    background-color: #3471CC;
-    color: #3471CC;
+    background-color: #4ED35D;
+    color: #4ED35D;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -623,9 +624,9 @@ textarea {
 }
 .mi-div > div select {
     background-color: white;
-    border: 0.5px solid #3471CC;
+    border: 0.5px solid #308C7E;
     border-radius: 5px;
-    color: #3471CC;
+    color: #308C7E;
     font-size: 14px;
     padding: 8px 20px;
     width: 100%;
@@ -633,9 +634,9 @@ textarea {
 }
 .mi-div > div > input{
     background-color: white;
-    border: 0.5px solid #3471CC;
+    border: 0.5px solid #308C7E;
     border-radius: 5px;
-    color: #3471CC;
+    color: #308C7E;
     font-size: 14px;
     padding: 8px 20px;
     width: 100%;

@@ -501,7 +501,7 @@ const CalendarM = () => {
         {isLoading ? (
           <div></div>
         ): (
-            <div>
+            <div className='calenda-totaly'>
                    <div className="topDash dashhideexport"
                     style={{gap: '13rem', fontSize: '0.8rem', margin: '30px 0'}}
                     >

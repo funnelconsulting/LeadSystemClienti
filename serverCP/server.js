@@ -8,19 +8,12 @@ const path = require("path");
 const cron = require('node-cron');
 const { parse } = require('json2csv');
 const LeadChatbot = require('./models/leadChatbot');
-const {authenticate} = require('@google-cloud/local-auth');
-const Token = require("./models/googleToken")
 const moment = require('moment');
 const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss } = require('./controllers/chatbot');
 
-const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
-
-const TOKEN_PATH = path.join(process.cwd(), 'token.json');
-const CREDENTIALS_PATH = path.join(process.cwd(), 'credentials.json');
-
 const app = express();
 
-mongoose.set('strictQuery', false); 
+mongoose.set('strictQuery', false);
 mongoose
   .connect(process.env.DATABASE)
   .then(() => console.log("DB Connessoo!"))
@@ -30,42 +23,6 @@ mongoose
 
 app.use(express.json({ limit: "10mb" }));
 app.use(cors());
-
-/*async function loadSavedCredentialsIfExist() {
-  try {
-    const content = await fs.readFile(TOKEN_PATH);
-    const credentials = JSON.parse(content);
-    return google.auth.fromJSON(credentials);
-  } catch (err) {
-    return null;
-  }
-}*/
-/*sync function saveCredentials(client) {
-  const content = await fs.readFile(CREDENTIALS_PATH);
-  const keys = JSON.parse(content);
-  const key = keys.installed || keys.web;
-  const payload = JSON.stringify({
-    type: 'authorized_user',
-    client_id: key.client_id,
-    client_secret: key.client_secret,
-    refresh_token: client.credentials.refresh_token,
-  });
-  await fs.writeFile(TOKEN_PATH, payload);
-}
-async function authorize() {
-  let client = await loadSavedCredentialsIfExist();
-  if (client) {
-    return client;
-  }
-  client = await authenticate({
-    scopes: SCOPES,
-    keyfilePath: CREDENTIALS_PATH,
-  });
-  if (client.credentials) {
-    await saveCredentials(client);
-  }
-  return client;
-}*/
 
 async function exportChatbot(auth) {
   try {
@@ -178,41 +135,6 @@ async function findEventByTitleAndDate(title, date) {
       }
   } catch (error) {
       console.error('Errore durante la ricerca dell\'evento:', error);
-  }
-}
-
-async function updateEvent(title, date, newStartDateTime, newEndDateTime) {
-  try {
-      const eventId = await findEventByTitleAndDate(title, date);
-
-      if (!eventId) {
-          console.log('Evento non trovato, impossibile aggiornare.');
-          return;
-      }
-
-      const event = await calendar.events.get({
-          calendarId: 'primary',
-          eventId: eventId,
-      });
-
-      event.data.start = {
-          dateTime: moment(newStartDateTime, 'DD-MM-YY HH:mm').toISOString(),
-          timeZone: 'Europe/Rome',
-      };
-      event.data.end = {
-          dateTime: moment(newEndDateTime, 'DD-MM-YY HH:mm').toISOString(),
-          timeZone: 'Europe/Rome',
-      };
-
-      const updatedEvent = await calendar.events.update({
-          calendarId: 'primary',
-          eventId: eventId,
-          resource: event.data,
-      });
-
-      console.log(`Evento aggiornato: ${updatedEvent.data.htmlLink}`);
-  } catch (error) {
-      console.error('Errore durante l\'aggiornamento dell\'evento:', error);
   }
 }
 

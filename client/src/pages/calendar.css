@@ -1,3 +1,6 @@
+.calenda-totaly{
+  padding: 0 15px;
+}
 .calendar-container{
     display: flex;
     justify-content: center;
