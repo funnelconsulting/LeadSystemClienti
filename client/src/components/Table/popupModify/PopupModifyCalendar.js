@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import './popupModify.scss'
 import { WhatsAppOutlined } from '@ant-design/icons';
 import { FaPencilAlt, FaSave } from "react-icons/fa";
@@ -14,6 +14,8 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import recallgreen from '../../../imgs/recallGren.png';
 import moment from 'moment';
+import { useNavigate } from 'react-router-dom';
+import Message from '../../Message/Message';
 
 const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, deleteLead , admin = false, fetchLeads}) => {
     const [state, setState] = useContext(UserContext);
@@ -37,6 +39,9 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
     const [patientType, setPatientType] = useState('');
     const [treatment, setTreatment] = useState('');
     const [location, setLocation] = useState('');
+    const [chat, setChat] = useState()
+    const chatBodyRef = useRef(null);
+    const Navigate = useNavigate();
     const [tentativiChiamata, setTentativiChiamata] = useState(lead.tentativiChiamata ? lead.tentativiChiamata : "0");
 
     const [motivo, setMotivo] = useState(lead.motivo ? lead.motivo : "");
@@ -63,6 +68,10 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
         }
       }
 
+      const handleCompleteChat = () => {
+        Navigate(`/chats?_id=${chat?._id}`);
+      };
+
     const handleDateChange = (date) => {
       setSelectedDate(date);
     };
@@ -78,6 +87,12 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
         }
       }, [lead.recallHours]);
 
+      useEffect(() => {
+        if (chatBodyRef.current) {
+          chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }
+      }, [chat?.messages]);
+
     const handleTimeChange = (e) => {
         const { name, value } = e.target;
         setSelectedTime((prevTime) => ({
@@ -85,6 +100,30 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
           [name]: parseInt(value, 10),
         }));
       };
+
+      const getLeadChat = async () => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_CHATBOT}/get-lead-chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              //'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ numeroTelefono: lead?.telephone })
+          });
+      
+          const data = await response.json();
+          const { chat } = data;
+          console.log(data);
+          setChat(chat);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      useEffect(() => {
+        getLeadChat()
+      }, [])
 
       const handleSaveRecall = async () => {
         if (selectedDate && selectedTime) {
@@ -480,14 +519,16 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                             <h4 className={openPage == "scheda" ? "page-scheda" : ""} onClick={() => setOpenPage("scheda")}>Scheda lead</h4>
                             <hr className={openPage == "scheda" ? "page-scheda-linea" : ""} />
                         </div>
-                        {/*<div>
-                           <h4 className={openPage == "info" ? "page-scheda" : ""} onClick={() => setOpenPage("info")}>Maggiori info</h4>
-                           <hr className={openPage == "info" ? "page-scheda-linea" : ""} /> 
-                         </div>*/}
+                        <div>
+                           <h4 className={openPage == "chat" ? "page-scheda" : ""} onClick={() => setOpenPage("chat")}>Chat</h4>
+                           <hr className={openPage == "chat" ? "page-scheda-linea" : ""} /> 
+                        </div>
                     </div>
                     <svg id="modalclosingicon-choose" onClick={onClose} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
                 </div>
-                <hr className='linea-che-serve2' />
+                {openPage === "scheda" ? (
+                    <>
+                    <hr className='linea-che-serve2' />
                         <div className='popup-middle-top'>
                             <div className='popup-middle-top1'>
                                 <div>
@@ -606,6 +647,38 @@ const PopupModifyCalendar = ({ lead, onClose, setPopupModify, onUpdateLead, dele
                         {/*<a onClick={()=>deleteLead(lead.id)}>Elimina lead</a> */}
                     </div>                    
                 </div>
+                </>
+            ) : (
+                    <div className='chat-scheda-lead'>
+                        <div className='top-chat-scheda-lead'>
+                            <div>
+                                {lead && (() => {
+                                    const iniziali = lead?.name.charAt(0).toUpperCase() + lead?.surname.charAt(0).toUpperCase();
+                                    return <span>{iniziali}</span>;
+                                })()}
+                            </div>
+                            <div>
+                                <span>{lead.name + ' ' + lead.surname}</span>
+                                <span>Attivo da oggi alle 12:30</span>
+                            </div>
+                        </div>
+                        <div className='body-chat-scheda-lead'>
+                            <div className='message-container-scheda-lead' ref={chatBodyRef}>
+                                {chat && chat.messages?.map((msg, index) => (
+                                    <Message
+                                    key={index}
+                                    msgdata={msg.content}
+                                    sender={msg.sender}
+                                    timestamp={msg.timestamp}
+                                    />
+                                ))}
+                            </div>
+                            <div className='button-container-chat'>
+                                <button onClick={() => handleCompleteChat()}>Visualizza chat completa</button>
+                            </div>
+                        </div>
+                    </div>
+                )}
 
             </div>                  
             )}

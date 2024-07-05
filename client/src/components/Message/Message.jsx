@@ -5,7 +5,7 @@ import moment from 'moment';
 export default function Message({ msgdata, sender, timestamp }) {
     const orarioItaliano = moment(timestamp).locale('it').format('DD/MM/YYYY HH:mm:ss');   
 
-    if (sender == 'user')
+    if (sender == 'bot')
         return (
             <div className="messages mymessage">
                 <div className="text">

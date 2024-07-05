@@ -1081,6 +1081,78 @@ textarea {
     overflow-y: auto;
 }
 
+
+//NUOVE MODIFICHE
+
+.chat-scheda-lead{
+    padding: 20px 0;
+}
+.top-chat-scheda-lead{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+.top-chat-scheda-lead > div:first-of-type{
+    border-radius: 50%;
+    background-color: #308C7E;
+    border: 1px solid black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    min-height: 50px;
+    min-width: 50px;
+    max-width: 50px;
+    max-height: 50px;
+}
+.top-chat-scheda-lead > div:last-of-type{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.top-chat-scheda-lead > div:last-of-type > span:last-of-type{
+    color: #6C6C6C;
+    font-size: 13px;
+    margin-top: -5px;
+}
+
+.body-chat-scheda-lead{
+    width: 90%;
+    margin: 0 auto;
+    margin-top: 20px;
+    border-top: 1px solid #4ED35D;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.message-container-scheda-lead{
+    background-image: url('../../../imgs/whats-back.png');
+    flex: 1;
+    max-height: 420px;
+    padding: 10px 60px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+.button-container-chat{
+    background-color: #F1F1F1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+.button-container-chat > button {
+    background-color: #4ED35D;
+    color: white;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 5px;
+}
+
 @media screen and (width<=2000px) {
     .popup-modify-calendar {
         width: 52% !important;

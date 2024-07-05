@@ -5,24 +5,28 @@ const SocketContext = createContext();
 
 const SocketProvider = ({ children }) => {
   const [socket, setSocket] = useState(null);
-
-  useEffect(() => {
-    const newSocket = io(process.env.REACT_APP_API_CHATBOT || 'http://localhost:9000', {
+  //http://localhost:9000
+  useEffect(() => {//https://chatbolt-comparacorsi-production.up.railway.app
+    const newSocket = io('https://chatbolt-comparacorsi-production.up.railway.app', {
       cors: {
-        origin: "http://localhost:9000",
-        withCredentials: true,
+        origin: "*",
       },
+      upgrade: false,
       transports: ['websocket'],
     });
 
+    newSocket.on('connect', () => {
+      console.log('connected');
+    });
     newSocket.on("connect_error", (err) => {
-        console.log(err.message);  
-        console.log(err.description);  
-        console.log(err.context);
-      });
+        console.log(err.description);
+    });
+
+    newSocket.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
 
     setSocket(newSocket);
-    return () => newSocket.close();
   }, []);
 
   return (

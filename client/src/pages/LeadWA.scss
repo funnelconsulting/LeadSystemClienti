@@ -54,7 +54,10 @@
     padding: 0px;
     width: 100%;
   }
-  
+  .new-message-icon{
+    font-size: 24px;
+    color: #075e54;
+  }
   .chat-item {
     display: flex;
     align-items: center;
@@ -91,11 +94,18 @@
   .message-header > span:last-of-type{
     font-size: 12px;
   }
-  
-  .name {
+  .custom-switch.ant-switch-checked {
+    background-color: #075e54; /* Colore quando il Switch è attivo */
+  }
+  .custom-switch.ant-switch-checked:hover{
+    background-color: #075e54;
+  }
+  .custom-switch .ant-switch-handle {
+    background-color: #188fff00; /* Colore del manico */
+  }
+  .name-list-chat {
     font-weight: bold;
   }
-  
   .time {
     color: #888;
     font-size: 11px;
@@ -232,6 +242,13 @@
     cursor: pointer;
     margin: 0 7px;
     color: #6C6C6C;
+    font-size: 24px;
+  }
+
+  .icon-favorite{
+    cursor: pointer;
+    margin: 0 7px;
+    color: #075e54;
     font-size: 24px;
   }
 

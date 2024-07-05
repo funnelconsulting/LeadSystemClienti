@@ -103,9 +103,18 @@ const CalendarM = () => {
     const [originalData, setOriginalData] = useState([]);
 
     const formatDateString = (inputDate) => {
-      const parsedDate = moment(inputDate, 'YY-MM-DD HH:mm');
+      let parsedDate;
+      
+      if (moment(inputDate, 'DD-MM-YYYY HH:mm', true).isValid()) {
+        parsedDate = moment(inputDate, 'DD-MM-YYYY HH:mm');
+      } else if (moment(inputDate, 'YY-MM-DD HH:mm', true).isValid()) {
+        parsedDate = moment(inputDate, 'YY-MM-DD HH:mm');
+      } else {
+        throw new Error('Formato data non valido');
+      }
+    
       const formattedDate = parsedDate.format('DD/MM/YYYY HH:mm');
-      const data = moment(formattedDate, 'DD/MM/YYYY HH:mm').toDate()
+      const data = moment(formattedDate, 'DD/MM/YYYY HH:mm').toDate();
       return data;
     };
     

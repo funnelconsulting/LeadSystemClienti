@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useRef } from 'react'
 import './popupModify.scss'
 import { WhatsAppOutlined } from '@ant-design/icons';
 import { FaPencilAlt, FaSave } from "react-icons/fa";
@@ -9,11 +9,13 @@ import { ProvinceItaliane } from '../../Data';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import recallblue from '../../../imgs/recallblue.png';
+import { useNavigate } from 'react-router-dom';
 import indietro from '../../../imgs/indietro.png';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import recallgreen from '../../../imgs/recallGren.png';
 import moment from 'moment';
+import Message from '../../Message/Message';
 
 const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshate , admin = false, popupRef, fetchLeads, setInfoPopup}) => {
     const [state, setState] = useContext(UserContext);
@@ -37,12 +39,21 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
     const [patientType, setPatientType] = useState('');
     const [treatment, setTreatment] = useState('');
     const [location, setLocation] = useState('');
+    const [chat, setChat] = useState()
+    const chatBodyRef = useRef(null);
+    const Navigate = useNavigate();
     const [tentativiChiamata, setTentativiChiamata] = useState(lead.tentativiChiamata ? lead.tentativiChiamata : "0");
 
     const [motivo, setMotivo] = useState(lead.motivo ? lead.motivo : "");
     const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         "Numero Errato", "Non interessato", "Non ha mai risposto"
     ]);
+
+    useEffect(() => {
+        if (chatBodyRef.current) {
+          chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
+        }
+      }, [chat?.messages]);
 
     const userFixId = state.user.role && state.user.role === "orientatore" ? state.user.utente : state.user._id;
     function mapCampagnaPerLeadsystem(nomeCampagna) {
@@ -74,12 +85,40 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
         }
       }, [lead.recallHours]);
 
+      const getLeadChat = async () => {
+        try {
+          const response = await fetch(`${process.env.REACT_APP_API_CHATBOT}/get-lead-chat`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              //'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ numeroTelefono: lead?.telephone })
+          });
+      
+          const data = await response.json();
+          const { chat } = data;
+          console.log(data);
+          setChat(chat);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      useEffect(() => {
+        getLeadChat()
+      }, [])
+
     const handleTimeChange = (e) => {
         const { name, value } = e.target;
         setSelectedTime((prevTime) => ({
           ...prevTime,
           [name]: parseInt(value, 10),
         }));
+      };
+
+      const handleCompleteChat = () => {
+        Navigate(`/chats?_id=${chat?._id}`);
       };
 
       const handleSaveRecall = async () => {
@@ -495,187 +534,158 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                     </div>
                     <svg id="modalclosingicon-choose" onClick={onClose} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
                 </div>
-                <hr className='linea-che-serve2' />
-                        <div className='popup-middle-top'>
-                            <div className='popup-middle-top1'>
-                                <div>
-                                    {
-                                    !modificaNome ? 
-                                    <p>{lead.name} {lead.surname} <span onClick={() => setModificaNome(true)} className='span-nome'><FaPencilAlt size={14} style={{marginLeft: '10px'}} /></span></p>: 
-                                    <p className='modifica-nome-input'>
-                                        <input placeholder={lead.name} value={nome} onChange={(e) => setName(e.target.value)} />
-                                        <input placeholder={lead.surname} value={cognome} onChange={(e) => setSurname(e.target.value)} />
-                                        <FaSave size={30} className='salva-nome' onClick={handleSaveName} />
-                                    </p>
+                {openPage === "scheda" ? (
+                    <>
+                        <hr className='linea-che-serve2' />
+                                <div className='popup-middle-top'>
+                                    <div className='popup-middle-top1'>
+                                        <div>
+                                            {
+                                            !modificaNome ? 
+                                            <p>{lead.name} {lead.surname} <span onClick={() => setModificaNome(true)} className='span-nome'><FaPencilAlt size={14} style={{marginLeft: '10px'}} /></span></p>: 
+                                            <p className='modifica-nome-input'>
+                                                <input placeholder={lead.name} value={nome} onChange={(e) => setName(e.target.value)} />
+                                                <input placeholder={lead.surname} value={cognome} onChange={(e) => setSurname(e.target.value)} />
+                                                <FaSave size={30} className='salva-nome' onClick={handleSaveName} />
+                                            </p>
+                                            }
+                                            <p><FiClock color='#30978B' /> Data di <b>creazione lead</b>: <span>{formatDate(lead.date)}</span></p>
+                                            <p>{lead.lastModify && lead.lastModify !== null ? <><FiClock color='#3471CC' /> Data <b>ultima modifica</b>: <span>{formatDate(lead.lastModify)}</span></> : ""}</p>
+                                            {(lead.provenienza === "AI chatbot" || (lead.appDate && lead?.appDate?.trim() !== "")) && lead.appDate && <h6><FiClock color='#3471CC' /> Data <b>appuntamento:</b> <span>{formatDateString(lead.appDate)}</span></h6>}
+                                            <p style={{margin: '17px 0 10px 0'}}>Stato lead:
+                                                <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
+                                            </p>
+                                            {motivo && motivo !== "" && lead.status === "Non interessato" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
+                                        </div>
+                                    </div>
+                                    <div className='popup-middle-top2'>
+                                    <button className='btnWhats' onClick={handleClickWhatsapp}><WhatsAppOutlined /> Contatta su whatsapp</button>
+                                    {lead.recallDate && lead.recallHours && lead.recallDate !== null && lead.recallHours !== null ?
+                                    <button className='recallGreen'>
+                                        <img src={recallgreen} onClick={() => setMostraCalendar(true)} />
+                                        <span onClick={() => setMostraCalendar(true)}>
+                                            Recall in data <br />
+                                            {formattedRecallDateTime(lead.recallDate, lead.recallHours)}
+                                        </span>
+                                        <button className='delete-recall' onClick={deleteRecall}>x</button>
+                                    </button> : 
+                                    <button className='btcRecall' onClick={() => setMostraCalendar(true)}>
+                                        <img src={recallblue} />organizza una recall
+                                    </button>
                                     }
-                                    <p><FiClock color='#30978B' /> Data di <b>creazione lead</b>: <span>{formatDate(lead.date)}</span></p>
-                                    <p>{lead.lastModify && lead.lastModify !== null ? <><FiClock color='#3471CC' /> Data <b>ultima modifica</b>: <span>{formatDate(lead.lastModify)}</span></> : ""}</p>
-                                    {(lead.provenienza === "AI chatbot" || (lead.appDate && lead?.appDate?.trim() !== "")) && lead.appDate && <h6><FiClock color='#3471CC' /> Data <b>appuntamento:</b> <span>{formatDateString(lead.appDate)}</span></h6>}
-                                    <p style={{margin: '17px 0 10px 0'}}>Stato lead:
-                                        <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
-                                    </p>
-                                    {motivo && motivo !== "" && lead.status === "Non interessato" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
+                                    </div> 
+                                    
                                 </div>
-                            </div>
-                            <div className='popup-middle-top2'>
-                            <button className='btnWhats' onClick={handleClickWhatsapp}><WhatsAppOutlined /> Contatta su whatsapp</button>
-                            {lead.recallDate && lead.recallHours && lead.recallDate !== null && lead.recallHours !== null ?
-                            <button className='recallGreen'>
-                                <img src={recallgreen} onClick={() => setMostraCalendar(true)} />
-                                <span onClick={() => setMostraCalendar(true)}>
-                                    Recall in data <br />
-                                    {formattedRecallDateTime(lead.recallDate, lead.recallHours)}
-                                </span>
-                                <button className='delete-recall' onClick={deleteRecall}>x</button>
-                            </button> : 
-                            <button className='btcRecall' onClick={() => setMostraCalendar(true)}>
-                                <img src={recallblue} />organizza una recall
-                            </button>
-                            }
-                            </div> 
-                            
-                        </div>
-                        <hr className='linea-che-serve' />
-                        <div className='sommario'>
-                           <h4>Sommario</h4>
-                           <p>
-                              {displayedText}
-                                {fullText.length > MAX_CHARS && (
-                                <span onClick={() => setExpanded(!expanded)}>
-                                    {expanded ? 'Leggi meno' : 'Leggi di più'}
-                                </span>
-                                )}
-                            </p> 
-                        </div>
-                        <hr className='linea-che-serve' />
-                        <div className='maggiori-informazioni'>
-                            <h4>ANAGRAFICA</h4>
-                            <div className='mi-div'>
-                                <div>
-                                    <p>Telefono</p>
-                                    <input placeholder={lead.telephone} value={numeroTelefono} onChange={(e) => setNumeroTelefono(e.target.value)} />
+                                <hr className='linea-che-serve' />
+                                <div className='sommario'>
+                                <h4>Sommario</h4>
+                                <p>
+                                    {displayedText}
+                                        {fullText.length > MAX_CHARS && (
+                                        <span onClick={() => setExpanded(!expanded)}>
+                                            {expanded ? 'Leggi meno' : 'Leggi di più'}
+                                        </span>
+                                        )}
+                                    </p> 
                                 </div>
-                                <div>
-                                    <p>Email</p>
-                                    <input placeholder={lead.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <hr className='linea-che-serve' />
+                                <div className='maggiori-informazioni'>
+                                    <h4>ANAGRAFICA</h4>
+                                    <div className='mi-div'>
+                                        <div>
+                                            <p>Telefono</p>
+                                            <input placeholder={lead.telephone} value={numeroTelefono} onChange={(e) => setNumeroTelefono(e.target.value)} />
+                                        </div>
+                                        <div>
+                                            <p>Email</p>
+                                            <input placeholder={lead.email} value={email} onChange={(e) => setEmail(e.target.value)} />
+                                        </div>
+                                    </div>
+                                    <div className={lead.leadAmbassador ? 'mi-div mgm-div' : 'mi-div'}>
+                                        <div>
+                                            <p>Campagna</p>
+                                            <input placeholder={lead.campagna ? lead.campagna : ""} value={mapCampagnaPerLeadsystem(lead.campagna)} disabled onChange={(e) => setCampagna(e.target.value)} />
+                                        </div>
+                                        {state.user.role && state.user.role === "orientatore" ? 
+                                        <div>
+                                            <p>Operatore</p>
+                                            <label>
+                                                <select 
+                                                data-width="100%"
+                                                disabled
+                                                required value={orientatori} onChange={(e) => setOrientatori(e.target.value)}>
+                                                    <option value="" disabled defaultChecked>{lead.orientatori ? lead.orientatori : 'Seleziona orientatore'}</option>
+                                                    {orientatoriOptions.map((option) => (
+                                                        <option key={option._id} value={option._id}>
+                                                            {option.nome} {' '} {option.cognome}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                        </div>: <div>
+                                            <p>Operatore</p>
+                                            <label>
+                                                <select 
+                                                data-width="100%"
+                                                required value={orientatori} onChange={(e) => setOrientatori(e.target.value)}>
+                                                    <option value="" disabled defaultChecked>{lead.orientatori ? lead.orientatori : 'Seleziona orientatore'}</option>
+                                                    {orientatoriOptions.map((option) => (
+                                                        <option key={option._id} value={option._id}>
+                                                            {option.nome} {' '} {option.cognome}
+                                                        </option>
+                                                    ))}
+                                                </select>
+                                            </label>
+                                        </div>}
+                                    </div>
                                 </div>
-                            </div>
-                            <div className={lead.leadAmbassador ? 'mi-div mgm-div' : 'mi-div'}>
-                                <div>
-                                    <p>Campagna</p>
-                                    <input placeholder={lead.campagna ? lead.campagna : ""} value={mapCampagnaPerLeadsystem(lead.campagna)} disabled onChange={(e) => setCampagna(e.target.value)} />
+                                <hr className='linea-che-serve' />
+                                <div className='popup-bottom maggiori-informazioni'>
+                                    <p style={{ fontSize: "18px", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: '0px' }}>Inserisci <span style={{ color: "#3471CC", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginLeft: '5px' }}>
+                                        note
+                                        </span></p>
+                                    <textarea
+                                        placeholder='Inserisci una nota...'
+                                        id='textareanote' value={note} onChange={(e) => setNote(e.target.value)} />
                                 </div>
-                                {state.user.role && state.user.role === "orientatore" ? 
-                                <div>
-                                    <p>Operatore</p>
-                                    <label>
-                                        <select 
-                                        data-width="100%"
-                                        disabled
-                                        required value={orientatori} onChange={(e) => setOrientatori(e.target.value)}>
-                                            <option value="" disabled defaultChecked>{lead.orientatori ? lead.orientatori : 'Seleziona orientatore'}</option>
-                                            {orientatoriOptions.map((option) => (
-                                                <option key={option._id} value={option._id}>
-                                                    {option.nome} {' '} {option.cognome}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </label>
-                                </div>: <div>
-                                    <p>Operatore</p>
-                                    <label>
-                                        <select 
-                                        data-width="100%"
-                                        required value={orientatori} onChange={(e) => setOrientatori(e.target.value)}>
-                                            <option value="" disabled defaultChecked>{lead.orientatori ? lead.orientatori : 'Seleziona orientatore'}</option>
-                                            {orientatoriOptions.map((option) => (
-                                                <option key={option._id} value={option._id}>
-                                                    {option.nome} {' '} {option.cognome}
-                                                </option>
-                                            ))}
-                                        </select>
-                                    </label>
-                                </div>}
-                            </div>
-                            {/*<div className='mi-div'>
-                                <div>
-                                    <p>Città</p>
-                                    <input disabled placeholder={lead.città.charAt(0).toUpperCase()} value={città} onChange={(e) => setCittà(e.target.value)} />
-                                </div>
-                                <div className='trat-cont-input'>
-                                    <p>Campo aggiuntivo</p>
-                                    <input className='input-trattamento-hover' placeholder={campoPlus} value={campoPlus} onChange={(e) => setCampoPlus(e.target.value)} />
-                                    <span className="trattamento-fullname">{campoPlus}</span>
-                                </div>
-                            </div>*/}
-                        </div>
-                        <hr className='linea-che-serve' />
-                        <div className='popup-bottom maggiori-informazioni'>
-                            <p style={{ fontSize: "18px", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: '0px' }}>Inserisci <span style={{ color: "#3471CC", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginLeft: '5px' }}>
-                                note
-                                </span></p>
-                            <textarea
-                                placeholder='Inserisci una nota...'
-                                id='textareanote' value={note} onChange={(e) => setNote(e.target.value)} />
-                        </div>
-                    {/*: (
-                    <div className='maggiori-informazioni'>
-                        <h4>Informazioni inserite dal cliente sul Comparatore</h4>
-                        <div className='mi-div'>
+                        <div className='popup-bottom'>
+                            <div className='popup-bottom-button'>
+                                <a onClick={updateLead}>Salva scheda lead</a>
+                                {/*<a onClick={()=>deleteLead(lead.id)}>Elimina lead</a> */}
+                            </div>                    
+                        </div>                    
+                    </>
+                ) : (
+                    <div className='chat-scheda-lead'>
+                        <div className='top-chat-scheda-lead'>
                             <div>
-                                <p>Tipologia di corso</p>
-                                <input type='text' disabled value={tipologiaCorso} onChange={(e) => setTipologiaCorso(e.target.value)} />
+                                {lead && (() => {
+                                    const iniziali = lead?.name.charAt(0).toUpperCase() + lead?.surname.charAt(0).toUpperCase();
+                                    return <span>{iniziali}</span>;
+                                })()}
                             </div>
                             <div>
-                                <p>Area studi</p>
-                                <input type='text' disabled value={corsoDiLaurea} onChange={(e) => setCorsoDiLaurea(e.target.value)} />
+                                <span>{lead.name + ' ' + lead.surname}</span>
+                                <span>Attivo da oggi alle 12:30</span>
                             </div>
                         </div>
-                        <div className='mi-div'>
-                            <div>
-                                <p>Corso di laurea</p>
-                                <input type='text' disabled value={facolta} onChange={(e) => setFacolta(e.target.value)} />
+                        <div className='body-chat-scheda-lead'>
+                            <div className='message-container-scheda-lead' ref={chatBodyRef}>
+                                {chat && chat.messages?.map((msg, index) => (
+                                    <Message
+                                    key={index}
+                                    msgdata={msg.content}
+                                    sender={msg.sender}
+                                    timestamp={msg.timestamp}
+                                    />
+                                ))}
                             </div>
-                            <div>
-                                <p>Budget</p>
-                                <input type='text' disabled value={budget} onChange={(e) => setBudget(e.target.value)} />
+                            <div className='button-container-chat'>
+                                <button onClick={() => handleCompleteChat()}>Visualizza chat completa</button>
                             </div>
                         </div>
-                        <div className='mi-div'>
-                            <div>
-                                <p>Iscrizione</p>
-                                <input type='text' disabled value={enrollmentTime} onChange={(e) => setEnrollmentTime(e.target.value)} />
-                            </div>
-                            <div>
-                                <p>Frequenti l’università</p>
-                                <input type='text' disabled value={frequentiUni} onChange={(e) => setFrequentiUni(e.target.value)} />
-                            </div>
-                        </div>    
-                        <div className='mi-div'>
-                            <div>
-                                <p>Lavori?</p>
-                                <input type='text' disabled value={lavoro} onChange={(e) => setLavoro(e.target.value)} />
-                            </div>
-                            <div>
-                                <p>Tempo disponibile</p>
-                                <input type='text' disabled value={oreStudio} onChange={(e) => setOreStudio(e.target.value)} />
-                            </div>
-                        </div> 
-                        <div className='mi-div'>
-                            <div>
-                                <p>Categoria</p>
-                                <input type='text' disabled value={categories} onChange={(e) => setCategories(e.target.value)} />
-                            </div>
-                        </div>     
                     </div>
-                )*/}
-                <div className='popup-bottom'>
-                    <div className='popup-bottom-button'>
-                        <a onClick={updateLead}>Salva scheda lead</a>
-                        {/*<a onClick={()=>deleteLead(lead.id)}>Elimina lead</a> */}
-                    </div>                    
-                </div>
-
+                )}
             </div>                  
             )}
       
