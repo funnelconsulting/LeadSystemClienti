@@ -25,7 +25,7 @@ mongoose
 app.use(express.json({ limit: "10mb" }));
 app.use(
   cors({
-    origin: [process.env.CLIENT_URL, process.env.COMPARACORSI, process.env.APP_COMPARACORSI, "https://ai.leadsystem.app", "https://leadsystem-test.netlify.app", "https://leadsystem-commerciale-test.netlify.app", "http://localhost:3000"],
+    origin: [process.env.CLIENT_URL, process.env.COMPARACORSI, process.env.APP_COMPARACORSI, "https://ai.leadsystem.app", "https://leadsystem-test.netlify.app", "https://leadsystem-commerciale-test.netlify.app", "http://localhost:3000", "http://localhost:5173"],
   })
 );
 

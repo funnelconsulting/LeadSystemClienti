@@ -53,4 +53,14 @@ router.post("/modify-rating-note-super", async (req, res) => {
     }
   });
 
+
+  router.get('/get-all-client', async (req, res) => {
+    try {
+      const clients = await User.find({}, '_id name')
+      res.status(200).json(clients);
+    } catch (error) {
+      console.error(error)
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
 module.exports = router;

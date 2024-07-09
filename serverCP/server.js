@@ -101,7 +101,7 @@ app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 };*/
 
 //cron.schedule('10 2 * * *', runDailyJob);
-const redirect_uris=["http://localhost:8001","http://localhost:8000","https://server-chatbot-ai-production.up.railway.app"]
+const redirect_uris=["http://localhost:8001","http://localhost:8000","https://server-chatbot-ai-production.up.railway.app", "http://localhost:5173"]
 const scopes = ['https://www.googleapis.com/auth/calendar'];
 const CLIENT_SECRET="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"
 const CLIENT_ID="321609978941-3tddpomhn02meoudv8k0giqguka5v18m.apps.googleusercontent.com"
