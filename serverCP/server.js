@@ -9,7 +9,7 @@ const cron = require('node-cron');
 const { parse } = require('json2csv');
 const LeadChatbot = require('./models/leadChatbot');
 const moment = require('moment');
-const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss } = require('./controllers/chatbot');
+const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss, saveLeadVantaggio } = require('./controllers/chatbot');
 
 const app = express();
 
@@ -93,6 +93,7 @@ const exportLeadsToCSV = async () => {
 app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
 app.post('/api/save-chatbot-smc', saveLeadSMC);
 app.post('/api/save-chatbot-luiss', saveLeadLuiss);
+app.post('/api/save-chatbot-vantaggio', saveLeadVantaggio);
 
 /*const runDailyJob = () => {
   authorize()
