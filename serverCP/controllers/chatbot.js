@@ -758,10 +758,10 @@ exports.saveLeadVantaggio = async (req, res) => {
     let canale = '';
     let cognome = '';
     let nome = '';
-    const specificField = custom_fields.find(field => field.id === '500329');
-    const specificFieldApp = custom_fields.find(field => field.id === '934190');
-    const customLastSurname = custom_fields.find(field => field.id === "652840");
-    const customLastName = custom_fields.find(field => field.id === "242329");
+    const specificField = custom_fields.find(field => field.id === '720286');
+    const specificFieldApp = custom_fields.find(field => field.id === '562190');
+    const customLastSurname = custom_fields.find(field => field.id === "26189");
+    const customLastName = custom_fields.find(field => field.id === "246801");
     if (specificField && specificField.type === '0') {
       conversation_summary = specificField.value;
     }
