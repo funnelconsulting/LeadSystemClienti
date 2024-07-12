@@ -4,15 +4,18 @@ const cors = require('cors');
 const fs = require('fs');
 require("dotenv").config();
 const {google} = require('googleapis');
+const axios = require('axios')
 const path = require("path");
 const cron = require('node-cron');
 const { parse } = require('json2csv');
 const LeadChatbot = require('./models/leadChatbot');
 const moment = require('moment');
 const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss, saveLeadVantaggio } = require('./controllers/chatbot');
+const { appendToGoogleSheet } = require('./controllers/exportSheet');
+const Lead = require('./models/lead');
 
 const app = express();
-
+app.use(express.urlencoded({ extended: true }));
 mongoose.set('strictQuery', false);
 mongoose
   .connect(process.env.DATABASE)
@@ -94,7 +97,71 @@ app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
 app.post('/api/save-chatbot-smc', saveLeadSMC);
 app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 app.post('/api/save-chatbot-vantaggio', saveLeadVantaggio);
+app.post('/submit-comparacorsi-luiss', async (req, res) => {
+  console.log('ok')
+  console.log(req.body)
+const { Nome, Cognome, Email, Telefono, utm_medium, utm_source, utm_campaign, utm_term } = req.body;
+const master = req.body['Master ']
+if (!Nome || !Cognome || !Email || !Telefono || !master) {
+  return res.status(400).json({ error: 'Tutti i campi sono obbligatori' });
+}
 
+try {
+  const newLead = new Lead({
+      data: new Date(),
+      nome: Nome,
+      cognome: Cognome,
+      email: Email,
+      numeroTelefono: Telefono,
+      campagna: 'AI chatbot',
+      esito: 'Da contattare',
+      orientatori: null,
+      utente: "6674220bc423baeeaa460161", //"662f767d3eda57d593f420fe", TEST ACCOUNT
+      note: '',
+      fatturato: '',
+      utmCampaign: 'AI chatbot',
+      utmSource: utm_source,
+      utmContent: utm_medium,
+      utmTerm: utm_term,
+      utmAdgroup: utm_campaign,
+      utmAdset: "",
+      appDate: "",
+      summary: "Interessato a Master",
+      last_interaction: "",
+      tag: "luiss",
+      master: master,
+  });
+
+  const existingLead = await Lead.findOne({ email: Email });
+  if (!existingLead) {
+    await newLead.save();
+    await appendToGoogleSheet(newLead);
+    const ecpLeadTracking = {
+      ecpId: '6674220bc423baeeaa460161',
+      leads: newLead,
+    };
+    const response = await axios.post('https://whatsecp-lead-28c0b2052b12.herokuapp.com/webhook-lead-luiss', ecpLeadTracking);
+    if (response.status === 200) {
+        console.log('Chiamata al webhook riuscita.');
+    } else {
+        console.log('Errore durante la chiamata al webhook:', response.statusText);
+    }
+  } else {
+    if(Email !== ""){
+      existingLead.email = Email;
+    };
+    existingLead.numeroTelefono = Telefono;
+    existingLead.master = master; 
+    await existingLead.save()
+    await appendToGoogleSheet(existingLead);
+  }
+
+  res.status(201).json({ message: 'Lead salvato correttamente' });
+} catch (error) {
+  console.error('Errore nel salvataggio del lead:', error);
+  res.status(500).json({ error: 'Errore interno del server' });
+}
+});
 /*const runDailyJob = () => {
   authorize()
     .then(exportChatbot)
