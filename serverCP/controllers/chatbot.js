@@ -577,7 +577,7 @@ exports.saveLeadLuiss = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (conversation_summary && specificFieldApp?.value && specificFieldApp?.value !== ""){
+      if (conversation_summary){
         const userId = '6674220bc423baeeaa460161'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -674,7 +674,7 @@ exports.saveLeadLuiss = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (conversation_summary && specificFieldApp?.value && specificFieldApp?.value !== ""){
+      if (conversation_summary){
         const userId ='6674220bc423baeeaa460161'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
