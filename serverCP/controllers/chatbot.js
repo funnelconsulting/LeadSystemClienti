@@ -620,6 +620,16 @@ exports.saveLeadLuiss = async (req, res) => {
             console.log(`Assegnato il lead ${lead.cognome} all'utente Luiss`);
             await user.save();
             await appendToGoogleSheet(newLead);
+            const ecpLeadTracking = {
+              ecpId: user._id,
+              leads: newLead,
+            };
+            const response = await axios.post('https://whatsecp-lead-28c0b2052b12.herokuapp.com/webhook-lead-luiss', ecpLeadTracking);
+            if (response.status === 200) {
+                console.log('Chiamata al webhook riuscita.');
+            } else {
+                console.log('Errore durante la chiamata al webhook:', response.statusText);
+            }
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
             console.log(`Già assegnato il lead ${lead.cognome} all'utente Luiss`)
@@ -707,6 +717,16 @@ exports.saveLeadLuiss = async (req, res) => {
             console.log(`Assegnato il lead ${lead.cognome} all'utente Luiss`);
             await user.save();
             await appendToGoogleSheet(newLead);
+            const ecpLeadTracking = {
+              ecpId: user._id,
+              leads: newLead,
+            };
+            const response = await axios.post('https://whatsecp-lead-28c0b2052b12.herokuapp.com/webhook-lead-luiss', ecpLeadTracking);
+            if (response.status === 200) {
+                console.log('Chiamata al webhook riuscita.');
+            } else {
+                console.log('Errore durante la chiamata al webhook:', response.statusText);
+            }
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
             console.log(`Già assegnato il lead ${lead.cognome} all'utente Luiss`)
@@ -950,5 +970,28 @@ exports.saveLeadVantaggio = async (req, res) => {
     res.status(500).json({ error: error, message: 'Errore' });
   }
 };
+
+
+const provaWebhookwhatsapp = async () => {
+  try {
+    const newLead = {
+      nome: "Mattia",
+      cognome: "Noris",
+      numeroTelefono: '3313869850',
+    };
+    const ecpLeadTracking = {
+      ecpId: "6674220bc423baeeaa460161",
+      leads: newLead,
+    };
+    const response = await axios.post('https://whatsecp-lead-28c0b2052b12.herokuapp.com/webhook-lead-luiss', ecpLeadTracking);
+            if (response.status === 200) {
+                console.log('Chiamata al webhook riuscita.');
+            } else {
+                console.log('Errore durante la chiamata al webhook:', response.statusText);
+            }
+  } catch (error) {
+    console.error(error)
+  }
+}
 
 //createEvent("andrea.c@funnelconsulting.it", "24-05-29 18:00", "Mattia Noris", "Il cliente vuole prenotare", "3313869850", "mattianoris23@gmail.com")
