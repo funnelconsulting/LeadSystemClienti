@@ -98,10 +98,10 @@ app.post('/api/save-chatbot-smc', saveLeadSMC);
 app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 app.post('/api/save-chatbot-vantaggio', saveLeadVantaggio);
 app.post('/submit-comparacorsi-luiss', async (req, res) => {
-  console.log('ok')
-  console.log(req.body)
-const { Nome, Cognome, Email, Telefono, utm_medium, utm_source, utm_campaign, utm_term } = req.body;
-const master = req.body['Master ']
+console.log(req.body)
+const { Nome, Cognome, Email, utm_medium, utm_source, utm_campaign, utm_term } = req.body;
+const Telefono = req.body['Telefono/Cellulare']
+const master = req.body['Quale master ti interessa?']
 if (!Nome || !Cognome || !Email || !Telefono || !master) {
   return res.status(400).json({ error: 'Tutti i campi sono obbligatori' });
 }
