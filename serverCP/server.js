@@ -146,6 +146,7 @@ try {
     } else {
         console.log('Errore durante la chiamata al webhook:', response.statusText);
     }
+    res.status(201).json({ message: 'Lead salvato correttamente' });
   } else {
     if(Email !== ""){
       existingLead.email = Email;
@@ -154,9 +155,8 @@ try {
     existingLead.master = master; 
     await existingLead.save()
     await appendToGoogleSheet(existingLead);
+    res.status(200).json({ message: 'Lead salvato correttamente' });
   }
-
-  res.status(201).json({ message: 'Lead salvato correttamente' });
 } catch (error) {
   console.error('Errore nel salvataggio del lead:', error);
   res.status(500).json({ error: 'Errore interno del server' });
