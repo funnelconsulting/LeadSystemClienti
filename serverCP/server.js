@@ -151,6 +151,8 @@ try {
     if(Email !== ""){
       existingLead.email = Email;
     };
+    existingLead.nome = Nome;
+    existingLead.cognome = Cognome;
     existingLead.numeroTelefono = Telefono;
     existingLead.master = master; 
     await existingLead.save()
