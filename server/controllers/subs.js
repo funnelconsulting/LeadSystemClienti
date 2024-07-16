@@ -3,6 +3,7 @@ const LeadFacebook = require('../models/leadFacebook');
 const LeadWordpress = require("../models/leadWordpress");
 const Lead = require('../models/lead');
 var cron = require('node-cron');
+const axios = require("axios");
 const { sendEmailLeadArrivati } = require('../middlewares');
 const { getDentistaLead, getTagLeads, getTagLeads2, getDentistaLead2, getDentistaLead3, getBludentalLead } = require('./Facebook');
 const Orientatore = require('../models/orientatori');
@@ -636,3 +637,30 @@ async function updateLeadsByPhoneNumber(phoneNumbers) {
 //updateLeads();
 //updateLeadsEsito();
 //updateLeadsRec(); //DEI NON RISPONDE OGNI INIZIO SETTIMANA
+
+const processTrigger = async () => {
+  const userId = '662f767d3eda57d593f420fe';
+  //const url = `http://localhost:9000/ls/process-trigger/${userId}`;
+  const url = `https://chatbolt-comparacorsi-production.up.railway.app/ls/process-trigger/${userId}`;
+
+  const lead = await Lead.findOne({numeroTelefono: "3313869850"})
+  const payload = {
+    action: '1',
+    userInfo: {
+      _id: lead._id,
+      first_name: lead.nome,
+      last_name: lead.cognome,
+      email: lead.email,
+      numeroTelefono: lead.numeroTelefono,
+    }
+  };
+
+  try {
+    const response = await axios.post(url, payload);
+    console.log('Success:', response.data);
+  } catch (error) {
+    console.error('Error processing trigger:', error.response ? error.response.data : error.message);
+  }
+};
+
+//processTrigger()

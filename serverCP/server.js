@@ -13,6 +13,7 @@ const moment = require('moment');
 const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss, saveLeadVantaggio } = require('./controllers/chatbot');
 const { appendToGoogleSheet } = require('./controllers/exportSheet');
 const Lead = require('./models/lead');
+const { saveChatboltLead } = require('./controllers/newChatbolt');
 
 const app = express();
 app.use(express.urlencoded({ extended: true }));
@@ -97,8 +98,10 @@ app.post('/api/save-chatbot-unusual', saveLeadChatbotUnusual);
 app.post('/api/save-chatbot-smc', saveLeadSMC);
 app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 app.post('/api/save-chatbot-vantaggio', saveLeadVantaggio);
+
+app.post('/chatbolt/save-chatbolt-lead', saveChatboltLead)
+
 app.post('/submit-comparacorsi-luiss', async (req, res) => {
-console.log(req.body)
 const { Nome, Cognome, Email, utm_medium, utm_source, utm_campaign, utm_term } = req.body;
 const Telefono = req.body['Telefono/Cellulare']
 const master = req.body['Quale master ti interessa?']
