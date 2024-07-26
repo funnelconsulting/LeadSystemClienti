@@ -16,7 +16,7 @@ export default function LeadHeader({
 
   return (
     <div
-      className={"secheader "}
+      className={"secheader"}
       ref={ref}
       onClick={() => {
         if (type == "Da contattare")

@@ -2,6 +2,8 @@ import React, { useContext } from 'react'
 import './MainDash.scss';
 import { SearchOutlined } from '@ant-design/icons';
 import { UserContext } from "../../context";
+import esporta from '../../imgs/export.png'
+import { Popover } from 'antd';
 import { FaArrowDown, FaArrowRight, FaArrowUp } from 'react-icons/fa';
 
 const TopDash = ({ hideexport = false,
@@ -19,6 +21,12 @@ const TopDash = ({ hideexport = false,
   setShowLegenda,
 }) => {
   const [state, setState] = useContext(UserContext);
+
+  const popoverContent = (
+    <div>
+      <a style={{ cursor: 'pointer' }} onClick={generatePdf}>Export as CSV | XLS</a>
+    </div>
+  );
 
   function getDisplayName(user) {
     const name = user.role === "orientatore" ? user.nome : user.name;
@@ -51,7 +59,7 @@ const TopDash = ({ hideexport = false,
       >
         <div className="topDash-item" id='fstdashitem'>
           {!hidecerca &&
-            <label className={hideexport ? "hideexport" : ""} style={{display: 'flex', alignItems: 'center', gap: '1rem', padding: "6px 12px", backgroundColor: '#fff', borderRadius: 15 }}>
+            <label className={hideexport ? "hideexport" : ""} style={{display: 'flex', alignItems: 'center', gap: '1rem', padding: "6px 12px", backgroundColor: '#fff', borderRadius: 30, border: '1px solid #000' }}>
               <SearchOutlined color="white" id='looptopdash' />
               <input
                 id='dashcerca'
@@ -62,9 +70,9 @@ const TopDash = ({ hideexport = false,
               />
             </label>
           }
-          {!hideLegend && <button className="btn-legenda-visibile" onClick={() => setShowLegenda(!showLegenda)}>
+          {/*!hideLegend && <button className="btn-legenda-visibile" onClick={() => setShowLegenda(!showLegenda)}>
             Legenda {showLegenda ? <FaArrowUp /> : <FaArrowRight />}
-          </button>}
+          </button>*/}
           {hideexport &&
             <div id='attiviora' style={{ display: (hideattivi && "none") }}>
               <div className="tit">Attivi ora</div>
@@ -96,19 +104,19 @@ const TopDash = ({ hideexport = false,
           }
 
         {hideexportLeads &&
-            <div id='dwrep'>
-              <svg style={{ rotate: "90deg" }} width="20" height="20" viewBox="0 0 33 30" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M-4.52725e-07 19.0576L14.4375 19.0576L14.4375 25.303L24.75 14.8939L14.4375 4.48479L14.4375 10.7303L-8.14905e-07 10.7303L-4.52725e-07 19.0576ZM28.875 29.4667L33 29.4667L33 0.321146L28.875 0.321147L28.875 29.4667Z" />
-              </svg>
-              <a className='export-lead' style={{cursor: 'pointer'}} onClick={generatePdf}>Export as CSV | XLS</a>
+          <Popover content={popoverContent} title="" trigger="hover">
+            <div id='dwrep' style={{cursor: 'pointer'}} onClick={generatePdf}>
+              <img alt='esporta' src={esporta} />
+              {/*<a className='export-lead' style={{cursor: 'pointer'}} onClick={generatePdf}>Export as CSV | XLS</a>*/}
             </div>
+          </Popover>
           }
-          {!hideciao &&
+          {/*!hideciao &&
             <div id='fstdiv'>
               <span className='iniziale-top-dash'>{state.user.role && state.user.role === "orientatore" ? state.user.nome.charAt(0) : state.user.name ? state.user.name.charAt(0) : ""}</span>
               <p>ciao <span><u>{getDisplayName(state.user)}</u></span></p>
             </div>
-          }
+          */}
         </div>
       </div>
       // </div>

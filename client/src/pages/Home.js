@@ -5,6 +5,7 @@ import { SyncOutlined } from "@ant-design/icons";
 import LeggendaEsiti from "../components/MainDash/LeggendaEsiti";
 import '../components/MainDash/MainDash.scss';
 import '../components/Table/Table2.scss';
+import Logout from "../components/Logout";
 const LazyMainDash = React.lazy(() => import('../components/MainDash/MainDash'));
 const Home = ({ history, setNextSchedule }) => {
   const [state, setState] = useContext(UserContext);
@@ -40,6 +41,7 @@ const Home = ({ history, setNextSchedule }) => {
             <LazyMainDash setNextSchedule={setNextSchedule} showLegenda={showLegenda} setShowLegenda={setShowLegenda} />
           </Suspense>
         </div>
+        <Logout />
       </div>
   }
   </div>

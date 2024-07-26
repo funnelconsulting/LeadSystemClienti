@@ -105,7 +105,7 @@ const Login = () => {
   }
 
   return (
-    <div className="d-flex justify-content-center login" style={{ height: "80vh" }}>
+    <div className="d-flex justify-content-center login" style={{ height: "90vh" }}>
       {recoveryPasswordPopup ? (
       <div className="form-goup" style={{margin: '60px 0 0 0'}}>
         <h1 className="pt-5">Recupera <font color='#3471CC'>password</font></h1>
@@ -159,12 +159,11 @@ const Login = () => {
       <button className="button-reg" style={{margin:'20px 0px'}}  onClick={handleResetPassword}>Reset Password</button>
     </div>
      ) :(
-            <div className="container align-items-center d-flex">
+            <div className="container container-login align-items-center d-flex">
         <div className="row col-md-6 offset-md-3 text-center">
-          <h1 className="pt-5">Accedi al tuo <font color='#3471CC'>account</font></h1>
+          <h1 className="pt-5">CRM Login</h1>
           <p className="lead pb-4">
-            <a style={{color: 'black', margin: '0 50px'}} href="/register">Non hai un account?</a>
-            <a style={{color: 'black', margin: '0 50px', cursor:'pointer', fontSize: '0.8rem', textDecoration: 'underline'}} onClick={() => setRecoveryPasswordPopup(true)} >Recupera password</a>
+            Accedi alla tua area personale di gestione delle lead
           </p>
 
           {!cambiaPass ? <div className="form-group">
@@ -173,29 +172,21 @@ const Login = () => {
               type="email"
               value={email}
               setValue={setEmail}
-              placeholder="Inserisci la tua email.."
+              placeholder=""
             />
             <Input
               label="Password"
               type="password"
               value={password}
               setValue={setPassword}
-              placeholder="Inserisci la tua password.."
+              placeholder=""
             />
-             <label style={{width: '100%'}}>
-              <input 
-              type="checkbox" 
-              checked={isChecked} 
-              onChange={handleCheckboxChange} 
-              style={{marginBottom: '30px'}}
-              />
-              <font color='#3471CC'>  Memorizza</font> i dati di accesso.
-            </label>
-            <div>
+            <div className="accedi-btn-container">
               <button onClick={handleClick} className="button-reg">
                 Accedi
               </button>
-            </div> 
+              {/*<a style={{color: 'black', margin: '0 50px', cursor:'pointer', fontSize: '0.8rem', textDecoration: 'underline'}} onClick={() => setRecoveryPasswordPopup(true)} >Recupera password</a>*/}
+            </div>
           </div> :
             <div className="form-group">
               <Input
@@ -203,7 +194,7 @@ const Login = () => {
                 type="password"
                 value={newPassword}
                 setValue={setNewPassword}
-                placeholder="Inserisci la tua password.."
+                placeholder=""
               />
               <div>
                 <button className="salta-login" onClick={() => {navigate('/'); toast.success('Benvenuto')}}>

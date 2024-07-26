@@ -5,6 +5,9 @@
     width: 86%;
     font-family: 'Poppins', sans-serif;
 }
+.ori-container{
+    height: 90vh;
+}
 .termini-condizioni {
     width: 60%;
     margin: 0 auto;
@@ -49,11 +52,13 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    justify-content: space-between;
     align-items: stretch;
-    gap: 3rem;
+    gap: 1rem;
     width: 100%;
     padding-bottom: 40px;
+    background-color: #fff;
+    border-radius: 2px;
 
     #lastroworient {
         display: flex;
@@ -165,16 +170,15 @@
     width: 90%;
     border-radius: 20px;
     background: white;
-    box-shadow: 0px 0px 20px 2px #80808029;
     padding: 25px 35px;
-    margin-top: 30px;
+    margin-top: 15px;
 }
 
 .add-orientatori h4 {
     width: 90%;
     margin-left: 5%;
+    font-size: 20px;
 }
-
 
 .input-item {
     display: flex;
@@ -187,26 +191,18 @@
 
 .input-item input {
     border: none;
-    background-color: #d9d9d95b;
+    background-color: #F9FBFC;
     border-radius: 5px;
     width: 100%;
-    font-size: 12px !important;
-    padding: 8px;
+    font-size: 14px !important;
+    padding: 6px 8px;
+    outline: none;
 }
 
-.input-item label {
-    font-size: 16px !important;
+.input-item > label {
+    font-size: 14px !important;
 }
 
-.input-item label::after {
-    content: "";
-    display: inline-block;
-    width: 20px;
-    height: 20px;
-    margin-left: 10px;
-    background: url(../imgs/penna.svg);
-    background-size: cover;
-}
 .input-orientatori {
     display: flex;
     flex-direction: column;
@@ -217,30 +213,42 @@
 }
 
 .btn-orie {
-    background-color: #3471CC;
+    background-color: #4ED35D;
     margin: 0 auto;
     padding: 8px 16px;
     font-size: 13px;
     border: none;
     cursor: pointer;
     color: white;
-    border-radius: 5px;
+    border-radius: 2px;
     margin-top: 15px;
     /* width: 30%; */
 }
 
 .btn-orie-add {
-    background-color: #3471CC;
+    background-color: #4ED35D;
     margin: 0 auto;
-    padding: 8px 16px;
+    padding: 6px 16px;
     font-size: 13px;
     border: none;
     cursor: pointer;
     color: white;
-    border-radius: 5px;
+    border-radius: 2px;
     margin-top: 15px;
+    width: 100%;
 }
-
+.ori-not-allowed{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    height: 90vh;
+}
+.ori-not-allowed > img {
+    width: 90px;
+}
 .popup-orientatore {
     display: flex;
     flex-direction: column;
@@ -268,29 +276,34 @@
     max-height: 50vh;
     box-shadow: none;
 }
-
-
 #Table {
     padding: 10px;
     background-color: white !important;
     border-radius: 20px;
     box-shadow: 0px 0px 20px 2px #80808029;
-
 }
-
+.orientatori-search-container{
+    padding: 15px 20px 0 20px;
+    margin-bottom: -50px;
+}
 #orientatorisearch svg {
-    height: 50px;
+    height: 30px;
 }
-
+#orientatorisearch {
+    border: 1px solid #000;
+    border-radius: 30px;
+    width: 220px;
+    padding: 4px 10px;
+}
+.table-body-container img {
+    width: 17px;
+}
 #orientatorisearch input {
     border: none;
     outline: none;
-    background-color: white;
-    border-bottom: 1px solid;
-    font-size: 20px;
+    background-color: transparent;
+    font-size: 14px;
 }
-
-
 .filtraorient {
     width: 80%;
     margin-left: 10%;
@@ -301,14 +314,13 @@
     color: black;
     font-weight: 600;
     text-decoration: underline;
-    font-size: 20px;
+    font-size: 16px !important;
 }
 
 .filtraorient .wrapper {
     display: flex;
     gap: 3rem;
 }
-
 
 .filtraorient input {
     background-color: var(--bg);
@@ -387,9 +399,6 @@
 @media screen and (width <=1600px) {
     .orientatori {
         .add-orientatori {
-            * {
-                font-size: 18px !important;
-            }
 
             button {
                 font-size: 15px !important;
@@ -468,9 +477,6 @@
 
     .orientatori {
         .add-orientatori {
-            * {
-                font-size: 16px !important;
-            }
 
             button {
                 font-size: 14px !important;

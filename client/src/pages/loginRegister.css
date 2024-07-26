@@ -8,12 +8,59 @@
 .a-login{
     color: #3471CC;
 }
+.container-login{
+    background-color: #FFFFFF;
+    border-radius: 3px;
+    box-shadow: 0 0 2px 2px #00000042;
+    width: 50%;
+    height: 65vh;
+    margin: 0 auto;
+    margin-top: 100px;
+}
+.container-login > div {
+    width: 80%;
+    margin: 0 auto;
+}
+.container-login > .form-group{
+    width: 60%;
+    margin:  0 auto;
+}
+.container-login > div > p {
+    font-size: 16px;
+}
+.container-login input,
+.form-control {
+    outline: none !important;
+    border: 1px solid #0000005b;
+    box-shadow: none !important;
+    background-color: #F9FBFC;
+}
+.form-control:focus{
+    box-shadow: none !important;
+    border: 1px solid #0000005b;
+    background-color: #F9FBFC;
+}
 .button-reg{
-    background: #3471CC;
-    border-radius: 10px;
+    background: #4ED35D;
+    border-radius: 2px;
     border: none;
     color: white;
     padding: 6px 25px;
+}
+.form-input-login{
+    border: 'none';
+    margin-bottom: '10px'; 
+    border-bottom: '1px solid black';
+    border-radius: 0; 
+    font-size: '13px';
+    background-color: #F9FBFC;
+}
+.accedi-btn-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
 }
 .salta-login{
     border: 2px solid #3471CC;

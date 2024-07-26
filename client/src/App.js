@@ -39,7 +39,7 @@ function App() {
           duration: 3000,
         }}
       />
-      {nextSchedule ? 
+      {/*nextSchedule ? 
       scheduleView ? <div className={scheduleView ? "notification-schedule" : "notification-schedule-close"}>
         <div>
           <h2>Prossima chiamata</h2>
@@ -49,7 +49,7 @@ function App() {
         <p>{moment(nextSchedule?.recallDate).format('DD-MM-YY')} - {nextSchedule?.recallHours}</p>
       </div> : <div onClick={() => setScheduleView(true)} className="open-schedule-notif">
         <FaArrowLeft />
-        </div> : null}
+        </div> : null*/}
         <Routes>
           <Route
             exact

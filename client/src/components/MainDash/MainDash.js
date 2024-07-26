@@ -191,7 +191,6 @@ const handleEnableNotifications = async () => {
       null
       }
       <TopDash SETsearch={SETsearch} hideattivi hideexportLeads generatePdf={generateCsvLead} showLegenda={showLegenda} setShowLegenda={setShowLegenda}/>
-      <hr className="linea-filtri" />
       <div className="table-main-mobile">
         <Suspense fallback={<div>Loading...</div>}>
           <LazyTable2 setNextSchedule={setNextSchedule} onResults={handleResults} searchval={search} setLeadsPdf={setLeadsPdf} />

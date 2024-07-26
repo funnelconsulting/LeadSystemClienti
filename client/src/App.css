@@ -19,12 +19,12 @@
 .App {
   text-align: center;
   font-family: "Poppins", sans-serif;
-  background-color: #F4F8FB !important;
+  background-color: #F9FBFC !important;
   overflow-y: scroll !important;
   overflow-x: hidden;
 }
 .big-container{
-  background-color: #F4F8FB !important;
+  background-color: #F9FBFC !important;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   min-height: auto;
@@ -34,9 +34,11 @@
 }
 .boost-container {
   position: absolute;
-  left: 50%;
+  /*left: 50%;
   transform: translateX(-39%);
-  width: 82%;
+  width: 82%;*/
+  width: 98%;
+  left: 1%;
   font-family: 'Poppins', sans-serif;
   padding-bottom: 40px;
   transition: 'width 0.3s ease',
@@ -59,8 +61,8 @@ button, a {
   right: 2rem;
   background-color: white;
   z-index: 100;
-  border: 2px solid #3471CC;
-  border-radius: 10px;
+  border: 2px solid #4ED35D;
+  border-radius: 2px;
   padding: 10px;
   min-width: 20%;
 }
@@ -75,7 +77,7 @@ button, a {
 .notification-schedule > div > p {
   font-weight: 700;
   font-size: 18px;
-  background-color: #3471CC;
+  background-color: #4ED35D;
   border-radius: 50%;
   color: white;
   min-width: 30px;
@@ -97,10 +99,19 @@ button, a {
   right: 0;
   bottom: 2rem;
   transition: 0.2s all;
-  background-color: #3471CC;
+  background-color: #4ED35D;
   display: flex;
   align-items: center;
   cursor: pointer;
+  z-index: 1000;
+}
+.logout-button{
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+}
+.logout-button > img {
+  width: 30px;
 }
 .open-schedule-notif > * {
   color: white;
@@ -112,7 +123,6 @@ button, a {
     right: 2rem;
     background-color: white;
     z-index: 100;
-    border: 2px solid #3471CC;
     border-radius: 10px;
     padding: 10px;
     min-width: 20%;
@@ -131,7 +141,6 @@ button, a {
   .notification-schedule > div > p {
     font-weight: 700;
     font-size: 16px;
-    background-color: #3471CC;
     border-radius: 50%;
     color: white;
     min-width: 30px;
@@ -153,16 +162,15 @@ button, a {
     right: 0;
     bottom: 2rem;
     transition: 0.2s all;
-    background-color: #3471CC;
     display: flex;
     align-items: center;
     cursor: pointer;
   }
   .boost-container {
     position: absolute;
-    left: 50%;
+    /*left: 50%;
     transform: translateX(-39%);
-    width: 80%;
+    width: 80%;*/
     font-family: 'Poppins', sans-serif;
     padding-bottom: 40px;
     transition: 'width 0.3s ease',

@@ -1,9 +1,8 @@
 .table-big-container {
-  box-shadow: 0px 0px 20px 2px #80808029;
   background-color: white;
-  border-radius: 20px;
+  border-radius: 2px;
   padding: 30px 20px;
-  max-height: 58vh;
+  max-height: 68vh;
   overflow: auto;
   font-family: 'Poppins', sans-serif;
   margin-top: 30px;
@@ -78,7 +77,7 @@
 }
 
 .table-big-container::-webkit-scrollbar-thumb {
-  background: #3471CC;
+  background: #4ED35D;
   border-radius: 56px;
   width: 12px;
 }
@@ -299,14 +298,14 @@ thead {
   width: 100%;
 }
 .btn-orie {
-  background-color: #3471CC;
+  background-color: #4ED35D;
   margin: 0 auto;
   padding: 8px 16px;
   font-size: 13px;
   border: none;
   cursor: pointer;
   color: white;
-  border-radius: 5px;
+  border-radius: 2px;
   margin-top: 15px;
   /* width: 30%; */
 }
@@ -337,22 +336,35 @@ thead {
 .table-container th {
   text-align: left;
   padding: 8px;
-  color: rgba(0, 0, 0, 0.31);
-  font-size: 16px;
-  font-weight: 400;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  color: rgb(0, 0, 0) !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
 }
 
 .table-container td {
-  padding: 8px;
+  padding: 18px 10px !important;
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   color: black;
+  font-size: 15px !important;
 }
-
+.row-name{
+  text-decoration: underline;
+  font-weight: 500 !important;
+  cursor: pointer;
+}
+.table-big-container td img {
+  width: 24px;
+  cursor: pointer;
+}
 .table-container tr:hover {
   background-color: #ddd;
 }
-
+.table-big-container td span {
+  color: #4ED35D;
+  font-size: 12px !important;
+  cursor: pointer;
+  margin-left: 10px;
+}
 .table-body-container>td {
   width: 20%;
 }
@@ -364,7 +376,6 @@ thead {
   padding: 0 20px;
 }
 .table-body-container td {
-  font-size: 13px !important;
   font-weight: 400;
 }
 
@@ -413,54 +424,6 @@ thead {
 .table-body-container .status svg {
   margin-right: 25px;
 }
-
-.table-body-container .status:after {
-  content: "";
-  height: 15px;
-  width: 15px;
-  border-radius: 100%;
-  position: absolute;
-  left: 18px;
-  top: 6px;
-  background: grey;
-  cursor: pointer;
-}
-
-.table-body-container .status.Da.contattare:after {
-  background: #000000;
-}
-
-.table-body-container .status.In.lavorazione:after {
-  background: #973030;
-}
-
-
-.table-body-container .status.Non.interessato:after {
-  background: #655528;
-}
-
-.table-body-container .status.Non.risponde:after {
-  background: #E849D8;
-}
-
-.table-body-container .status.Opportunità:after {
-  background: #FBBC05;
-}
-
-.table-body-container .status.In.valutazione:after {
-  background: #01594f;
-}
-
-.table-body-container .status.Venduto:after {
-  background: #30978B;
-}
-.table-body-container .status.Non.valido:after {
-  background: #3471CC;
-}
-
-
-
-
 #selectesiti {
   background-color: white;
   border: none;
@@ -541,7 +504,7 @@ thead {
 /*POPUP*/
 .popup-container {
   position: fixed;
-  top: 10%;
+  top: 0%;
   left: 0;
   width: 100%;
   height: 100%;
@@ -549,6 +512,7 @@ thead {
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  background-color: #00000096;
 }
 .popup-top {
   background-color: white;
@@ -571,23 +535,23 @@ thead {
   font-weight: 400;
   cursor: pointer;
   padding-bottom: 0px;
-  color: #0000007a;
+  color: #000000f6;
   font-weight: 500;
 }
 .popup {
   background-color: #fff;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 2px;
 }
 
 #filterbyesito,
 #filterbydate {
   text-align: center;
-  border-radius: 20px 20px 10px 10px;
+  border-radius: 2px;
   padding: 0 0 20px 0;
-  box-shadow: 0px 0px 20px 2000px rgba(0, 0, 0, 0.767);
   position: relative;
   width: 600px;
+  min-height: 30vh;
   transform: translate(-1%, 10%);
 
 }
@@ -595,9 +559,9 @@ thead {
 #modalclosingicon {
   position: absolute;
   left: 15px;
-  top: 23px;
+  top: 13px;
   height: 30px;
-  fill: white;
+  fill: rgb(0, 0, 0);
   cursor: pointer;
   z-index: 99;
 }
@@ -841,7 +805,40 @@ thead {
   }
 
 }
-
+.filtra-recall{
+  display: flex;
+  align-items: center;
+  margin-top: 5px;
+}
+.switch-label {
+  margin-left: 10px;
+}
+.custom-switch .ant-switch-checked,
+.custom-switch:hover .ant-switch {
+  background-color: #4ED35D !important;
+}
+.filtralead{
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 2px;
+}
+.wrapperwrapper {
+  position: relative;
+}
+.filter-item{
+  min-width: 240px;
+  width: auto;
+}
+.data-selezionata > div{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.filter-item img {
+  width: 10px;
+  z-index: 1000;
+}
 @media screen and (width <= 2000px){
   .wrapperwrapper {
     div p{

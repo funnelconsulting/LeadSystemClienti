@@ -1,19 +1,23 @@
 import React, { useContext, useEffect, useState, useRef } from 'react';
 import './calendar.css';
-import { SidebarContext } from '../context/SidebarContext';
 import axios from 'axios';
 import { UserContext } from '../context';
 import moment from 'moment';
 import 'moment/locale/it';
+import '../components/Table/Table2.scss'
 import { Calendar, formatDate } from '@fullcalendar/core'
 import interactionPlugin from '@fullcalendar/interaction'
 import dayGridPlugin from '@fullcalendar/daygrid'
+import cancel from '../imgs/cancel.png';
 import timeGridPlugin from '@fullcalendar/timegrid'
 import itLocale from '@fullcalendar/core/locales/it';
 import { SearchOutlined } from '@ant-design/icons';
 import toast from 'react-hot-toast';
 import PopupModifyCalendar from '../components/Table/popupModify/PopupModifyCalendar';
+import { DatePicker, Popover, Select, Switch } from 'antd';
+import Logout from '../components/Logout';
 
+const {Option} = Select
 function MyCalendar({leads, setSelectedLead, setOpenInfoCal, saveNewRecall, setOpenDeleteRecall}) {
   const calendarRef = useRef(null);
   console.log(leads);
@@ -28,11 +32,7 @@ function MyCalendar({leads, setSelectedLead, setOpenInfoCal, saveNewRecall, setO
 
     const calendar = new Calendar(calendarEl, {
       plugins:[dayGridPlugin, timeGridPlugin, interactionPlugin],
-      headerToolbar:{
-        left: 'prev,next today',
-        center: 'title',
-        right: 'dayGridMonth,timeGridWeek,timeGridDay'
-      },
+      headerToolbar: false,
       initialView: initialView,
       editable: true,
       locale: itLocale,
@@ -101,6 +101,9 @@ const CalendarM = () => {
     const [orientatoriOptions, setOrientatoriOptions] = useState([]);
     const [filteredData, setFilteredData] = useState([]);
     const [originalData, setOriginalData] = useState([]);
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
+    const [recallFilter, setRecallFilter] = useState(false);
 
     const formatDateString = (inputDate) => {
       let parsedDate;
@@ -165,6 +168,7 @@ const CalendarM = () => {
                 tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "",
                 summary: lead.summary ? lead.summary : "",
                 appDate: lead.appDate ? lead.appDate : "",
+                linkChat: lead.linkChat ? lead.linkChat : "",
             },
               start: dateTime,
               description: `Data: ${dateTime}, Testo`,
@@ -208,6 +212,7 @@ const CalendarM = () => {
                 tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "",
                 summary: lead.summary ? lead.summary : "",
                 appDate: lead.appDate ? lead.appDate : "",
+                linkChat: lead.linkChat ? lead.linkChat : "",
             },
               start: dateTime,
               description: `Data: ${dateTime}, Testo`,
@@ -290,6 +295,7 @@ const CalendarM = () => {
                 tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "",
                 summary: lead.summary ? lead.summary : "",
                 appDate: lead.appDate ? lead.appDate : "",
+                linkChat: lead.linkChat ? lead.linkChat : "",
             },
               start: dateTime,
               description: `Data: ${dateTime}, Testo`,
@@ -333,6 +339,7 @@ const CalendarM = () => {
                 tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "",
                 summary: lead.summary ? lead.summary : "",
                 appDate: lead.appDate ? lead.appDate : "",
+                linkChat: lead.linkChat ? lead.linkChat : "",
               },
               start: dateTime,
               description: `Data: ${dateTime}, Testo`,
@@ -393,6 +400,18 @@ const CalendarM = () => {
       const [selectedOrientatore, setSelectedOrientatore] = useState("");
       const [openDeleteRecall, setOpenDeleteRecall] = useState(false);
 
+      const filterDataByDate = (data, startDate, endDate) => {
+        const filteredData = data.filter((row) => {
+          const rowDate = Date.parse(row.date);
+          const selectedDateStart = new Date(startDate);
+          const selectedDateEnd = new Date(endDate);
+          selectedDateEnd.setDate(selectedDateEnd.getDate() + 1);
+          return rowDate >= selectedDateStart && rowDate <= selectedDateEnd;
+        });
+    
+        return filteredData;
+      };
+
       const saveNewRecall = async (leadId, recallDate, recallHours) => {
         console.log(leadId, recallDate, recallHours)
         try {
@@ -431,14 +450,7 @@ const CalendarM = () => {
         }
       };
 
-      const changeOrienta = (orientatore) => {
-        setSelectedOrientatore(orientatore); 
-        localStorage.setItem("Ori", orientatore);
-        if (orientatore == ""){
-          console.log('daje');
-          setFilteredData(originalData);
-        };
-      }
+      const [filtroDiRiserva, setFiltroDiRiserva] = useState([]);
 
       const handleUpdateLead = (updatedLead) => {
         setSelectedLead(updatedLead);
@@ -478,6 +490,36 @@ const CalendarM = () => {
         }
       };
 
+      const handleStartDateChange = (date) => {
+        if (date) {
+          setStartDate(date.toDate());
+          localStorage.setItem("startDate", date.toISOString());
+        }
+      };
+    
+      const handleEndDateChange = (date) => {
+        if (date) {
+          setEndDate(date.toDate());
+          localStorage.setItem("endDate", date.toISOString());
+        }
+      };
+      const handleOrientatoreChange = (value) => {
+        setSelectedOrientatore(value);
+        localStorage.setItem("Ori", value);
+      };
+
+      const handleClearDate = () => {
+        setStartDate(null);
+        setEndDate(null);
+        localStorage.removeItem("startDate");
+        localStorage.removeItem("endDate");
+    }
+  
+    const handleClearOri = () => {
+      setSelectedOrientatore("");
+      localStorage.removeItem("Ori");
+  }
+
     return (
     <>
           {openInfoCal && selectedLead &&
@@ -511,41 +553,106 @@ const CalendarM = () => {
           <div></div>
         ): (
             <div className='calenda-totaly'>
-                   <div className="topDash dashhideexport"
-                    style={{gap: '13rem', fontSize: '0.8rem', margin: '30px 0'}}
-                    >
-                      <div className="topDash-item" id='fstdashitem'>
-                          <label className="hideexport" style={{display: 'flex', alignItems: 'center', gap: '1rem', padding: "6px 12px", backgroundColor: '#fff', borderRadius: 15, width: '250px' }}>
-                            <SearchOutlined color="white" id='looptopdash' />
-                            <input
-                              id='dashcerca'
-                              type="text"
-                              placeholder="Cerca.."
-                              style={{ border: 'none', outline: 'none' }}
-                              //onChange={(e) => SETsearch ? SETsearch(e.target.value) : {}}
-                            />
-                          </label>
-                          <select 
-                          className='select-calendar'
-                          value={selectedOrientatore}
-                          onChange={(e) => changeOrienta(e.target.value)}
+              <div className='Table-admin'>
+                      <div className="filtralead filtralead-calendar">
+                        <div className="wrapperwrapper">
+                        <div className="filter-item">
+                          <Popover
+                            content={
+                              <div>
+                                <DatePicker
+                                  value={startDate ? moment(startDate) : null}
+                                  onChange={handleStartDateChange}
+                                  format="YYYY-MM-DD"
+                                  placeholder="Da"
+                                />
+                                <DatePicker
+                                  value={endDate ? moment(endDate) : null}
+                                  onChange={handleEndDateChange}
+                                  format="YYYY-MM-DD"
+                                  placeholder="A"
+                                />
+                              </div>
+                            }
+                            title="Seleziona intervallo di date"
+                            trigger="click"
                           >
-                            <option value="">Nessun filtro</option>
-                            {orientatoriOptions.map((orientatore) => (
-                              <option key={orientatore._id} value={orientatore._id}>
-                                {orientatore.nome} {orientatore.cognome}
-                              </option>
-                            ))}
-                          </select>
-                      </div>
+                            <div className="data-selezionata" style={{ border: '1px solid #d9d9d9', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>
+                              {startDate && endDate ? (
+                                <div>
+                                  <span>{`${moment(startDate).format('ddd DD MMM')} - ${moment(endDate).format('ddd DD MMM')}`}</span>
+                                  <img src={cancel} onClick={handleClearDate} />
+                                </div>
+                              ) : (
+                                <span>Seleziona date</span>
+                              )}
+                            </div>
+                          </Popover>
+                        </div>
 
-                      <div className="topDash-item" id='lasttopdashitem'>
-                          <div id='fstdiv'>
-                            <span className='iniziale-top-dash'>{state.user.name && state.user.name.charAt(0)}</span>
-                            <p>ciao <span><u>{state.user.name}</u></span></p>
+                          {state.user.role && state.user.role === "orientatore" ?
+                          null :
+                          <div className="filter-item">
+                          <Popover
+                            content={
+                              <Select
+                                value={selectedOrientatore}
+                                style={{ width: 200 }}
+                                onChange={handleOrientatoreChange}
+                                placeholder="Nome orientatore"
+                              >
+                                <Option value="">Tutti</Option>
+                                {orientatoriOptions.map((option) => (
+                                  <Option key={option._id} value={option._id}>
+                                    {option.nome} {option.cognome}
+                                  </Option>
+                                ))}
+                                <Option value="nonassegnato">Non assegnato</Option>
+                              </Select>
+                            }
+                            title="Seleziona orientatore"
+                            trigger="click"
+                          >
+                            <div className="data-selezionata" style={{ border: '1px solid #d9d9d9', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>
+                              {selectedOrientatore ? (
+                                <div>
+                                  {orientatoriOptions.find(option => option._id === selectedOrientatore)?.nome + ' ' + orientatoriOptions.find(option => option._id === selectedOrientatore)?.cognome}
+                                  <img src={cancel} onClick={handleClearOri} />
+                                </div>
+                              ) : (
+                                <span>Seleziona orientatore</span>
+                              )}
+                            </div>
+                          </Popover>
+                        </div>}
+                          <div className="filtra-recall">
+                            <Switch
+                              checked={recallFilter}
+                              className="custom-switch"
+                              onChange={(checked) => {
+                                setRecallFilter(checked);
+                                if (checked) {
+                                  localStorage.setItem("recallFilter", "true");
+                                } else {
+                                  setFilteredData(originalData);
+                                  localStorage.removeItem('recallFilter');
+                                }
+                              }}
+                            />
+                            <span className="switch-label">Recall</span>
+                          </div>
+                          {/*<button onClick={handleClearFilter} className="button-filter rimuovi-button">Rimuovi filtri</button>*/}
+                        </div>
+                        <div className="leadslinks secondLink">
+                              <button>
+                                <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" /></svg>
+                                <span>
+                                  Aggiungi call
+                                </span>
+                              </button>
                           </div>
                       </div>
-                    </div>
+                      </div>
                 <div className='calendar-container'>
                 {filteredData && filteredData.length > 0 ? (
                   <MyCalendar 
@@ -556,26 +663,50 @@ const CalendarM = () => {
                   setOpenDeleteRecall={setOpenDeleteRecall}
                   leads={
                     filteredData.filter((row) => {
+                      console.log(selectedOrientatore)
+                      console.log(recallFilter)
+                      console.log(startDate, endDate)
                       if (selectedOrientatore !== "" && selectedOrientatore !== undefined && selectedOrientatore !== null) {
                         const selectedOrientatoreObj = orientatoriOptions.find(option => option._id === selectedOrientatore);
                         const selectedOrientatoreFullName = selectedOrientatoreObj ? selectedOrientatoreObj.nome + ' ' + selectedOrientatoreObj.cognome : '';
                         const rowOrientatoreFullName = row.extendedProps.orientatore;
-                        return rowOrientatoreFullName === selectedOrientatoreFullName;
+                        if (rowOrientatoreFullName !== selectedOrientatoreFullName) return false;
                       } else if (selectedOrientatore === "nonassegnato") {
                         const rowOrientatoreFullName = row.extendedProps.orientatore;
-                        return rowOrientatoreFullName === "";
-                      } else {
-                        return true;
+                        if (rowOrientatoreFullName !== "") return false;
                       }
+          
+                      // Filtro per recall
+                      if (recallFilter) {
+                        if (row.extendedProps.recallDate && row.extendedProps.recallHours) {
+                          console.log(row.extendedProps.recallDate)
+                          const recallDate = new Date(row.extendedProps.recallDate);
+                          const today = new Date();
+                          if (recallDate > today) return true;
+                        } else {
+                          return false;
+                        }
+                      }
+          
+                      // Filtro per data
+                      if (startDate !== null && endDate !== null) {
+                        const rowDate = Date.parse(row.extendedProps.date);
+                        const selectedDateStart = new Date(startDate);
+                        const selectedDateEnd = new Date(endDate);
+                        selectedDateEnd.setDate(selectedDateEnd.getDate() + 1);
+                        return rowDate >= selectedDateStart && rowDate <= selectedDateEnd;
+                      }
+
+                      return true;
                     })
-                  } />
+                  }/>
                 ) : (
                   <MyCalendar saveNewRecall={saveNewRecall} setPopupPosition={setPopupPosition} setOpenInfoCal={setOpenInfoCal} setSelectedLead={setSelectedLead} leads={filteredData && filteredData} />
                 )}
                 </div>
+                <Logout />
             </div>  
-        )}
-         
+        )} 
     </>
   )
 }

@@ -5,8 +5,8 @@ import { FaPencilAlt, FaSave } from "react-icons/fa";
 import { FiClock } from 'react-icons/fi';
 import icon1 from '../../../imgs/Group.png';
 import { UserContext } from '../../../context';
-import { ProvinceItaliane } from '../../Data';
 import axios from 'axios';
+import penna from '../../../imgs/penna-g.png'
 import toast from 'react-hot-toast';
 import recallblue from '../../../imgs/recallblue.png';
 import { useNavigate } from 'react-router-dom';
@@ -417,7 +417,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
     }
 
     const handleClickWhatsapp = () => {
-        const whatsappLink = `https://wa.me/39${lead.telephone}`;
+        const whatsappLink = `${lead.linkChat}`;
         window.open(whatsappLink, '_blank');
       };
 
@@ -425,9 +425,10 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
         const recallDateTime = moment(`${recallDate} ${recallHours}`, 'YYYY-MM-DD HH:mm');
         
         const formattedDate = recallDateTime.format('DD/MM/YY');
-        const formattedTime = recallDateTime.format(' [alle ore] HH:mm');
+        //const formattedTime = recallDateTime.format(' [alle ore] HH:mm');
       
-        return `${formattedDate}${formattedTime}`;
+        //return `${formattedDate}${formattedTime}`;
+        return ` ${formattedDate}`;
       };
 
       const deleteRecall = async () => {
@@ -481,7 +482,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
             <div className='popup-modify' id={admin ? "popupadmincolors" : ''}>
                 {chooseMotivo && (
                     <div className='shadow-blur'>
-                        <div style={{marginTop: '-100px', position: 'fixed', zIndex: 100}} className="choose-esito-popup">
+                        <div style={{marginTop: '-100px', zIndex: 100}} className="choose-esito-popup">
                             <div className='top-choose-esito'>
                             <h4>Modifica l'esito di {nome + " " + cognome}</h4>
                             </div>
@@ -522,60 +523,75 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                     </div>    
                 )}
                 <div className='popup-top'>
-                   <div>           
-                        <div>
+                   <div> 
+                   {!modificaNome ? 
+                        <p className='span-nome'>{lead.name} {lead.surname} <span onClick={() => setModificaNome(true)} className='span-nome'><img size={14} style={{marginLeft: '10px'}} src={penna} /></span></p>: 
+                        <p className='modifica-nome-input'>
+                            <input placeholder={lead.name} value={nome} onChange={(e) => setName(e.target.value)} />
+                            <input placeholder={lead.surname} value={cognome} onChange={(e) => setSurname(e.target.value)} />
+                            <FaSave size={30} className='salva-nome' onClick={handleSaveName} />
+                        </p>
+                    }
+                        {/*<div>
                             <h4 className={openPage == "scheda" ? "page-scheda" : ""} onClick={() => setOpenPage("scheda")}>Scheda lead</h4>
                             <hr className={openPage == "scheda" ? "page-scheda-linea" : ""} />
                         </div>
                         <div>
                            <h4 className={openPage == "chat" ? "page-scheda" : ""} onClick={() => setOpenPage("chat")}>Chat</h4>
                            <hr className={openPage == "chat" ? "page-scheda-linea" : ""} /> 
-                         </div>
+                         </div>*/}
                     </div>
                     <svg id="modalclosingicon-choose" onClick={onClose} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
                 </div>
                 {openPage === "scheda" ? (
                     <>
-                        <hr className='linea-che-serve2' />
-                                <div className='popup-middle-top'>
-                                    <div className='popup-middle-top1'>
-                                        <div>
-                                            {
-                                            !modificaNome ? 
-                                            <p>{lead.name} {lead.surname} <span onClick={() => setModificaNome(true)} className='span-nome'><FaPencilAlt size={14} style={{marginLeft: '10px'}} /></span></p>: 
-                                            <p className='modifica-nome-input'>
-                                                <input placeholder={lead.name} value={nome} onChange={(e) => setName(e.target.value)} />
-                                                <input placeholder={lead.surname} value={cognome} onChange={(e) => setSurname(e.target.value)} />
-                                                <FaSave size={30} className='salva-nome' onClick={handleSaveName} />
-                                            </p>
-                                            }
-                                            <p><FiClock color='#30978B' /> Data di <b>creazione lead</b>: <span>{formatDate(lead.date)}</span></p>
-                                            <p>{lead.lastModify && lead.lastModify !== null ? <><FiClock color='#3471CC' /> Data <b>ultima modifica</b>: <span>{formatDate(lead.lastModify)}</span></> : ""}</p>
-                                            {(lead.provenienza === "AI chatbot" || (lead.appDate && lead?.appDate?.trim() !== "")) && lead.appDate && <h6><FiClock color='#3471CC' /> Data <b>appuntamento:</b> <span>{formatDateString(lead.appDate)}</span></h6>}
-                                            <p style={{margin: '17px 0 10px 0'}}>Stato lead:
-                                                <span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span>
-                                            </p>
-                                            {motivo && motivo !== "" && lead.status === "Non interessato" ? <p className='motivo-top'>Motivo: <span>{motivo}</span></p> : null}
+                                <div className='popup-top-info'>
+                                    <div className='popup-top-info1'>
+                                        <div className='tp1'>
+                                            <p>Stato lead:</p> 
+                                            <p><span onClick={() => setChooseMotivo(true)}>{esito == "Non interessato" ? "Lead persa" : esito} <FaPencilAlt size={12} style={{marginLeft: '3px', cursor: 'pointer'}} /></span></p>
+                                        </div>
+                                        <div className='tp2'>
+                                            <button className='btnWhats' onClick={lead.linkChat && lead.linkChat?.trim() !== "" ? handleClickWhatsapp : null}>{/*<WhatsAppOutlined />*/} Visualizza chat</button>
                                         </div>
                                     </div>
-                                    <div className='popup-middle-top2'>
-                                    <button className='btnWhats' onClick={handleClickWhatsapp}><WhatsAppOutlined /> Contatta su whatsapp</button>
-                                    {lead.recallDate && lead.recallHours && lead.recallDate !== null && lead.recallHours !== null ?
-                                    <button className='recallGreen'>
-                                        <img src={recallgreen} onClick={() => setMostraCalendar(true)} />
-                                        <span onClick={() => setMostraCalendar(true)}>
-                                            Recall in data <br />
-                                            {formattedRecallDateTime(lead.recallDate, lead.recallHours)}
-                                        </span>
-                                        <button className='delete-recall' onClick={deleteRecall}>x</button>
-                                    </button> : 
-                                    <button className='btcRecall' onClick={() => setMostraCalendar(true)}>
-                                        <img src={recallblue} />organizza una recall
-                                    </button>
-                                    }
-                                    </div> 
-                                    
+                                    <div className='popup-top-info2'>
+                                        <div className='tp1'>
+                                            <p>Data di creazione lead:</p>
+                                            <p>{formatDate(lead.date)}</p>
+                                        </div>
+                                        <div className='tp2'>
+                                            {lead.recallDate && lead.recallHours && lead.recallDate !== null && lead.recallHours !== null ?
+                                            <button className='recallGreen'>
+                                                {/*<img src={recallgreen} onClick={() => setMostraCalendar(true)} />*/}
+                                                <span onClick={() => setMostraCalendar(true)}>
+                                                    Recall il 
+                                                    {formattedRecallDateTime(lead.recallDate, lead.recallHours)}
+                                                </span>
+                                                <button className='delete-recall' onClick={deleteRecall}>x</button>
+                                            </button> : 
+                                            <button className='btcRecall' onClick={() => setMostraCalendar(true)}>organizza una recall</button>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className='popup-top-info3'>
+                                        <div className='tp1'>
+                                            <p>Data ultima modifica:</p>
+                                            {lead.lastModify && lead.lastModify !== null ?
+                                            <p>{formatDate(lead.lastModify)}</p> :
+                                            <p>-</p>}
+                                        </div>
+                                    </div>
+                                    <div className='popup-top-info4'>
+                                        <div className='tp1'>
+                                            <p>Data appuntamento:</p>
+                                            {(lead.appDate && lead?.appDate?.trim() !== "") ?
+                                            <p>{formatDateString(lead.appDate)}</p> :
+                                            <p>-</p>}
+                                        </div>
+                                    </div>
                                 </div>
+                                {/*
                                 <hr className='linea-che-serve' />
                                 <div className='sommario'>
                                 <h4>Sommario</h4>
@@ -589,8 +605,9 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                     </p> 
                                 </div>
                                 <hr className='linea-che-serve' />
+                                */}
                                 <div className='maggiori-informazioni'>
-                                    <h4>ANAGRAFICA</h4>
+                                    {/*<h4>ANAGRAFICA</h4>*/}
                                     <div className='mi-div'>
                                         <div>
                                             <p>Telefono</p>
@@ -639,12 +656,11 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                         </div>}
                                     </div>
                                 </div>
-                                <hr className='linea-che-serve' />
                                 <div className='popup-bottom maggiori-informazioni'>
-                                    <p style={{ fontSize: "18px", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: '0px' }}>Inserisci <span style={{ color: "#3471CC", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginLeft: '5px' }}>
-                                        note
-                                        </span></p>
-                                    <textarea
+                                <p style={{ fontSize: "18px", display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginBottom: '0px' }}>Inserisci <span style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginLeft: '5px' }}>
+                                note
+                                </span></p>
+                                <textarea
                                         placeholder='Inserisci una nota...'
                                         id='textareanote' value={note} onChange={(e) => setNote(e.target.value)} />
                                 </div>

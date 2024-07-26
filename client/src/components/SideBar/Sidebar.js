@@ -162,7 +162,7 @@ const Sidebar = () => {
                             </Link>
                         </li>
 
-                        {state.user.role && state.user.role === "orientatore" ? 
+                        {state.user.role && state.user.role === "orientatore" ?
                         null :
                         (<li className={(toselect == "orientatori") ? "selected" : ''}>
                             <Link to='/orientatori'>

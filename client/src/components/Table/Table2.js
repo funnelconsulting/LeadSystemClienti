@@ -9,11 +9,16 @@ import { IoIosArrowDown } from 'react-icons/io';
 import '../MainDash/MainDash.scss';
 import listaImg from '../../imgs/lista.png';
 import LeadEntry from "./LeadEntry.jsx";
+import cancel from '../../imgs/cancel.png';
+import cestinonero from '../../imgs/cestinonero.png';
 import LeadHeader from "./LeadHeader.jsx";
 import PopupModify from "./popupModify/PopupModify";
 import AddLeadPopup from "./popupAdd/PopupAdd";
 import moment from "moment";
+import { DatePicker, Select, Dropdown, Switch, Popover } from 'antd';
 const PopupMotivo = React.lazy(() => import("./popupMotivo/PopupMotivo.js"));
+const { Option } = Select;
+const { RangePicker } = DatePicker;
 
 export default function Table2({ onResults, searchval, setLeadsPdf, setNextSchedule }) {
   const [state, setState, headerIndex, SETheaderIndex] = useContext(UserContext);
@@ -328,7 +333,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
           appDate: lead.appDate ? lead.appDate : null,
-          summary: lead.summary ? lead.summary : ''
+          summary: lead.summary ? lead.summary : '',
+          linkChat: lead.linkChat ? lead.linkChat : "",
         };
       });
 
@@ -440,6 +446,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         lastModify: row.lastModify,
         campagna: row.utmCampaign,
         tentativiChiamata: row.tentativiChiamata ? row.tentativiChiamata : "0",
+        linkChat: row.linkChat ? row.linkChat : "",
       };
     });
     setFilteredData(filteredDataIn);
@@ -509,6 +516,18 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
     localStorage.removeItem("recallFilter");
     setRecallFilter(false);
   };
+
+  const handleClearDate = () => {
+      setStartDate(null);
+      setEndDate(null);
+      localStorage.removeItem("startDate");
+      localStorage.removeItem("endDate");
+  }
+
+  const handleClearOri = () => {
+    setSelectedOrientatore("");
+    localStorage.removeItem("Ori");
+}
 
   const [recallFilter, setRecallFilter] = useState(false);
   useEffect(() => {
@@ -599,7 +618,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
           appDate: lead.appDate ? lead.appDate : null,
-          summary: lead.summary ? lead.summary : ''
+          summary: lead.summary ? lead.summary : '',
+          linkChat: lead.linkChat ? lead.linkChat : "",
         };
       });
 
@@ -684,7 +704,8 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           campagna: lead.utmCampaign ? lead.utmCampaign : "",
           tentativiChiamata: lead.tentativiChiamata ? lead.tentativiChiamata : "0",
           appDate: lead.appDate ? lead.appDate : null,
-          summary: lead.summary ? lead.summary : ''
+          summary: lead.summary ? lead.summary : '',
+          linkChat: lead.linkChat ? lead.linkChat : "",
         };
       });
 
@@ -776,6 +797,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
               id: updatedLead._id,
               trattamento: updatedLead.trattamento,
               tentativiChiamata: updatedLead.tentativiChiamata ? updatedLead.tentativiChiamata : "0",
+              linkChat: updatedLead.linkChat ? updatedLead.linkChat : "",
             };
             return { ...lead, ...adaptedLead };
           } else {
@@ -803,6 +825,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
             trattamento: updatedLead.trattamento,
             campoPlus: updatedLead.campoPlus ? updatedLead.campoPlus : '',
             tentativiChiamata: updatedLead.tentativiChiamata ? updatedLead.tentativiChiamata : "0",
+            linkChat: updatedLead.linkChat ? updatedLead.linkChat : "",
           };
           return { ...lead, ...adaptedLead };
         } else {
@@ -915,15 +938,15 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
 
   const [toggles, SETtoggles] = useState({
-    dacontattare: false,
+    dacontattare: true,
     inlavorazione: false,
-    noninteressato: false,
-    opportunita: false,
+    noninteressato: true,
+    opportunita: true,
     invalutazione: false,
-    venduto: false,
+    venduto: true,
     nonValido: false,
     nonRisponde: false,
-    irraggiungibile: false,
+    irraggiungibile: true,
     iscrizionePosticipata: false,
   })
 
@@ -982,8 +1005,6 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
       "off" : "on"
     )
   }
-
-
 
   const handleDragEnd = (event) => {
     document.querySelectorAll(".secwrap").forEach(e => e.classList.remove("colordroprow"));
@@ -1077,6 +1098,23 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
   const handleUpdateLead = (updatedLead) => {
     setSelectedLead(updatedLead);
   };
+  const handleStartDateChange = (date) => {
+    if (date) {
+      setStartDate(date.toDate());
+      localStorage.setItem("startDate", date.toISOString());
+    }
+  };
+
+  const handleEndDateChange = (date) => {
+    if (date) {
+      setEndDate(date.toDate());
+      localStorage.setItem("endDate", date.toISOString());
+    }
+  };
+  const handleOrientatoreChange = (value) => {
+    setSelectedOrientatore(value);
+    localStorage.setItem("Ori", value);
+  };
 
   return (
     <>
@@ -1104,89 +1142,95 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
     <div className="Table-admin" style={{marginTop: '-30px'}}>
 
       <div className="filtralead">
-        <h5 style={{ color: "gray", fontSize: '16px', marginBottom: '15px' }}>Selezione filtri:</h5>
         <div className="wrapperwrapper">
-          <div>
-            <p style={{ color: "gray", fontSize: '12px' }}>Filtra per data</p>
-            <div className="wrapper">
+        <div className="filter-item">
+          <Popover
+            content={
               <div>
-                <label>Da</label>
-                <input value={!startDate ? "" : new Date(startDate).toISOString().split('T')[0]} type="date" onChange={(e) => {setStartDate(e.target.valueAsDate); localStorage.setItem("startDate", e.target.valueAsDate)}} />
+                <DatePicker
+                  value={startDate ? moment(startDate) : null}
+                  onChange={handleStartDateChange}
+                  format="YYYY-MM-DD"
+                  placeholder="Da"
+                />
+                <DatePicker
+                  value={endDate ? moment(endDate) : null}
+                  onChange={handleEndDateChange}
+                  format="YYYY-MM-DD"
+                  placeholder="A"
+                />
               </div>
-              <div>
-                <label>A</label>
-                <input value={!endDate ? "" : new Date(endDate).toISOString().split('T')[0]} type="date" onChange={(e) => {setEndDate(e.target.valueAsDate); localStorage.setItem("endDate", e.target.valueAsDate)}} />
-              </div>
-            </div>            
-          </div>
+            }
+            title="Seleziona intervallo di date"
+            trigger="click"
+          >
+            <div className="data-selezionata" style={{ border: '1px solid #d9d9d9', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>
+              {startDate && endDate ? (
+                <div>
+                  <span>{`${moment(startDate).format('ddd DD MMM')} - ${moment(endDate).format('ddd DD MMM')}`}</span>
+                  <img src={cancel} onClick={handleClearDate} />
+                </div>
+              ) : (
+                <span>Seleziona date</span>
+              )}
+            </div>
+          </Popover>
+        </div>
 
           {state.user.role && state.user.role === "orientatore" ?
            null :
-          <div className="filter-etichette">
-            <p style={{ color: "gray", fontSize: '13px' }}>Operatore</p>
-              <select
-                id="etichettaSelect"
-                placeholder="Nome orientatore"
-                value={selectedOrientatore}
-                onChange={(e) => {setSelectedOrientatore(e.target.value); localStorage.setItem("Ori", e.target.value)}}
-              >
-                <option value="">Tutti</option>
-                {orientatoriOptions && orientatoriOptions.map((option) => (
-                <option key={option._id} value={option._id}>
-                  {option.nome} {' '} {option.cognome}
-                </option>
-              ))}
-              <option value="nonassegnato">Non assegnato</option>
-              </select>
-          </div>}
+           <div className="filter-item">
+           <Popover
+             content={
+               <Select
+                 value={selectedOrientatore}
+                 style={{ width: 200 }}
+                 onChange={handleOrientatoreChange}
+                 placeholder="Nome orientatore"
+               >
+                 <Option value="">Tutti</Option>
+                 {orientatoriOptions.map((option) => (
+                   <Option key={option._id} value={option._id}>
+                     {option.nome} {option.cognome}
+                   </Option>
+                 ))}
+                 <Option value="nonassegnato">Non assegnato</Option>
+               </Select>
+             }
+             title="Seleziona orientatore"
+             trigger="click"
+           >
+             <div className="data-selezionata" style={{ border: '1px solid #d9d9d9', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>
+               {selectedOrientatore ? (
+                <div>
+                  {orientatoriOptions.find(option => option._id === selectedOrientatore)?.nome + ' ' + orientatoriOptions.find(option => option._id === selectedOrientatore)?.cognome}
+                  <img src={cancel} onClick={handleClearOri} />
+                </div>
+               ) : (
+                 <span>Seleziona orientatore</span>
+               )}
+             </div>
+           </Popover>
+         </div>}
           <div className="filtra-recall">
-            <p style={{ color: "gray", fontSize: '13px' }}>Filtra per Recall</p>
-            <div className="recall-option">
-              <label>
-                <input
-                  type="radio"
-                  name="recallOption"
-                  value="si"
-                  checked={recallFilter === true}
-                  onChange={() => {
-                    setRecallFilter(true);
-                    localStorage.setItem("recallFilter", "true");
-                  }}
-                />
-                Si
-              </label>
-              <label>
-                <input
-                  type="radio"
-                  name="recallOption"
-                  value="no"
-                  checked={recallFilter === false}
-                  onChange={() => {
-                    setRecallFilter(false);
-                    setFilteredData(originalData);
-                    localStorage.removeItem('recallFilter');
-                  }}
-                />
-                No
-              </label>
-            </div>
+            <Switch
+              checked={recallFilter}
+              className="custom-switch"
+              onChange={(checked) => {
+                setRecallFilter(checked);
+                if (checked) {
+                  localStorage.setItem("recallFilter", "true");
+                } else {
+                  setFilteredData(originalData);
+                  localStorage.removeItem('recallFilter');
+                }
+              }}
+            />
+            <span className="switch-label">Recall</span>
           </div>
-          {/*<div className="filter-etichette">
-            <p style={{ color: "gray", fontSize: '13px' }} htmlFor="citySelect">Città di provenienza:</p>
-            <select id="citySelect" onChange={handleCityChange} value={selectedCity}>
-              <option value="">Seleziona</option>
-              {cities.map(city => (
-                <option key={city} value={city}>{city}</option>
-              ))}
-            </select>
-            </div>*/}
-          <button onClick={handleClearFilter} className="button-filter rimuovi-button">Rimuovi filtri</button>
+          {/*<button onClick={handleClearFilter} className="button-filter rimuovi-button">Rimuovi filtri</button>*/}
         </div>
-      </div>
-      <hr className="linea-filtri" />
-      <div className="filtralead filtralead2">
-        <div className="wrapperwrapper">
-          <div className="leadslinks secondLink">
+        <div className="leadslinks secondLink">
               <button id="visualbtt" onClick={handletogglegrid} className="">
                 <img src={listaImg} />
                 {toggleGrid ?
@@ -1201,46 +1245,49 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                   Aggiungi lead
                 </span>
               </button>
-            </div>          
-        </div>
+          </div>
       </div>
 
-      {changeOrientatore && 
+      {changeOrientatore &&
               <div className="popup-container">
-              <div className="popup" id="filterbyesito" ref={popupRef}>
+              <div className="popup" id="filterbyesito" onClick={(e) => e.stopPropagation()}>
                 <div className='popup-top'>
                   <h4>Seleziona l'orientatore</h4>
                 </div>
-    
                 <svg id="modalclosingicon" onClick={() => setChangeOrientatore(false)} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
-    
-                <div className="labelwrapper" style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px'}}>
-                  <select required value={selectedOrientatoreToChange} onChange={(e) => setSelectedOrientatoreToChange(e.target.value)}>
-                  <option value="" disabled defaultChecked>Seleziona un orientatore</option>
-                  {orientatoriOptions && orientatoriOptions.map((option) => (
-                    <option key={option._id} value={option._id}>
-                      {option.nome} {' '} {option.cognome}
-                    </option>
-                  ))}
-                </select>
+                <div className="labelwrapper" onClick={(e) => e.stopPropagation()} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '20px'}}>
+                  <Select
+                      required
+                      value={selectedOrientatoreToChange || "Seleziona un orientatore"}
+                      onChange={(value) => setSelectedOrientatoreToChange(value)}
+                      style={{ width: 200 }}
+                      placeholder="Seleziona un orientatore"
+                    >
+                      <Option value="" disabled>Seleziona un orientatore</Option>
+                      {orientatoriOptions && orientatoriOptions.map((option) => (
+                        <Option key={option._id} value={option._id}>
+                          {option.nome} {option.cognome}
+                        </Option>
+                      ))}
+                  </Select>
                 </div>
-    
-    
-                <button className="btn-orie" style={{ fontSize: "19px" }} onClick={updateOrientatore}>Modifica</button>
-                <div style={{ cursor: "pointer", marginTop: "20px" }} onClick={() => setChangeOrientatore(false)}><u>Torna indietro</u></div>
+                <button className="btn-orie" style={{ fontSize: "16px" }} onClick={updateOrientatore}>Modifica</button>
               </div>
             </div>
       }
-        {addOpen && <AddLeadPopup
-        setAddOpen={setAddOpen} popupRef={popupRef} fetchLeads={() => {
-          if (state.user.role && state.user.role === "orientatore"){
-            getOrientatoreLeads();
-          } else{
-            fetchLeads(orientatoriOptions);
-          }
-          setRefreshate(true)
-        }}
-         />}
+        {addOpen && 
+        <div className="popup-container">
+          <AddLeadPopup
+          setAddOpen={setAddOpen} popupRef={popupRef} fetchLeads={() => {
+            if (state.user.role && state.user.role === "orientatore"){
+              getOrientatoreLeads();
+            } else{
+              fetchLeads(orientatoriOptions);
+            }
+            setRefreshate(true)
+          }}
+          />
+         </div>}
       <Suspense fallback={<div>Loading...</div>}>
         {popupMotivi && (
           <div className="shadow-popup">
@@ -1255,6 +1302,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
       </Suspense>
 
       {deleting && (
+        <div className='shadow-blur'>
         <div className="add-lead-popup" id="popupdeletelead" ref={popupRef}>
           <div className="popup-top">
             <h4>Eliminazione Lead</h4>
@@ -1266,13 +1314,14 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
           <button className='btn-orie' onClick={handleDelete}>Elimina</button>
           <div style={{ cursor: "pointer", textAlign: "center" }} onClick={() => { setDeleting(false); SETheaderIndex(999) }}><u>Torna indietro</u></div>
-
+        </div>
         </div>
       )}
 
 
       {popupModifyEsito && (
-                         <div style={{marginTop: '-90px', position: 'fixed'}} className="choose-esito-popup">
+        <div className='popup-container'>
+                         <div style={{marginTop: '100px'}} className="choose-esito-popup popup-esito3">
                          <div className='top-choose-esito'>
                          <h4>Modifica l'esito di {selectedLead.name}</h4>
                          </div>
@@ -1310,23 +1359,27 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                              </div>
                          <button style={{ fontSize: "14px" }} className='btn-orie' onClick={updateLeadEsito}>Salva modifiche</button>
                          </div>
+                         </div>
       )
       }
       {toggleGrid ?
-        <div style={{ boxShadow: "0px 0px 20px 2px #80808029", borderRadius: '20px', padding: '30px 20px', maxHeight: '58vh',  }} className="table-big-container">
+        <div style={{ borderRadius: '2px', padding: '30px 20px', maxHeight: '68vh',  }} className="table-big-container">
           <div className="table-filters">
             <div id="wrapperleadsright">
               <div className="filter-etichette">
-                {/*<button className='btn-orie' onClick={() => setEsitoOpen(true)}>Filtra per esito</button>*/}
-                <select value={esitoToFilter} onChange={(e) => cambiaEsito(e.target.value)} style={{fontSize: '16px'}}>
-                  <option style={{fontSize: '16px'}} value='' disabled>{esitoToFilter ? esitoToFilter : "Seleziona esito"}</option>
-                  <option style={{fontSize: '16px'}} value="Nessun filtro">Nessun filtro</option>
-                  <option style={{fontSize: '16px'}} value='Da contattare'>Da contattare</option>
-                  <option style={{fontSize: '16px'}} value="Da richiamare">Da richiamare</option>
-                  <option style={{fontSize: '16px'}} value='Non interessato'>Lead persa</option>
-                  <option style={{fontSize: '16px'}} value="Opportunità">Opportunità</option>
-                  <option style={{fontSize: '16px'}} value='Venduto'>Venduto</option>
-                </select>
+                <Select
+                  value={esitoToFilter || "Seleziona esito"}
+                  onChange={cambiaEsito}
+                  style={{ width: 200, fontSize: '16px' }}
+                >
+                  <Option value='' disabled>{esitoToFilter ? esitoToFilter : "Seleziona esito"}</Option>
+                  <Option value="Nessun filtro">Nessun filtro</Option>
+                  <Option value='Da contattare'>Da contattare</Option>
+                  <Option value="Da richiamare">Da richiamare</Option>
+                  <Option value='Non interessato'>Lead persa</Option>
+                  <Option value="Opportunità">Opportunità</Option>
+                  <Option value='Venduto'>Venduto</Option>
+                </Select>
               </div>
             </div>
           </div>
@@ -1339,7 +1392,6 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                   <th style={{ color: 'rgba(0, 0, 0, 0.31)', fontSize: '20px', fontWeight: "600" }}>Data e ora</th>
                   <th style={{ color: 'rgba(0, 0, 0, 0.31)', fontSize: '20px', fontWeight: "600" }}>Telefono</th>
                   <th style={{ color: 'rgba(0, 0, 0, 0.31)', fontSize: '20px', fontWeight: "600" }}>Esito</th>
-                  <th style={{ color: 'rgba(0, 0, 0, 0.31)', fontSize: '20px', fontWeight: "600" }}>Dati cliente</th>
                   <th style={{ color: 'rgba(0, 0, 0, 0.31)', fontSize: '20px', fontWeight: "600" }}>Orientatore</th>
                   <th style={{ color: 'rgba(0, 0, 0, 0.31)', fontSize: '20px', fontWeight: "600" }}></th>
                 </tr>
@@ -1355,45 +1407,22 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
                   .sort((a, b) => new Date(a.date) < new Date(b.date) ? 1 : -1)
                   .map((row) => (
                     <tr className={row.campagna === "Mgm" ? "mgm-lead" : ""} style={{position:'relative', padding: '0 20px'}} key={row.id}>
-                      <td className="row-name">
+                      <td className="row-name" onClick={() => handleModifyPopup(row)}>
                         {row.name}
                       </td>
                       <td>{formatDate(row.date)}</td>
                       <td>{row.telephone}</td>
                       <td>
+                      {row.status == "Non interessato" ? "Lead persa" : row.status}
                         <span
                           className={"status " + row.status}
                           onClick={() => handleModifyPopupEsito(row)}
                         >
-                          <IoIosArrowDown size={12} />
-                          {row.status == "Non interessato" ? "Lead persa" : row.status}
+                          Modifica
                         </span>
                       </td>
-                      <td className="modify-table" onClick={() => handleModifyPopup(row)}>Info <IoIosArrowDown size={12} /></td>
-                      <td style={{cursor: 'pointer'}} className="Details" onClick={state.user.role && state.user.role === "orientatore" ? null : () => openChangeOrientatore(row)}>{row.orientatore} <IoIosArrowDown size={12} /></td>
-                      <td>
-                      <p 
-                      onClick={row?.orientatore ? null : () => openChangeOrientatore(row)} 
-                      className={row?.orientatore ? 'iniziali' : 'iniziali redIniz'}
-                      >
-                        {row?.orientatore ? (
-                              <>
-                                {(() => {
-                                  const parts = row.orientatore.split(' ');
-
-                                  if (parts.length >= 2) {
-                                    const iniziali = parts[0].charAt(0).toUpperCase() + parts[1].charAt(0).toUpperCase();
-                                    return <span>{iniziali}</span>;
-                                  } else {
-                                    return "NV";
-                                  }
-                                })()}
-                              </>
-                            ) : (
-                              "+"
-                            )}
-                        </p>
-                      </td>
+                      <td style={{cursor: 'pointer'}} className="Details">{row.orientatore ? row.orientatore : "Non assegnato"} <span onClick={state.user.role && state.user.role === "orientatore" ? null : () => openChangeOrientatore(row)}>Modifica</span></td>
+                      <td><img src={cestinonero} onClick={() => handleRowClick(row)}/></td>
                     </tr>
                   ))}
               </tbody>

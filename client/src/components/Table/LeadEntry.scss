@@ -1,6 +1,6 @@
 .leadentry {
     position: relative;
-    background-color: white;
+    background-color: #F9FAFB;
     padding: 10px 20px;
     margin-top: 15px;
     border-radius: 10px;
@@ -174,8 +174,8 @@
         margin-bottom: -5px;
       }
       .iniziali{
-        background-color: #3471CC;
-        color: white;
+        background-color: #EDF3F7;
+        color: #000;
         border-radius: 50%;
         padding: 5px;
         font-size: 14px;
@@ -183,6 +183,7 @@
         min-width: 33px;
         min-height: 33px;
         height: 33px;
+        font-weight: 500;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -194,7 +195,8 @@
         cursor: pointer;
       }
     .name {
-        font-size: 14px;
+        font-size: 12px;
+        text-align: left;
     }
 
     .phone,
@@ -210,15 +212,25 @@
     }
     .modifica,
     .sposta {
-        font-size: 10pt;
+        font-size: 11px;
         font-weight: 400;
-        color: #3471CC;
+        color: #426487;
         cursor: pointer;
         text-align: left;
+        text-decoration: none;
+        border-radius: 5px;
+        padding: 3px 8px;
+        background-color: #EDF3F7;
+    }
+    .centro-bollettino{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start !important;
+        justify-content: flex-start;
+        width: 67%;
     }
     .modifica{
-        text-decoration: underline;
-        margin-top: -10px;
+        margin-top: -20px;
     }
     .options {
         display: flex;
@@ -241,8 +253,8 @@
         text-align: center;
         cursor: grab;
 
-        svg {
-            height: 33px;
+        img {
+            height: 20px;
             transform: rotate(90deg);
         }
 

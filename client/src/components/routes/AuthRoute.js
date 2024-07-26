@@ -23,7 +23,7 @@ const AuthRouteWithLayout = ({ component: Component, ...rest }) => {
 
   return state && state.token ? (
     <div className="big-container">
-      <Sidebar />
+      {/*<Sidebar />*/}
       <div className={isMobile() ? 'container-mobile' : `${isSidebarOpen ? 'boost-container' : 'boost-container-closed'}`} style={containerStyle}>
         <Component {...rest} />
       </div>

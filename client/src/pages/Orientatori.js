@@ -7,9 +7,17 @@ import toast from 'react-hot-toast';
 import { SyncOutlined } from "@ant-design/icons";
 import { SidebarContext } from '../context/SidebarContext';
 import { FaPencilAlt } from "react-icons/fa";
+import cestino from '../imgs/cestino.png'
+import logout from '../imgs/logout.png'
+import penna from '../imgs/penna.png'
+import loghe from '../imgs/loghe.png'
 import '../components/Table/popupModify/popupModify.scss';
+import { Popover } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import Logout from '../components/Logout';
 
 const Orientatori = () => {
+  const navigate = useNavigate()
   const [filterValue, setFilterValue] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [originalData, setOriginalData] = useState([]);
@@ -156,10 +164,16 @@ const Orientatori = () => {
     setModifyOrientatore(false);
   }
 
-
   return (
     <>
-      <div>
+    {state.user.role && state.user.role === "orientatore" ? (
+      <div className='ori-not-allowed'>
+        <img src={loghe} />
+        <h4>Non hai le autorizzazioni necessarie per accedere a questa risorsa.</h4>
+        <Logout />
+      </div>
+    ) : (
+      <div className='ori-container'>
 
         {deleting && (
           <div className="popup-orientatore">
@@ -176,36 +190,30 @@ const Orientatori = () => {
           <ModifyOrientatore getOrientatori={getOrientatori} onClose={onClosePopupModify} selectedOrientatore={selectedOrientatore} setPopupModify={() => setModifyOrientatore(false)} />
         )}
 
+        <div className='orientatori-search-container'>
+            <div id={"orientatorisearch"} style={{ display: 'flex', alignItems: 'center' }}>
+              <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" enable-background="new 0 0 50 50">
+                <path d="M20.745,32.62c2.883,0,5.606-1.022,7.773-2.881L39.052,40.3c0.195,0.196,0.452,0.294,0.708,0.294
+              c0.255,0,0.511-0.097,0.706-0.292c0.391-0.39,0.392-1.023,0.002-1.414L29.925,28.319c3.947-4.714,3.717-11.773-0.705-16.205
+              c-2.264-2.27-5.274-3.52-8.476-3.52s-6.212,1.25-8.476,3.52c-4.671,4.683-4.671,12.304,0,16.987
+              C14.533,31.37,17.543,32.62,20.745,32.62z M13.685,13.526c1.886-1.891,4.393-2.932,7.06-2.932s5.174,1.041,7.06,2.932
+              c3.895,3.905,3.895,10.258,0,14.163c-1.886,1.891-4.393,2.932-7.06,2.932s-5.174-1.041-7.06-2.932
+              C9.791,23.784,9.791,17.431,13.685,13.526z"/>
+              </svg>
+
+              <input
+                type="text"
+                placeholder="Cerca..."
+                onChange={(e) => setFilterValue(e.target.value)}
+                value={filterValue} />
+          </div>
+        </div>
         <div className='orientatori'>
-          <div className="Table" id='Table'>
+          <div className="Table" id=''>
             <div className="table-big-container-admin" id='table-container'>
-              <div className="table-filters" id='table-filters-orient'>
-                <div>
-                  <h4>Operatori</h4>
-                </div>
-
-                <div id={"orientatorisearch"} style={{ display: 'flex', alignItems: 'center' }}>
-
-
-                  <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50" enable-background="new 0 0 50 50">
-                    <path d="M20.745,32.62c2.883,0,5.606-1.022,7.773-2.881L39.052,40.3c0.195,0.196,0.452,0.294,0.708,0.294
-	c0.255,0,0.511-0.097,0.706-0.292c0.391-0.39,0.392-1.023,0.002-1.414L29.925,28.319c3.947-4.714,3.717-11.773-0.705-16.205
-	c-2.264-2.27-5.274-3.52-8.476-3.52s-6.212,1.25-8.476,3.52c-4.671,4.683-4.671,12.304,0,16.987
-	C14.533,31.37,17.543,32.62,20.745,32.62z M13.685,13.526c1.886-1.891,4.393-2.932,7.06-2.932s5.174,1.041,7.06,2.932
-	c3.895,3.905,3.895,10.258,0,14.163c-1.886,1.891-4.393,2.932-7.06,2.932s-5.174-1.041-7.06-2.932
-	C9.791,23.784,9.791,17.431,13.685,13.526z"/>
-                  </svg>
-
-                  <input
-                    type="text"
-                    placeholder="Cerca..."
-                    onChange={(e) => setFilterValue(e.target.value)}
-                    value={filterValue} />
-                </div>
-              </div>
               {isLoading ?
                 <div
-                  className="d-flex justify-content-center fw-bold"
+                  className="d-flex justify-content-center align-items-start fw-bold"
                   style={{ height: "90vh" }}
                 >
                   <div className="d-flex align-items-center">
@@ -240,10 +248,9 @@ const Orientatori = () => {
                               {row.email}
                             </td>
                             <td>
-                              <svg style={{cursor: 'pointer', margin: '0 20px'}} onClick={() => handleRowClick(row, 'delete')} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M135.2 17.7C140.6 6.8 151.7 0 163.8 0H284.2c12.1 0 23.2 6.8 28.6 17.7L320 32h96c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 96 0 81.7 0 64S14.3 32 32 32h96l7.2-14.3zM32 128H416V448c0 35.3-28.7 64-64 64H96c-35.3 0-64-28.7-64-64V128zm96 64c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16zm96 0c-8.8 0-16 7.2-16 16V432c0 8.8 7.2 16 16 16s16-7.2 16-16V208c0-8.8-7.2-16-16-16z" /></svg>
-                              <FaPencilAlt style={{cursor: 'pointer'}} onClick={() => handleRowClick(row, 'modify')} size={18} />
+                              <img src={penna} style={{cursor: 'pointer', margin: '0 20px'}} onClick={() => handleRowClick(row, 'modify')} />
+                              <img src={cestino} style={{cursor: 'pointer'}} onClick={() => handleRowClick(row, 'delete')} size={18} />
                             </td>
-
                           </tr>
                         )}
                     </tbody>
@@ -253,24 +260,8 @@ const Orientatori = () => {
             </div>
           </div>
           <div className='right-orientatori'>
-            <h5 style={{ fontSize: "20px", width: "90%", color: "grey" }}>Classifica <span style={{ color: "black" }}>operatori</span></h5>
-            <div className='classifica'>
-              <div id='overflowhandler'>
-                {arrayFatturatoPerOrientatoreUser && arrayFatturatoPerOrientatoreUser
-                  .map((data, k) => {
-                    if (data.orientatore)
-                      return (
-                        <div key={data.orientatore._id} className='classifica-nomi'>
-                          <span id='s1'>#{k + 1}</span>
-                          <span id='s2'>{data.orientatore.nome}</span>
-                          <span id='s3'>{data.sommaFatturato}</span>
-                        </div>
-                      )
-                  })}
-              </div>
-            </div>
             <div className='add-orientatori'>
-              <h4>Aggiungi <font color='#3471CC'>operatore</font></h4>
+              <h4>Aggiungi operatore</h4>
               <div className='input-orientatori'>
                 <div className='input-item'>
                   <label>Nome:</label>
@@ -293,7 +284,10 @@ const Orientatori = () => {
             </div>
           </div>
         </div>
-      </div>
+        <Logout />
+      </div>      
+    )}
+
     </>
   )
 }

@@ -1,5 +1,6 @@
 .calenda-totaly{
   padding: 0 15px;
+  height: 90vh;
 }
 .calendar-container{
     display: flex;
@@ -7,10 +8,32 @@
     align-items: center;
     overflow-y: hidden;
     width: 100%;
-    margin-top: 40px;
+    margin-top: 0px;
+    height: 65vh;
+    background-color: white !important;
+}
+.fc-timegrid-axis-cushion{
+  display: none;
+}
+.filtralead-calendar{
+  margin-top: 20px;
+}
+.fc-scroller::-webkit-scrollbar{
+  width: 12px;
+}
+.fc-scroller::-webkit-scrollbar-track {
+  border-radius: 70px;
+  padding: 4px 8px;
+  width: 20px;
+}
+
+.fc-scroller::-webkit-scrollbar-thumb {
+  background: #4ED35D;
+  border-radius: 56px;
+  width: 12px;
 }
 .my-calendar{
-    height: 78vh;
+    height: 76vh;
     width: 100%;
 }
 .fc-day {
@@ -38,20 +61,20 @@
     padding: 2px;
     position: relative;
     width: 100%;
-    background-color: #3471CC;
+    background-color: #EDF3F7;
     min-height: 50px;
     border-radius: 2px;
     padding: 3px;
   }
   .chatbot-calendar{
-    background-color: green !important;
-    border-color: green;
+    background-color: #EDF3F7 !important;
+    border-color: #4ED35D;
   }
   .fc-col-header-cell-cushion{
     font-size: 14px !important;
     font-weight: 500;
     text-decoration: none !important;
-    color: #3471CC;
+    color: #000000;
   }
   .fc-scrollgrid-shrink{
     font-size: 14px;
@@ -61,12 +84,12 @@
     margin-bottom: 0px; /* Margine inferiore per separare il titolo dalla descrizione */
     font-size: 12px;
     width: 80%;
+    color: #000000;
     line-height: 13px;
   }
-  
   .event-description {
     font-size: 12px;
-    color: #ffffff; /* Colore grigio per la descrizione */
+    color: #000000; /* Colore grigio per la descrizione */
     font-weight: 400;
   }
   .close-icon-calendar{
@@ -75,14 +98,13 @@
     right: 3px;
     width: 20px;
     height: 20px;
-    background-color: white;
-    color: #3471CC;
+    color: #000000;
     border-radius: 50%;
     display: flex;
     align-items: center;
     font-weight: 600;
     justify-content: center;
-    font-size: 10px;
+    font-size: 12px;
     cursor: pointer;
   }
   .popup-orientatore {
