@@ -643,7 +643,7 @@ const processTrigger = async () => {
   //const url = `http://localhost:9000/ls/process-trigger/${userId}`;
   const url = `https://chatbolt-comparacorsi-production.up.railway.app/ls/process-trigger/${userId}`;
 
-  const lead = await Lead.findOne({numeroTelefono: "3313869850"})
+  const lead = await Lead.findOne({numeroTelefono: "393382857716"})
   const payload = {
     action: '1',
     userInfo: {

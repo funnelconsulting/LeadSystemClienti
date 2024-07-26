@@ -97,6 +97,7 @@ const LeadSchema = new Schema({
     last_interaction: String,
     idLeadChatic: String,
     master: String,
+    linkChat: String,
   });
 
 
