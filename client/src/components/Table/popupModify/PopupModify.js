@@ -167,7 +167,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                 </div>
                 <hr className='linea-choose-date' />
                 <div className='calendar-container'>
-                    <Calendar 
+                    <Calendar
                         onChange={(date) => {
                         handleDateChange(date);
                     }} 

@@ -99,6 +99,7 @@ app.post('/api/save-chatbot-smc', saveLeadSMC);
 app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 app.post('/api/save-chatbot-vantaggio', saveLeadVantaggio);
 app.post('/api/save-chatbot-demo', saveLeadDemo);
+app.post('/api/save-chatbot-life', saveLeadDemo);
 
 app.post('/chatbolt/save-chatbolt-lead', saveChatboltLead)
 

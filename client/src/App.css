@@ -41,7 +41,8 @@
   left: 1%;
   font-family: 'Poppins', sans-serif;
   padding-bottom: 40px;
-  transition: 'width 0.3s ease',
+  transition: 'width 0.3s ease';
+  background-color: #F9FBFC !important;
 }
 button, a {
   cursor: pointer !important;

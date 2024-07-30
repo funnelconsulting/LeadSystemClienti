@@ -32,7 +32,11 @@ function MyCalendar({leads, setSelectedLead, setOpenInfoCal, saveNewRecall, setO
 
     const calendar = new Calendar(calendarEl, {
       plugins:[dayGridPlugin, timeGridPlugin, interactionPlugin],
-      headerToolbar: false,
+      headerToolbar: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
       initialView: initialView,
       editable: true,
       locale: itLocale,
@@ -653,7 +657,7 @@ const CalendarM = () => {
                           </div>
                       </div>
                       </div>
-                <div className='calendar-container'>
+                <div className='calendar-container-t'>
                 {filteredData && filteredData.length > 0 ? (
                   <MyCalendar 
                   saveNewRecall={saveNewRecall} 
