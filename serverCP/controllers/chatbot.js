@@ -83,9 +83,23 @@ async function createEvent(emailInvitato, dataInizio, nome, summary, phoneNumber
 }
 
 function isValidPhoneNumber(phoneNumber) {
-    const phoneRegex = /^(?:\+?39)?(?:\d{10})$/;
-    return phoneRegex.test(phoneNumber);
+  // Verifica se il numero di telefono ha 10 cifre ed è preceduto da un +
+  if (/^\+\d{10}$/.test(phoneNumber)) {
+    return true;
   }
+
+  // Verifica se il numero di telefono ha +39 seguito da 10 cifre (12 cifre in totale)
+  if (/^\+39\d{10}$/.test(phoneNumber)) {
+    return true;
+  }
+
+  // Verifica se il numero di telefono ha 10 cifre senza prefisso
+  if (/^\d{10}$/.test(phoneNumber)) {
+    return true;
+  }
+
+  return false;
+}
 
 exports.saveLeadChatbotUnusual = async (req, res) => {
   console.log(req.body);
