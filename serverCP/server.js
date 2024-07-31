@@ -10,7 +10,7 @@ const cron = require('node-cron');
 const { parse } = require('json2csv');
 const LeadChatbot = require('./models/leadChatbot');
 const moment = require('moment');
-const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss, saveLeadVantaggio, saveLeadDemo, saveLeadLifeGen } = require('./controllers/chatbot');
+const { saveLeadChatbotUnusual, saveLeadSMC, saveLeadLuiss, saveLeadVantaggio, saveLeadDemo, saveLeadLifeGen, saveLeadMira } = require('./controllers/chatbot');
 const { appendToGoogleSheet } = require('./controllers/exportSheet');
 const Lead = require('./models/lead');
 const { saveChatboltLead } = require('./controllers/newChatbolt');
@@ -100,6 +100,7 @@ app.post('/api/save-chatbot-luiss', saveLeadLuiss);
 app.post('/api/save-chatbot-vantaggio', saveLeadVantaggio);
 app.post('/api/save-chatbot-demo', saveLeadDemo);
 app.post('/api/save-chatbot-life', saveLeadLifeGen);
+app.post('/api/save-chatbot-mira', saveLeadMira);
 
 app.post('/chatbolt/save-chatbolt-lead', saveChatboltLead)
 
