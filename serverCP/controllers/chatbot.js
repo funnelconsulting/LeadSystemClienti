@@ -1023,7 +1023,7 @@ exports.saveLeadLifeGen = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (specificFieldApp?.value && specificFieldApp?.value !== ""){
+      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '66a8eabc6153b4378acf1ccc'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1063,11 +1063,11 @@ exports.saveLeadLifeGen = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente Smc`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente life-generation`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente Smc`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente life-generation`)
             if (!isValidPhoneNumber(phone)){
               console.log('Numero non valido')
               return
@@ -1147,11 +1147,11 @@ exports.saveLeadLifeGen = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente Smc`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente life-generation`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente Smc`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente life-generation`)
             if (!isValidPhoneNumber(phone)){
               return
             }
