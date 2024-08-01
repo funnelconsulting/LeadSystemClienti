@@ -130,6 +130,36 @@ const Lead = require('../models/lead');
     }
   };
 
+  exports.getLeadsWithRecallAndAppDate = async (req, res) => {
+    try {
+      const userId = req.body._id;
+  
+      const leads = await Lead.find({
+        utente: userId,
+        $and: [
+          { esito: { $ne: "Non valido" } },
+          { esito: { $ne: "Non interessato" } },
+          {
+            $or: [
+              { 
+                $and: [
+                  { recallDate: { $exists: true, $ne: "", $ne: null } },
+                  { recallHours: { $exists: true, $ne: "", $ne: null } }
+                ]
+              },
+              { appDate: { $exists: true, $ne: "", $ne: null } }
+            ]
+          }
+        ]
+      }).populate('orientatori');
+  
+      res.json(leads);
+    } catch (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Errore nel recupero dei lead' });
+    }
+  };
+
   exports.calculateFatturatoByUtente = async (req, res) => {
     try {
       // Recupera tutti gli utenti

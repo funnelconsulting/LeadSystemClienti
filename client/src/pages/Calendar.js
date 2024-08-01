@@ -126,13 +126,12 @@ const CalendarM = () => {
     };
     
     const fetchLeads = async (orin) => {
-
         try {
-          const response = await axios.post('/get-leads-manual-base', {
+          const response = await axios.post('/get-lead-calendar', {
             _id: state.user._id
             //_id: "655f707143a59f06d5d4dc3b"
           });
-    
+
           const doppioAppuntamento = response.data.filter(lead => (lead.appDate && lead.appDate !== "") && lead.recallDate);
           const filteredDoppione = doppioAppuntamento.map((lead) => {
             const telephone = lead.numeroTelefono ? lead.numeroTelefono.toString() : '';
