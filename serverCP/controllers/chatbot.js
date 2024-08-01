@@ -1272,7 +1272,7 @@ exports.saveLeadSMCNew = async (req, res) => {
           summary: conversation_summary || "",
           last_interaction: formattedDate || "",
           idLeadChatic: id,
-          tag: "unusual",
+          tag: "smc",
           linkChat: linkChat,
         });
         try {
@@ -1287,11 +1287,11 @@ exports.saveLeadSMCNew = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente unusual`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente smc`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente unusual`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente smc`)
             if (!isValidPhoneNumber(phone)){
               console.log('Numero non valido')
               return
@@ -1325,7 +1325,7 @@ exports.saveLeadSMCNew = async (req, res) => {
         last_interaction: formattedDate,
         conversation_summary: conversation_summary,
         appointment_date: specificFieldApp.value,
-        tag: "unusual",
+        tag: "smc",
         linkChat: linkChat,
       });
 
@@ -1356,7 +1356,7 @@ exports.saveLeadSMCNew = async (req, res) => {
           summary: conversation_summary || "",
           last_interaction: formattedDate || "",
           idLeadChatic: id,
-          tag: "unusual",
+          tag: "smc",
           linkChat: linkChat,
         });
         try {
@@ -1371,11 +1371,11 @@ exports.saveLeadSMCNew = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente unusual`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente smc`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente unusual`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente smc`)
             if (!isValidPhoneNumber(phone)){
               return
             }
@@ -1482,7 +1482,7 @@ exports.saveLeadUnusualNew = async (req, res) => {
           summary: conversation_summary || "",
           last_interaction: formattedDate || "",
           idLeadChatic: id,
-          tag: "smc",
+          tag: "unusual",
           linkChat: linkChat,
         });
         try {
@@ -1497,11 +1497,11 @@ exports.saveLeadUnusualNew = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente smc`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente unusual`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente smc`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente unusual`)
             if (!isValidPhoneNumber(phone)){
               console.log('Numero non valido')
               return
@@ -1535,7 +1535,7 @@ exports.saveLeadUnusualNew = async (req, res) => {
         last_interaction: formattedDate,
         conversation_summary: conversation_summary,
         appointment_date: specificFieldApp.value,
-        tag: "smc",
+        tag: "unusual",
         linkChat: linkChat,
       });
 
@@ -1566,7 +1566,7 @@ exports.saveLeadUnusualNew = async (req, res) => {
           summary: conversation_summary || "",
           last_interaction: formattedDate || "",
           idLeadChatic: id,
-          tag: "smc",
+          tag: "unusual",
           linkChat: linkChat,
         });
         try {
@@ -1581,11 +1581,11 @@ exports.saveLeadUnusualNew = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente smc`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente unusual`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente smc`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente unusual`)
             if (!isValidPhoneNumber(phone)){
               return
             }
