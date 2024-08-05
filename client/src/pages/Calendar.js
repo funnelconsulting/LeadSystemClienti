@@ -139,7 +139,7 @@ const CalendarM = () => {
               telephone.startsWith('+39') && telephone.length === 13
                 ? telephone.substring(3)
                 : telephone;
-    
+
           const dateTime = moment(`${lead.recallDate} ${lead.recallHours}`, 'YYYY-MM-DD HH:mm:ss').toDate()
           const inizialiNome = lead.orientatori ? lead.orientatori.nome.charAt(0).toUpperCase() : '';
           const inizialiCognome = lead.orientatori ? lead.orientatori.cognome.charAt(0).toUpperCase() : '';
@@ -559,39 +559,6 @@ const CalendarM = () => {
               <div className='Table-admin'>
                       <div className="filtralead filtralead-calendar">
                         <div className="wrapperwrapper">
-                        <div className="filter-item">
-                          <Popover
-                            content={
-                              <div>
-                                <DatePicker
-                                  value={startDate ? moment(startDate) : null}
-                                  onChange={handleStartDateChange}
-                                  format="YYYY-MM-DD"
-                                  placeholder="Da"
-                                />
-                                <DatePicker
-                                  value={endDate ? moment(endDate) : null}
-                                  onChange={handleEndDateChange}
-                                  format="YYYY-MM-DD"
-                                  placeholder="A"
-                                />
-                              </div>
-                            }
-                            title="Seleziona intervallo di date"
-                            trigger="click"
-                          >
-                            <div className="data-selezionata" style={{ border: '1px solid #d9d9d9', padding: '5px 10px', borderRadius: '4px', cursor: 'pointer' }}>
-                              {startDate && endDate ? (
-                                <div>
-                                  <span>{`${moment(startDate).format('ddd DD MMM')} - ${moment(endDate).format('ddd DD MMM')}`}</span>
-                                  <img src={cancel} onClick={handleClearDate} />
-                                </div>
-                              ) : (
-                                <span>Seleziona date</span>
-                              )}
-                            </div>
-                          </Popover>
-                        </div>
 
                           {state.user.role && state.user.role === "orientatore" ?
                           null :
@@ -647,12 +614,12 @@ const CalendarM = () => {
                           {/*<button onClick={handleClearFilter} className="button-filter rimuovi-button">Rimuovi filtri</button>*/}
                         </div>
                         <div className="leadslinks secondLink">
-                              <button>
+                              {/*<button>
                                 <svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 448 512"><path d="M256 80c0-17.7-14.3-32-32-32s-32 14.3-32 32V224H48c-17.7 0-32 14.3-32 32s14.3 32 32 32H192V432c0 17.7 14.3 32 32 32s32-14.3 32-32V288H400c17.7 0 32-14.3 32-32s-14.3-32-32-32H256V80z" /></svg>
                                 <span>
                                   Aggiungi call
                                 </span>
-                              </button>
+                              </button>*/}
                           </div>
                       </div>
                       </div>
@@ -689,15 +656,6 @@ const CalendarM = () => {
                         } else {
                           return false;
                         }
-                      }
-          
-                      // Filtro per data
-                      if (startDate !== null && endDate !== null) {
-                        const rowDate = Date.parse(row.extendedProps.date);
-                        const selectedDateStart = new Date(startDate);
-                        const selectedDateEnd = new Date(endDate);
-                        selectedDateEnd.setDate(selectedDateEnd.getDate() + 1);
-                        return rowDate >= selectedDateStart && rowDate <= selectedDateEnd;
                       }
 
                       return true;
