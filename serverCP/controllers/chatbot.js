@@ -827,7 +827,7 @@ exports.saveLeadDemo = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (specificFieldApp?.value && specificFieldApp?.value !== ""){
+      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '662f767d3eda57d593f420fe'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -911,7 +911,7 @@ exports.saveLeadDemo = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (specificFieldApp?.value && specificFieldApp?.value !== ""){
+      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='662f767d3eda57d593f420fe'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -2086,7 +2086,7 @@ exports.saveLeadVantaggio = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (specificFieldApp?.value && specificFieldApp?.value !== ""){
+      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '668ea5070f7da9d0a780398e'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
