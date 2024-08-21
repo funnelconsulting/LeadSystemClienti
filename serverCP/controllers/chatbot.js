@@ -827,7 +827,6 @@ exports.saveLeadDemo = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '662f767d3eda57d593f420fe'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -891,7 +890,6 @@ exports.saveLeadDemo = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -911,7 +909,6 @@ exports.saveLeadDemo = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='662f767d3eda57d593f420fe'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -973,7 +970,6 @@ exports.saveLeadDemo = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
@@ -1037,7 +1033,6 @@ exports.saveLeadLifeGen = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '66a8eabc6153b4378acf1ccc'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1101,7 +1096,6 @@ exports.saveLeadLifeGen = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -1121,7 +1115,6 @@ exports.saveLeadLifeGen = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='66a8eabc6153b4378acf1ccc'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1183,7 +1176,6 @@ exports.saveLeadLifeGen = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
@@ -1247,7 +1239,6 @@ exports.saveLeadSMCNew = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '665d947ba3d5d27812733530'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1311,7 +1302,6 @@ exports.saveLeadSMCNew = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -1331,7 +1321,6 @@ exports.saveLeadSMCNew = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='665d947ba3d5d27812733530'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1393,7 +1382,6 @@ exports.saveLeadSMCNew = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
@@ -1457,7 +1445,6 @@ exports.saveLeadLuissNew = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '6674220bc423baeeaa460161'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1521,7 +1508,6 @@ exports.saveLeadLuissNew = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -1541,7 +1527,6 @@ exports.saveLeadLuissNew = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='6674220bc423baeeaa460161'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1603,7 +1588,6 @@ exports.saveLeadLuissNew = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
@@ -1667,7 +1651,6 @@ exports.saveLeadUnusualNew = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '6634e06f353945e674c43b70'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1731,7 +1714,6 @@ exports.saveLeadUnusualNew = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -1751,7 +1733,6 @@ exports.saveLeadUnusualNew = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='6634e06f353945e674c43b70'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1813,7 +1794,6 @@ exports.saveLeadUnusualNew = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
@@ -1877,7 +1857,6 @@ exports.saveLeadMira = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '66aa423c1c13e2b53b36c9f0'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -1941,7 +1920,6 @@ exports.saveLeadMira = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -1961,7 +1939,6 @@ exports.saveLeadMira = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='66aa423c1c13e2b53b36c9f0'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -2023,7 +2000,6 @@ exports.saveLeadMira = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
@@ -2086,7 +2062,6 @@ exports.saveLeadVantaggio = async (req, res) => {
 
       await lead.save();
       console.log('Lead aggiornata con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId = '668ea5070f7da9d0a780398e'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -2150,7 +2125,6 @@ exports.saveLeadVantaggio = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     } else {
       lead = new LeadChatbot({
         data: new Date(),
@@ -2170,7 +2144,6 @@ exports.saveLeadVantaggio = async (req, res) => {
 
       await lead.save();
       console.log('Lead salvato con successo nel database!');
-      if (first_name.trim() !== "" && last_name.trim() !== "" && email.trim() !== "" && phone.trim() !== ""){
         const userId ='668ea5070f7da9d0a780398e'; //'662f767d3eda57d593f420fe'; TEST ACCOUNT
         let user = await User.findById(userId);
         const newLead = new Lead({
@@ -2232,7 +2205,6 @@ exports.saveLeadVantaggio = async (req, res) => {
         } catch (error) {
           console.log(`Errore nella validazione o salvataggio del lead: ${error.message}`);
         }
-      }
     }
 
     res.status(200).json({ message: 'Successo' });
