@@ -160,8 +160,16 @@ const Lead = require('../models/lead');
           }
         ]
       }).populate('orientatori');
-  
-      res.json(leads);
+
+      const leadsFiltered = leads.filter(lead => {
+        const recallDateValid = lead.recallDate && lead.recallDate.trim() !== "";
+        const recallHoursValid = lead.recallHours && lead.recallHours.trim() !== "";
+        const appDateValid = lead.appDate && lead.appDate.trim() !== "";
+        
+        return (recallDateValid && recallHoursValid) || appDateValid;
+      });
+
+      res.json(leadsFiltered);
     } catch (err) {
       console.log(err);
       return res.status(500).json({ error: 'Errore nel recupero dei lead' });

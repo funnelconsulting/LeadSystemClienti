@@ -131,7 +131,7 @@ const CalendarM = () => {
             _id: state.user._id
             //_id: "655f707143a59f06d5d4dc3b"
           });
-
+          
           const doppioAppuntamento = response.data.filter(lead => (lead.appDate && lead.appDate !== "") && lead.recallDate);
           const filteredDoppione = doppioAppuntamento.map((lead) => {
             const telephone = lead.numeroTelefono ? lead.numeroTelefono.toString() : '';
@@ -221,7 +221,6 @@ const CalendarM = () => {
               description: `Data: ${dateTime}, Testo`,
             };
           });
-          console.log(filteredTableLead)
           const mergedArray = filteredTableLead.concat(filteredDoppione);
           console.log(mergedArray)
           const ori = localStorage.getItem("Ori");
@@ -258,7 +257,7 @@ const CalendarM = () => {
           const response = await axios.post('/get-orientatore-lead-base', {
             _id: state.user._id
           });
-    
+
           const doppioAppuntamento = response.data.filter(lead => (lead.appDate && lead.appDate !== "") && lead.recallDate);
           const filteredDoppione = doppioAppuntamento.map((lead) => {
             const telephone = lead.numeroTelefono ? lead.numeroTelefono.toString() : '';
