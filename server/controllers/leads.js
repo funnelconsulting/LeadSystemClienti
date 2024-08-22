@@ -183,7 +183,7 @@ const Lead = require('../models/lead');
               // Seconda condizione: `appDate` deve essere valida
               { 
                 $and: [
-                  { appDate: { $exists: true, $ne: ""} }
+                  { appDate: { $exists: true, $ne: "", $ne: null }}
                 ]
               }
             ]
