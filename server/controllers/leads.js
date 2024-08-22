@@ -141,36 +141,6 @@ const Lead = require('../models/lead');
           { esito: { $ne: "Non interessato" } },
           {
             $or: [
-              { 
-                $and: [
-                  { recallDate: { $exists: true, $ne: "", $ne: null } },
-                  { recallHours: { $exists: true, $ne: "", $ne: null } }
-                ]
-              },
-              { appDate: { $exists: true, $ne: "", $ne: null } }
-            ]
-          }
-        ]
-      }).populate('orientatori');
-  
-      res.json(leads);
-    } catch (err) {
-      console.log(err);
-      return res.status(500).json({ error: 'Errore nel recupero dei lead' });
-    }
-  };
-
-  const getLeadsWithRecallAndAppDate = async () => {
-    try {
-      const userId = "668ea5070f7da9d0a780398e";
-  
-      const leads = await Lead.find({
-        utente: userId,
-        $and: [
-          { esito: { $ne: "Non valido" } },
-          { esito: { $ne: "Non interessato" } },
-          {
-            $or: [
               // Prima condizione: `recallDate` e `recallHours` devono essere valide
               { 
                 $and: [
@@ -189,15 +159,14 @@ const Lead = require('../models/lead');
             ]
           }
         ]
-      })
+      }).populate('orientatori');
   
-      console.log(leads.length);
+      res.json(leads);
     } catch (err) {
       console.log(err);
+      return res.status(500).json({ error: 'Errore nel recupero dei lead' });
     }
   };
-
-  getLeadsWithRecallAndAppDate()
 
   exports.calculateFatturatoByUtente = async (req, res) => {
     try {
