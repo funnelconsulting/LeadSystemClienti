@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { getWebhook, postWebhook } = require('../controllers/social');
-const { getDataFromWordpress } = require('../controllers/wordpress');
+const { getDataFromWordpress, salesParkLead } = require('../controllers/wordpress');
 
 router.get('/webhook', getWebhook);
 router.post('/webhook', postWebhook);
@@ -10,5 +10,7 @@ router.post('/webhook', postWebhook);
 /*WORDPRESS */
 router.post('/post-data-from-wordpress', getDataFromWordpress);
 router.get('/get-data-from-wordpress', getDataFromWordpress);
+
+router.post("/salespark-lead", salesParkLead);
 
 module.exports = router;

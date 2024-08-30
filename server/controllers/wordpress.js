@@ -1,3 +1,4 @@
+const Lead = require('../models/lead');
 const LeadWordpress = require('../models/leadWordpress');
 
 exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della richiesta in una stringa JSON
@@ -41,6 +42,57 @@ exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della 
           await newLead.save();
           console.log('Lead salvato:', newLead);
           res.status(200).json({ success: true });
+    } catch (error) {
+      console.error('Errore durante il salvataggio del lead:', error);
+      res.status(500).json({ success: false, error: error.message });
+    }
+  };
+
+  exports.salesParkLead = async (req, res) => {
+    console.log(req.body);
+    const nome = req.body.Nome;
+    const cognome = req.body.Cognome;
+    const email = req.body.Email;
+    const numeroTelefono = req.body.Telefono;
+    try {
+  
+      const existingLeadAss = await Lead.findOne({ $or: [{ email }, { numeroTelefono }], utente: "66d175318a9d02febe47d4a9" });
+
+      if (!existingLeadAss) {
+        const newLead = new Lead({
+          data: new Date(),
+          nome: nome,
+          cognome: cognome,
+          email: email,
+          numeroTelefono: numeroTelefono,
+          utente: "66d175318a9d02febe47d4a9",
+          campagna: 'Landing',
+          esito: 'Da contattare',
+          orientatori: null,
+          note: '',
+          fatturato: '',
+          utmCampaign: 'Landing',
+          utmSource: '',
+          utmContent: '',
+          utmTerm: '',
+          utmAdgroup: "",
+          utmAdset: "",
+          appDate: "",
+          summary: "",
+          last_interaction: "",
+          idLeadChatic: '',
+          tag: "salespark",
+          linkChat: "",
+        });
+    
+          await newLead.save();
+          console.log('Lead salvato:', newLead);
+          res.status(200).json({ success: true });
+      } else {
+        console.log('Lead already exists');
+        res.status(200).json({ success: true });
+      }
+
     } catch (error) {
       console.error('Errore durante il salvataggio del lead:', error);
       res.status(500).json({ success: false, error: error.message });
