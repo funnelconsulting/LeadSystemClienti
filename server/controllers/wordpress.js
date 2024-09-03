@@ -86,7 +86,7 @@ const writeDataSalespark = async (auth, lead) => {
   sheets.spreadsheets.values.append(
     {
       spreadsheetId: '1EoiU3qQtEjH8VkfCKngu0auYzz2nv4dH3kWa-7aKh60',
-      range: 'Sheet1!A1',
+      range: 'Lead-Salespark!A1',
       valueInputOption: 'RAW',
       resource: resource,
     },
