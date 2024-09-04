@@ -4,16 +4,16 @@ const showDebugingInfo = true;
 const cron = require('node-cron');
 const axios = require('axios');
 
-const accessToken = 'EAAD6mNGgHKABO0VRMoANGbKwcHT4xFBwjf1vZBEu1QwThbS8vQEEGcX8L9Yw2k99cZCIMncdZBGRm9QbbIiZCWrVzNIWvGEjeGhvUdM7eanwQZCTTOycgif5ZAvJZBQdD7sh2illondwZBIJhx1lpbZCbK7iZBIKkuwwTOK5TOAvVMzEovRdpFpmrBdvja';
+const accessToken = 'EAALrI8XoapEBO2rlxJs4ndjJmY2NShPE3ZB4EYojTjMZCUxKr6XuNOfS2vTskYMMpDR1ai8StjxggcOJZAeiAFnOgJyuW6yho3ouqRebO7XPmADiMtLVZCwexv3rd2GyjuLho5XyhxbGdZC5Ag2hJEbhtQQPhfyOqfhYZBLlZBL4ZBWAmMpZBGYZBGEJM6';
 const apiUrl = 'https://graph.facebook.com/v12.0';
 const idCampagna = '23858081191190152'; //ECP [LEAD ADS] - LAL Vendite - vantaggi VIDEO
 const idCampagna2 = '23859089103880152'; //ECP - [LEAD ADS] - Master
 const fields = 'id,name,objective,status,adsets{name},ads{name,leads{form_id,field_data}}';
 
 //LEADS 
-const TOKENBLUDENTAL = "EAAQEkt9HVpsBO00ZAjI4OWYr1KfpyttYYnEnxXMJQAILFZAZCdZAsRuVKH2RdAZCx9iB7OjVnQQ8diHwdEvmvPmySDVgaSKn4YZAdGdp1Ne5NBSh2JMpbME5zeJ05eoQdJWmR1bmIWix7hJ6ygZAZBgYQlFrznOX4W8GbgnD0fEwf7BcxC41aac1KzdZC";
-const TOKENMIO = "EAAD6mNGgHKABOZCFLOjk90nZCTiXKitChBna4fSTkgVbiehgRM3gfxaqd2AZCZCKQ7GeKMwTTaFSm9koTkW7XxSpcrxBq7dfn5qeZCMZAOd64rZCEeu09KfIlfLmxDtahUDSstNUHUXMX9bExQ7gSwuIV9CH0eNNhlzfzpdHWxZAhujnNaZAZB9yfrTQZDZD";
-const TOKEN1 = "EAAD6mNGgHKABOZCFLOjk90nZCTiXKitChBna4fSTkgVbiehgRM3gfxaqd2AZCZCKQ7GeKMwTTaFSm9koTkW7XxSpcrxBq7dfn5qeZCMZAOd64rZCEeu09KfIlfLmxDtahUDSstNUHUXMX9bExQ7gSwuIV9CH0eNNhlzfzpdHWxZAhujnNaZAZB9yfrTQZDZD";
+const TOKENBLUDENTAL = "EAALrI8XoapEBO2rlxJs4ndjJmY2NShPE3ZB4EYojTjMZCUxKr6XuNOfS2vTskYMMpDR1ai8StjxggcOJZAeiAFnOgJyuW6yho3ouqRebO7XPmADiMtLVZCwexv3rd2GyjuLho5XyhxbGdZC5Ag2hJEbhtQQPhfyOqfhYZBLlZBL4ZBWAmMpZBGYZBGEJM6";
+const TOKENMIO = "EAALrI8XoapEBO2rlxJs4ndjJmY2NShPE3ZB4EYojTjMZCUxKr6XuNOfS2vTskYMMpDR1ai8StjxggcOJZAeiAFnOgJyuW6yho3ouqRebO7XPmADiMtLVZCwexv3rd2GyjuLho5XyhxbGdZC5Ag2hJEbhtQQPhfyOqfhYZBLlZBL4ZBWAmMpZBGYZBGEJM6";
+const TOKEN1 = "EAALrI8XoapEBO2rlxJs4ndjJmY2NShPE3ZB4EYojTjMZCUxKr6XuNOfS2vTskYMMpDR1ai8StjxggcOJZAeiAFnOgJyuW6yho3ouqRebO7XPmADiMtLVZCwexv3rd2GyjuLho5XyhxbGdZC5Ag2hJEbhtQQPhfyOqfhYZBLlZBL4ZBWAmMpZBGYZBGEJM6";
 const { GoogleAdsApi, enums  } = require('google-ads-api');
 const Lead = require('../models/lead');
 
@@ -149,9 +149,10 @@ const Lead = require('../models/lead');
         console.error('Errore nella richiesta:', error);
       });
   };
-// NUOVO ID DELL'ACCOUNT PUBBLICITARIO 3.0 DENTISTA VICINO A ME     act_511963014361529
-  exports.getDentistaLead = () => {
-    const url = 'https://graph.facebook.com/v17.0/act_511963014361529/campaigns';
+// ID SALESPARK act_489800240581683
+  exports.getSalesparkLead = () => {
+    console.log('Eseguo getSalesparkLead');
+    const url = 'https://graph.facebook.com/v17.0/act_489800240581683/campaigns';
     const params = {
       fields: 'effective_status,account_id,id,name,objective,status,adsets{name},ads{name,leads{form_id,field_data}}',
       effective_status: "['ACTIVE']",
@@ -164,42 +165,38 @@ const Lead = require('../models/lead');
         const logs = [];
         if (Array.isArray(dataFromFacebook)) {
           for (const element of dataFromFacebook) {
-            const excludedCampaignIds = [idCampagna, idCampagna2];
-            //PER ESCLUDERE LE CAMPAGNE
-            /*if (excludedCampaignIds.includes(element.id)) {
-              console.log('Ho escluso:', element.id);
-              continue;
-            }*/
-
-            const { account_id, ads, effective_status, id, name, objective, adsets, status } = element;
-
-            if (ads && ads.data && ads.data.length > 0) {
-              for (const ad of ads.data) {
-                if (ad.leads && ad.leads.data && ad.leads.data.length > 0) {
-                  for (const lead of ad.leads.data) {
-                    if (lead && lead.field_data && Array.isArray(lead.field_data)) {
-                      const fieldData = lead.field_data;
-                      const id = lead.id;
-                      const formId = lead.form_id;
-                      const log = {
-                        fieldData: fieldData,
-                        name: name,
-                        id: id,
-                        formId: formId,
-                        annunci: ad.name,
-                        adsets: adsets.data[0].name,
-                      };
-                      logs.push(log);
+            if (element.id === "120212580101710769") {
+              const { account_id, ads, effective_status, id, name, objective, adsets, status } = element;
+              console.log(element);
+              if (ads && ads.data && ads.data.length > 0) {
+                for (const ad of ads.data) {
+                  if (ad.leads && ad.leads.data && ad.leads.data.length > 0) {
+                    for (const lead of ad.leads.data) {
+                      if (lead && lead.field_data && Array.isArray(lead.field_data)) {
+                        const fieldData = lead.field_data;
+                        const id = lead.id;
+                        const formId = lead.form_id;
+                        const log = {
+                          fieldData: fieldData,
+                          name: name,
+                          id: id,
+                          formId: formId,
+                          annunci: ad.name,
+                          adsets: adsets.data[0].name,
+                        };
+                        logs.push(log);
+                        console.log(logs);
+                      }
                     }
                   }
                 }
-              }
+              }              
             }
           }
         } else {
           console.error("dataFromFacebook non è un array");
         }
-        saveLeadFromFacebookAndInstagram(logs);
+        //saveLeadFromFacebookAndInstagram(logs);
       })
       .catch(error => {
         console.error('Errore:', error);
