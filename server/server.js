@@ -44,8 +44,10 @@ app.post('/api/subscribe', (req, res) => {
 
 const deleteAllLeads = async () => {
   try {
-    const result = await Lead.deleteMany({});
-    console.log(`${result.deletedCount} lead eliminate.`);
+    //const result = await Lead.deleteMany({utente: "66d175318a9d02febe47d4a9"});
+    const result = await Lead.find({utente: "66d175318a9d02febe47d4a9"});
+    console.log(result.length)
+    //console.log(`${result.deletedCount} lead eliminate.`);
   } catch (error) {
     console.error('Si è verificato un errore durante l\'eliminazione delle lead:', error);
   }

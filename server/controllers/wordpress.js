@@ -171,7 +171,7 @@ exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della 
   
       const existingLeadAss = await Lead.findOne({ $or: [{ email }, { numeroTelefono }], utente: "66d175318a9d02febe47d4a9" });
 
-      //if (!existingLeadAss) {
+      if (!existingLeadAss) {
         const newLead = new Lead({
           data: new Date(),
           nome: nome,
@@ -202,10 +202,10 @@ exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della 
           runExportSales(newLead)
           console.log('Lead salvato:', newLead);
           res.status(200).json({ success: true });
-      //} else {
-      //  console.log('Lead already exists');
-      //  res.status(200).json({ success: true });
-      //}
+      } else {
+        console.log('Lead already exists');
+        res.status(200).json({ success: true });
+      }
 
     } catch (error) {
       console.error('Errore durante il salvataggio del lead:', error);
