@@ -156,13 +156,17 @@ exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della 
       res.status(500).json({ success: false, error: error.message });
     }
   };
-
+  //https://leadsystemclienti-production.up.railway.app/api/salespark-lead
   exports.salesParkLead = async (req, res) => {
     console.log(req.body);
     const nome = req.body.Nome;
     const cognome = req.body.Cognome;
     const email = req.body.Email;
     const numeroTelefono = req.body.Telefono;
+    const utmCampaign = req.body.utm_campaign ? req.body.utm_campaign : '';
+    const utmSource = req.body.utm_source ? req.body.utm_source : '';
+    const utmMedium = req.body.utm_medium ? req.body.utm_medium : '';
+    const utmTerm = req.body.utm_term ? req.body.utm_term : '';
     try {
   
       const existingLeadAss = await Lead.findOne({ $or: [{ email }, { numeroTelefono }], utente: "66d175318a9d02febe47d4a9" });
@@ -180,10 +184,10 @@ exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della 
           orientatori: null,
           note: '',
           fatturato: '',
-          utmCampaign: 'Landing',
-          utmSource: '',
-          utmContent: '',
-          utmTerm: '',
+          utmCampaign: utmCampaign,
+          utmSource: utmSource,
+          utmContent: utmMedium,
+          utmTerm: utmTerm,
           utmAdgroup: "",
           utmAdset: "",
           appDate: "",
