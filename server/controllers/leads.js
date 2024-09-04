@@ -161,13 +161,13 @@ const Lead = require('../models/lead');
         ]
       }).populate('orientatori');
 
-      const leadsFiltered = leads.filter(lead => {
-        const recallDateValid = lead.recallDate && lead.recallDate.trim() !== "";
-        const recallHoursValid = lead.recallHours && lead.recallHours.trim() !== "";
-        const appDateValid = lead.appDate && lead.appDate.trim() !== "";
-        
-        return (recallDateValid && recallHoursValid) || appDateValid;
-      });
+        const leadsFiltered = leads.filter(lead => {
+          const recallDateValid = lead.recallDate instanceof Date && !isNaN(lead.recallDate);
+          const recallHoursValid = lead.recallHours && typeof lead.recallHours === 'string' && lead.recallHours.trim() !== "";
+          const appDateValid = lead.appDate && typeof lead.appDate === 'string' && lead.appDate.trim() !== "";
+          
+          return (recallDateValid && recallHoursValid) || appDateValid;
+        });
 
       res.json(leadsFiltered);
     } catch (err) {
