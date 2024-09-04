@@ -185,7 +185,7 @@ const Lead = require('../models/lead');
                           adsets: adsets.data[0].name,
                         };
                         logs.push(log);
-                        //console.log(logs);
+                        console.log(logs);
                       }
                     }
                   }

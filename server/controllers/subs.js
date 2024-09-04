@@ -8,6 +8,7 @@ const { sendEmailLeadArrivati } = require('../middlewares');
 const { getSalesparkLead } = require('./Facebook');
 const Orientatore = require('../models/orientatori');
 const LastLeadUser = require('../models/lastLeadUser');
+const { runExportSales } = require('./wordpress');
 
 let lastUserReceivedLead = null;
 
@@ -90,7 +91,7 @@ const calculateAndAssignLeadsEveryDay = async () => {
 
       try {
         await newLead.save();
-
+        runExportSales(newLead)
         leadWithoutUser.assigned = true;
         await leadWithoutUser.save();
 

@@ -110,6 +110,12 @@ const runExportSales = (lead) => {
     .catch(console.error);
 };
 
+exports.runExportSales = (lead) => {
+  authorize()
+    .then((auth) => writeDataSalespark(auth, lead))
+    .catch(console.error);
+};
+
 exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della richiesta in una stringa JSON
     console.log(req.body);
     const nome = req.body.yourName;
