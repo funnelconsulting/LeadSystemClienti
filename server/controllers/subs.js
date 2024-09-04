@@ -36,6 +36,10 @@ const calculateAndAssignLeadsEveryDay = async () => {
         phone_number: "",
         trattamento: "",
         città: '',
+        utm_source: '',
+        utm_medium: '',
+        utm_term: '',
+        utm_campaign: '',
       };
 
       for (const field of leadWithoutUser.fieldData) {
@@ -47,6 +51,14 @@ const calculateAndAssignLeadsEveryDay = async () => {
           userData.email = field.values[0];
         } else if (field.name === "numero_di_telefono") {
           userData.phone_number = field.values[0];
+        } else if (field.name === "utm_source") {
+          userData.utm_source = field.values[0];
+        } else if (field.name === "utm_medium") {
+          userData.utm_medium = field.values[0];
+        } else if (field.name === "utm_term") {
+          userData.utm_term = field.values[0];
+        } else if (field.name === "utm_campaign") {
+          userData.utm_campaign = field.values[0];
         }
       }
 
@@ -57,17 +69,17 @@ const calculateAndAssignLeadsEveryDay = async () => {
         email: userData.email,
         numeroTelefono: userData.phone_number,
         utente: "66d175318a9d02febe47d4a9",
-        campagna: 'Meta',
+        campagna: leadWithoutUser.name ? leadWithoutUser.name : '',
         esito: 'Da contattare',
         orientatori: null,
         note: '',
         fatturato: '',
-        utmSource: '',
-        utmContent: leadWithoutUser.annunci ? leadWithoutUser.annunci : '',
+        utmSource: userData.utm_source || '',
+        utmContent: userData.utm_medium || '',
         utmAdset: leadWithoutUser.adsets ? leadWithoutUser.adsets : '',
-        utmCampaign: leadWithoutUser.name ? leadWithoutUser.name : '',
-        utmTerm: '',
-        utmAdgroup: "",
+        utmCampaign: userData.utm_campaign || '',
+        utmTerm: userData.utm_term || '',
+        utmAdgroup: leadWithoutUser.annunci ? leadWithoutUser.annunci : '',
         appDate: "",
         summary: "",
         last_interaction: "",
