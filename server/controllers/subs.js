@@ -78,7 +78,7 @@ const calculateAndAssignLeadsEveryDay = async () => {
         utmSource: userData.utm_source || '',
         utmContent: userData.utm_medium || '',
         utmAdset: leadWithoutUser.adsets ? leadWithoutUser.adsets : '',
-        utmCampaign: userData.utm_campaign || '',
+        utmCampaign: leadWithoutUser.name ? leadWithoutUser.name : '',
         utmTerm: userData.utm_term || '',
         utmAdgroup: leadWithoutUser.annunci ? leadWithoutUser.annunci : '',
         appDate: "",
