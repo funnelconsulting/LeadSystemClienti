@@ -6,6 +6,7 @@ const axios = require('axios')
 const path = require("path");
 const fs = require('fs').promises;
 const process = require('process');
+const cron = require('node-cron');
 
 const SCOPES = ['https://www.googleapis.com/auth/spreadsheets'];
 
@@ -69,6 +70,29 @@ function formatDate(date) {
 
   return `${year}-${month}-${day}`;
 }
+function formatDate2(dateString) {
+  let [datePart, timePart] = dateString.split(' ');
+  let dateParts = datePart.split('-');
+
+  let fullYear, month, day;
+
+  if (dateParts[0].length === 2 && dateParts[2].length === 2) {
+      // Formato "24-07-04"
+      fullYear = `20${dateParts[0]}`; // Aggiungi "20" all'anno
+      month = dateParts[1];
+      day = dateParts[2];
+  } else if (dateParts[2].length === 4) {
+      // Formato "02-08-2024"
+      day = dateParts[0];
+      month = dateParts[1];
+      fullYear = dateParts[2];
+  } else {
+      throw new Error('Formato data non riconosciuto.');
+  }
+
+  // Restituisci la data nel formato desiderato
+  return `${fullYear}/${month}/${day}`;
+}
 const writeDataSalespark = async (auth, lead) => {
   const sheets = google.sheets({ version: 'v4', auth });
   console.log(lead)
@@ -116,7 +140,7 @@ exports.runExportSales = (lead) => {
     .catch(console.error);
 };
 
-exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della richiesta in una stringa JSON
+exports.getDataFromWordpress = async (req, res) => {
     console.log(req.body);
     const nome = req.body.yourName;
     const cognome = req.body.yourSurname;
@@ -218,6 +242,79 @@ exports.getDataFromWordpress = async (req, res) => { // Converte il corpo della 
       res.status(500).json({ success: false, error: error.message });
     }
   };
+
+  const writeDataComparatore = async (auth) => {
+    const dataToUpdate = [];
+    const sheets = google.sheets({ version: 'v4', auth });
+  
+    const leads = await Lead.find({utente: "66d175318a9d02febe47d4a9"}).populate('orientatori').populate('utente');
+  
+    leads.forEach((lead) => {
+      const leadData = [
+        lead.data ? formatDate(new Date(lead.data)) : '', 
+        lead.nome || '',
+        lead.cognome || '',
+        lead.email || '',
+        lead.numeroTelefono || '',
+        lead.campagna || '',
+        lead.utmSource || '', 
+        lead.utmContent || '', 
+        lead.utmCampaign || '', 
+        lead.utmTerm || '',
+        lead.utmAdgroup || '',
+        lead.utmAdset || '',
+        // Rimuovi i campi non presenti nel modello Lead
+        lead.utente ? lead.utente.nameECP : '',
+        lead.orientatori && lead.orientatori !== null ? `${lead.orientatori.nome} ${lead.orientatori.cognome}` : 'Non assegnato',
+        lead.motivo || '',
+        lead.esito === 'Non interessato' ? 'Lead persa' : lead.esito || '',
+        lead.dataCambiamentoEsito ? formatDate(lead.dataCambiamentoEsito) : 'Nessuna Data', 
+        lead.fatturato ? parseInt(lead.fatturato) : '',
+        lead.appDate ? formatDate2(lead.appDate) : '',
+        lead.manualLead ? 'Si' : 'No',
+        lead.recallDate ? formatDate(lead.recallDate) : '',
+        lead.recallHours || '',
+        lead.summary || '',
+      ];
+    
+      dataToUpdate.push(leadData);
+    });
+  
+    const resource = {
+      values: dataToUpdate,
+    };
+    console.log('import')
+    sheets.spreadsheets.values.append(
+      {
+        spreadsheetId: '15VD7LsKSltf5f1NysfT0D0ttbGZb0A-v33FxTIitux8',
+        range: 'Foglio1!A1',
+        valueInputOption: 'RAW',
+        resource: resource,
+      },
+      async (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(
+            '%d cells updated on range: %s',
+            result.data.updates.updatedCells,
+            result.data.updates.updatedRange
+          );
+        }
+      }
+    );
+  }
+
+  const runExport = () => {
+    console.log('export')
+    authorize()
+      .then(writeDataComparatore)
+      .catch(console.error);
+  };
+
+  cron.schedule('0 1 * * *', () => {
+    runExport();
+  });
   
   
   
