@@ -197,6 +197,8 @@ exports.getDataFromWordpress = async (req, res) => {
     const utmSource = req.body.utm_source ? req.body.utm_source : '';
     const utmMedium = req.body.utm_medium ? req.body.utm_medium : '';
     const utmTerm = req.body.utm_term ? req.body.utm_term : '';
+    const utmAd = req.body.utm_ad ? req.body.utm_ad : '';
+    const utmAdset = req.body.utm_adset ? req.body.utm_adset : ""; 
     try {
   
       const existingLeadAss = await Lead.findOne({ $or: [{ email }, { numeroTelefono }], utente: "66d175318a9d02febe47d4a9" });
@@ -218,8 +220,8 @@ exports.getDataFromWordpress = async (req, res) => {
           utmSource: utmSource,
           utmContent: utmMedium,
           utmTerm: utmTerm,
-          utmAdgroup: "",
-          utmAdset: "",
+          utmAdgroup: utmAd,
+          utmAdset: utmAdset,
           appDate: "",
           summary: "",
           last_interaction: "",
@@ -248,7 +250,7 @@ exports.getDataFromWordpress = async (req, res) => {
     const sheets = google.sheets({ version: 'v4', auth });
   
     const leads = await Lead.find({utente: "66d175318a9d02febe47d4a9"}).populate('orientatori').populate('utente');
-  
+    
     leads.forEach((lead) => {
       const leadData = [
         lead.data ? formatDate(new Date(lead.data)) : '', 
@@ -256,11 +258,9 @@ exports.getDataFromWordpress = async (req, res) => {
         lead.cognome || '',
         lead.email || '',
         lead.numeroTelefono || '',
-        lead.campagna || '',
         lead.utmSource || '', 
         lead.utmContent || '', 
-        lead.utmCampaign || '', 
-        lead.utmTerm || '',
+        lead.campagna == "Landing" ? lead.utmCampaign : lead.campagna, 
         lead.utmAdgroup || '',
         lead.utmAdset || '',
         // Rimuovi i campi non presenti nel modello Lead
