@@ -245,12 +245,30 @@ exports.getDataFromWordpress = async (req, res) => {
     }
   };
 
+  const modificaLeadRetro = async () => {
+    try {
+      const leadDaModifica = await Lead.find({utente: "66d175318a9d02febe47d4a9", utmContent: "cpc"});
+      console.log(leadDaModifica.length)
+
+      for (const lead of leadDaModifica){
+        lead.utmContent = "paid";
+        await lead.save()
+      }
+
+      console.log(`Modificate ${leadDaModifica.length} lead`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  //modificaLeadRetro()
+
   const writeDataComparatore = async (auth) => {
     const dataToUpdate = [];
     const sheets = google.sheets({ version: 'v4', auth });
   
     const leads = await Lead.find({utente: "66d175318a9d02febe47d4a9"}).populate('orientatori').populate('utente');
-    
+
     leads.forEach((lead) => {
       const leadData = [
         lead.data ? formatDate(new Date(lead.data)) : '', 
@@ -287,7 +305,7 @@ exports.getDataFromWordpress = async (req, res) => {
     sheets.spreadsheets.values.append(
       {
         spreadsheetId: '15VD7LsKSltf5f1NysfT0D0ttbGZb0A-v33FxTIitux8',
-        range: 'Foglio1!A1',
+        range: 'Lead!A1',
         valueInputOption: 'RAW',
         resource: resource,
       },
@@ -314,8 +332,9 @@ exports.getDataFromWordpress = async (req, res) => {
 
   cron.schedule('0 1 * * *', () => {
     runExport();
-  });
-  
+  });  
+
+  //runExport()
   
   
   
