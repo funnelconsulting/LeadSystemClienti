@@ -2233,7 +2233,7 @@ exports.saveLeadVideoAnimate = async (req, res) => {
     let linkChat = '';
     //const specificField = custom_fields.find(field => field.id === '500329');
     const specificFieldApp = custom_fields.find(field => field.id === '940106');
-    const linkChatField = custom_fields.find(field => field.id === "554346");
+    const linkChatField = custom_fields.find(field => field.id === "940935");
     const date = new Date(parseInt(last_interaction));
     const formattedDate = date.toLocaleString();
 
@@ -2305,11 +2305,11 @@ exports.saveLeadVideoAnimate = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente Smc`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente VideoAnimate`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente Smc`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente VideoAnimate`)
             if (!isValidPhoneNumber(phone)){
               console.log('Numero non valido')
               return
@@ -2387,11 +2387,11 @@ exports.saveLeadVideoAnimate = async (req, res) => {
             lead.assigned = true;
             await lead.save();
             await newLead.save();
-            console.log(`Assegnato il lead ${lead.cognome} all'utente Smc`);
+            console.log(`Assegnato il lead ${lead.cognome} all'utente VideoAnimate`);
             await user.save();
             //await createEvent("smc@scuolamotociclismo.com", newLead.appDate, nome + ' ' + cognome, conversation_summary, phone, email)
           } else {
-            console.log(`Già assegnato il lead ${lead.cognome} all'utente Smc`)
+            console.log(`Già assegnato il lead ${lead.cognome} all'utente VideoAnimate`)
             if (!isValidPhoneNumber(phone)){
               return
             }
