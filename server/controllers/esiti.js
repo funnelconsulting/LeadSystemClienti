@@ -136,6 +136,8 @@ exports.getEsiti = async (req, res) => {
     }
   }
 
+  //creaEsitiPredefiniti("6703b24559fdcb414e62cda1")
+
   async function creaEsitiPerTuttiGliUtenti() {
     try {
       // Recupera tutti gli utenti dal database
