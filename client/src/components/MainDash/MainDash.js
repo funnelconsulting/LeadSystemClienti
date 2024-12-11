@@ -73,7 +73,16 @@ const MainDash = ({showLegenda, setShowLegenda, setNextSchedule}) => {
 
   const generateCsvLead = () => {
     if (leadsPdf && leadsPdf.length > 0) {
-      const csvData = leadsPdf.map((lead) => [lead.name, lead.surname, lead.email, lead.telephone, lead.status, lead.note, lead.orientatore, lead.date]);
+      const csvData = leadsPdf.map((lead) => [
+        lead.name, 
+        lead.surname, 
+        lead.email, 
+        lead.telephone, 
+        lead.status === "Non interessato" ? "Lead persa" : lead.status, 
+        lead.note, 
+        lead.orientatore, 
+        lead.date
+      ]);
       const csv = Papa.unparse({
         fields: ['Nome', 'Cognome', 'Email', 'Telefono', 'Esito', 'Note', 'Orientatore', 'Data'],
         data: csvData,

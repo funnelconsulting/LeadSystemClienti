@@ -630,6 +630,7 @@
         transform: rotateX(180deg);
         padding-bottom: 30px;
         margin-top: 0px;
+        position: relative !important;
 
         &::-webkit-scrollbar {
             width: 12px;

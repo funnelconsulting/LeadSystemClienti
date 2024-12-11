@@ -108,6 +108,22 @@ const CalendarM = () => {
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const [recallFilter, setRecallFilter] = useState(false);
+    const userFixId = state.user.role && state.user.role === "orientatore" ? state.user.utente : state.user._id;
+    const [esiti, setEsiti] = useState([]);
+
+    const fetchEsiti = async () => {
+      try {
+        const response = await axios.get(`/esiti/${userFixId}`);
+        const esitiOrdinati = response.data.esiti.sort((a, b) => a.posizione - b.posizione);
+        setEsiti(esitiOrdinati);
+        
+      } catch (error) {
+        console.error('Errore nel recupero degli esiti:', error);
+      }
+    };
+    useEffect(() => {
+      fetchEsiti();
+    }, []);
 
     const formatDateString = (inputDate) => {
       let parsedDate;
@@ -117,7 +133,7 @@ const CalendarM = () => {
       } else if (moment(inputDate, 'YY-MM-DD HH:mm', true).isValid()) {
         parsedDate = moment(inputDate, 'YY-MM-DD HH:mm');
       } else {
-        throw new Error('Formato data non valido');
+        //throw new Error('Formato data non valido');
       }
     
       const formattedDate = parsedDate.format('DD/MM/YYYY HH:mm');
@@ -185,7 +201,7 @@ const CalendarM = () => {
                 : telephone;
     
           const inizialiNome = lead.orientatori ? lead.orientatori.nome.charAt(0).toUpperCase() : '';
-          const dateTime = (lead.campagna === "AI chatbot" || (lead.appDate && lead.appDate?.trim()  !== '')) ?
+          const dateTime = (lead.appDate && lead.appDate?.trim()  !== '') ?
           formatDateString(lead.appDate) :
           moment(`${lead.recallDate} ${lead.recallHours}`, 'YYYY-MM-DD HH:mm:ss').toDate();
             return {
@@ -530,6 +546,7 @@ const CalendarM = () => {
               onClose={() => {setOpenInfoCal(false); setSelectedLead(null)}}
               lead={selectedLead}
               onUpdateLead={handleUpdateLead}
+              esiti={esiti}
               setPopupModify={() => {setOpenInfoCal(false); setSelectedLead(null)}}
               //popupRef={popupRef}
               fetchLeads={() => {

@@ -20,6 +20,49 @@
   background-color: transparent;
   font-size: 14px;
 }
+#manageEsiti{
+  position: relative;
+  top: 10vh;
+}
+.esito-item-fix{
+  background-color: #E0EAF2;
+}
+.salva-cambio-nome{
+  border: none;
+  background-color: transparent;
+  text-decoration: underline;
+  z-index: 100000;
+}
+.add-esito input {
+  outline: none;
+  padding: 6px 12px;
+}
+.esiti-list-manage > div{
+  border: 1px solid rgba(0, 0, 0, 0.295);
+  margin: 7px 0;
+  padding: 4px 10px;
+  width: 60%;
+  text-align: left;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.esiti-list-manage input {
+  border: none;
+  outline: none;
+  background-color: #E0EAF2;
+}
+.add-esito{
+  width: 60%;
+  margin: 0 auto;
+}
+.add-esito button{
+  background-color: #4ED35D;
+  color: white;
+  border: none;
+  cursor: pointer;
+  padding: 6px 12px;
+}
 .button-dash > img{
   margin-right: 10px;
 }
@@ -408,8 +451,8 @@ thead {
   cursor: pointer;
   padding: 4px 18px;
   border-radius: 5px;
-  border: 1px solid #3471CC;
-  color: #3471CC;
+  border: 1px solid #000;
+  color: #000;
   margin: 0 10px;
   font-weight: 500;
 }

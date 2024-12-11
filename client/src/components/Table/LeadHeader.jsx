@@ -54,9 +54,9 @@ export default function LeadHeader({
           else if (type == "Da richiamare")
           SETtoggles({ ...toggles, irraggiungibile: !toggles.irraggiungibile })
       }}>
-      <span>{type}</span>
+      <span>{type == "Non interessato" ? "Lead persa" : type}</span>
       <span className={refreshate ? 'refresh-lead' : ''}>
-        {refreshate ? 
+        {refreshate ?
         <BiRefresh size={30} /> :
         type == "Lead persa" ?
         filteredData && filteredData.filter(x => x.status == "Non interessato").length : 

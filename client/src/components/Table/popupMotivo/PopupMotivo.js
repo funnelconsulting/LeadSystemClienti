@@ -1,9 +1,10 @@
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import './popupMotivo.css';
 import vendutoImg from '../../../imgs/venduto.png';
 import nonVendImg from '../../../imgs/nonvend.png';
 import indietro from '../../../imgs/indietro.png';
 import bonificato from '../../../imgs/bonificato.png';
+import { UserContext } from '../../../context';
 
 const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
     const [motivo, setMotivo] = useState("");
@@ -11,6 +12,8 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
     const [patientType, setPatientType] = useState('');
     const [treatment, setTreatment] = useState('');
     const [location, setLocation] = useState('');
+    const [state, setState, headerIndex, SETheaderIndex] = useContext(UserContext);
+    const userFixId = state.user.role && state.user.role === "orientatore" ? state.user.utente : state.user._id;
 
   const patientTypes = ["Nuovo paziente", "Gia’ paziente"];
   const treatments = ["Impianti", "Pulizia dei denti", "Protesi Mobile", "Sbiancamento", "Ortodonzia", "Faccette dentali"];
@@ -35,13 +38,16 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
   };
 
     const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
-      "Numero Errato", "Non interessato", "Non ha mai risposto"
+      "Numero Errato", "Non interessato", "Non ha mai risposto", 
     ]);
     const [motivoVendutoList, setMotivoVendutoList] = useState([
         "Promozione / sconto", "Convenzione", "Prevalutazione corretta",
         "Scatto di carriera", "Titolo necessario per concorso pubblico / candidatura",
         "Tempi brevi", "Sede d’esame vicino casa", "Consulenza orientatore",
     ]);
+    const [motivoListSalesPark, setMotivoListSalesPark] = useState([
+      "No Show", "No SQL", "No budget", "No Tempo", "No PMF"
+    ])
 
     const motivoList = type === "Venduto" ? motivoVendutoList : motivoLeadPersaList;
 
@@ -93,6 +99,20 @@ const PopupMotivo = ({type, onClose, spostaLead, leadId}) => {
                     {opzione}
                 </label>
             ))}
+            {userFixId === "66d175318a9d02febe47d4a9" && (
+              motivoListSalesPark.map((opzione, index) => (
+                <label key={index} className="radio-label">
+                    <input
+                    type="radio"
+                    name="motivo"
+                    value={opzione}
+                    checked={motivo === opzione}
+                    onChange={() => setMotivo(opzione)}
+                    />
+                    {opzione}
+                </label>
+            ))
+            )}
         </div>) : (
           <div className='motivo-venduto'>
          </div>

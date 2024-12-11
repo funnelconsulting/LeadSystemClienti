@@ -17,7 +17,7 @@ import recallgreen from '../../../imgs/recallGren.png';
 import moment from 'moment';
 import Message from '../../Message/Message';
 
-const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshate , admin = false, popupRef, fetchLeads, setInfoPopup}) => {
+const PopupModify = ({ lead, onClose, setPopupModify, esiti, onUpdateLead, setRefreshate , admin = false, popupRef, fetchLeads, setInfoPopup}) => {
     const [state, setState] = useContext(UserContext);
     const leadId = lead.id;
     const userId = state.user._id;
@@ -48,6 +48,9 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
     const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         "Numero Errato", "Non interessato", "Non ha mai risposto"
     ]);
+    const [motivoListSalesPark, setMotivoListSalesPark] = useState([
+        "No Show", "No SQL", "No budget", "No Tempo", "No PMF"
+      ])
 
     useEffect(() => {
         if (chatBodyRef.current) {
@@ -212,6 +215,8 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
             </div>
         )
     }
+
+    console.log(lead)
 
     const formatDate = (originalDate) => {
         const formattedDate = new Date(originalDate).toLocaleDateString('en-GB', {
@@ -472,6 +477,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
         const formattedDate = parsedDate.format('DD/MM/YYYY HH:mm');        
         return formattedDate;
       };
+
     return (
         <>
         {mostraCalendar ? (
@@ -480,48 +486,43 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
             </div>
             ) : (
             <div className='popup-modify' id={admin ? "popupadmincolors" : ''}>
-                {chooseMotivo && (
-                    <div className='shadow-blur'>
-                        <div style={{marginTop: '-100px', zIndex: 100}} className="choose-esito-popup">
-                            <div className='top-choose-esito'>
+            {chooseMotivo && (
+                <div className='shadow-blur'>
+                    <div style={{marginTop: '-100px', zIndex: 100}} className="choose-esito-popup">
+                        <div className='top-choose-esito'>
                             <h4>Modifica l'esito di {nome + " " + cognome}</h4>
-                            </div>
+                        </div>
 
-                            <svg id="modalclosingicon-popup" onClick={() => { setChooseMotivo(false)}} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
-                                 <div className='esiti-option-div' style={{ display: 'flex', justifyContent: 'center', overflowY: 'scroll' }}>
-                                    <div className={esito === "Da contattare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da contattare')}>
-                                        <span><span>o</span></span>
-                                        Da contattare
-                                    </div>
-                                    <div className={esito === "Da richiamare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da richiamare')}>
-                                        <span><span>o</span></span>
-                                        Da richiamare
-                                    </div>
-                                    <div className={esito === "Non interessato" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Non interessato')}>
-                                        <span><span>o</span></span>
-                                        Lead persa
-                                        {esito === "Non interessato" && (
-                                            <select className="selectMotivo" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
+                        <svg id="modalclosingicon-popup" onClick={() => { setChooseMotivo(false)}} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
+                        <div className='esiti-option-div' style={{ display: 'flex', justifyContent: 'center', overflowY: 'scroll' }}>
+                            {esiti?.map((esitoOption) => (
+                                <div 
+                                    key={esitoOption._id}
+                                    className={esito === esitoOption.nome ? "selected-option-motivo esito-option" : "esito-option"} 
+                                    onClick={() => setEsito(esitoOption.nome)}
+                                >
+                                    <span><span>o</span></span>
+                                    {esitoOption.nome === "Non interessato" ? "Lead persa" : esitoOption.nome}
+                                    {esitoOption.nome === "Non interessato" && esito === "Non interessato" && (
+                                        <select className="selectMotivo" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
                                             <option value='' disabled>Seleziona motivo</option>
                                             {motivoLeadPersaList.map((motivoOption, index) => (
                                                 <option key={index} value={motivoOption}>{motivoOption}</option>
                                             ))}
-                                            </select>
-                                        )}
-                                    </div>
-                                    <div className={esito === "Opportunità" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Opportunità')}>
-                                        <span><span>o</span></span>
-                                        Opportunità
-                                    </div>
-                                    <div className={esito === "Venduto" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Venduto')}>
-                                        <span><span>o</span></span>
-                                        Venduto
-                                    </div>
+                                            {userFixId === "66d175318a9d02febe47d4a9" && (
+                                                motivoListSalesPark.map((motivoOption, index) => (
+                                                    <option key={index} value={motivoOption}>{motivoOption}</option>
+                                                ))
+                                            )}
+                                        </select>
+                                    )}
                                 </div>
-                            <button style={{ fontSize: "14px" }} className='btn-orie' onClick={saveMotivoverify}>Salva modifiche</button>
-                            </div>
-                    </div>    
-                )}
+                            ))}
+                        </div>
+                        <button style={{ fontSize: "14px" }} className='btn-orie' onClick={saveMotivoverify}>Salva modifiche</button>
+                    </div>
+                </div>    
+            )}
                 <div className='popup-top'>
                    <div> 
                    {!modificaNome ? 
@@ -621,7 +622,7 @@ const PopupModify = ({ lead, onClose, setPopupModify, onUpdateLead, setRefreshat
                                     <div className={lead.leadAmbassador ? 'mi-div mgm-div' : 'mi-div'}>
                                         <div>
                                             <p>Campagna</p>
-                                            <input placeholder={lead.campagna ? lead.campagna : ""} value={mapCampagnaPerLeadsystem(lead.campagna)} disabled onChange={(e) => setCampagna(e.target.value)} />
+                                            <input placeholder={lead.campagna ? lead.campagna : ""} value={lead.campagna} disabled onChange={(e) => setCampagna(e.target.value)} />
                                         </div>
                                         {state.user.role && state.user.role === "orientatore" ? 
                                         <div>

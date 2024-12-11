@@ -8,6 +8,7 @@ const {getLeadsFb, getLeadsManual, getAllLead, calculateFatturatoByUtente, calcu
 const { createOrientatore, deleteOrientatore, createLead, deleteLead, updateLead, getOrientatori, getLeadDeleted, updateOrientatore, deleteRecall } = require('../controllers/orientatore');
 const { getAllLeadForCounter, LeadForMarketing } = require('../controllers/superAdmin');
 const { modificaEsito, createEsito, deleteEsito, getEsiti } = require('../controllers/esiti');
+const Lead = require('../models/lead');
 
 router.post("/get-leads-fb", getLeadsFb);
 router.post("/get-leads-manual", getLeadsManual);
@@ -63,6 +64,71 @@ router.post('/enable-notifications', async (req, res) => {
   } catch (error) {
     console.error('Errore nell\'abilitazione delle notifiche:', error);
     res.status(500).json({ message: 'Si è verificato un errore' });
+  }
+});
+
+router.post('/webhook/typeform', async (req, res) => {
+  try {
+      const { form_response } = req.body;
+      //console.log(form_response);
+      // Estrarre i dati necessari
+      const name = form_response.answers.find(
+          (answer) => answer?.field?.id === 'ILOWgwGOBjMl'
+      )?.text;
+      const surname = form_response.answers.find(
+        (answer) => answer?.field?.id === 'X9nBJYUEqnNG'
+      )?.text;
+      const email = form_response.answers.find(
+          (answer) => answer.type === 'email'
+      )?.email;
+      const phone = form_response.answers.find(
+          (answer) => answer.type === 'phone_number'
+      )?.phone_number;
+
+      const answers = form_response.answers;
+
+      // Estrarre le risposte di tipo 'choice'
+      const choices = answers
+        .filter(answer => answer.type === 'choice')
+        .map(answer => ({
+          choice: answer.choice.label,
+          //question: answer.field // Assumendo che 'title' contenga la domanda
+        }));
+
+      console.log(choices);
+      console.log(name, surname, email, phone)
+      // Salvare la lead nel database
+      const newLead = new Lead({
+        data: new Date(),
+        nome: name || '',
+        cognome: surname || '',
+        email: email || '',
+        numeroTelefono: phone || '',
+        utente: "66d175318a9d02febe47d4a9",
+        campagna: 'Typeform',
+        esito: 'Da contattare',
+        orientatori: null,
+        note: '',
+        fatturato: '',
+        utmCampaign: 'Typeform',
+        utmSource: 'Typeform',
+        utmContent: 'Typeform',
+        utmTerm: 'Typeform',
+        utmAdgroup: 'Typeform',
+        utmAdset: 'Typeform',
+        appDate: "",
+        summary: "",
+        last_interaction: "",
+        idLeadChatic: '',
+        tag: "salespark",
+        linkChat: "",
+      });
+      await newLead.save();
+
+      res.status(200).send('Lead salvata con successo');
+  } catch (error) {
+      console.error(error);
+      res.status(500).send('Errore nel salvataggio della lead');
   }
 });
 

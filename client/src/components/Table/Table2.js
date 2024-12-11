@@ -81,6 +81,9 @@ export default function Table2({ onResults, searchval, setLeadsPdf, setNextSched
 const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
     "Numero Errato", "Non interessato", "Non ha mai risposto"
 ]);
+const [motivoListSalesPark, setMotivoListSalesPark] = useState([
+  "No Show", "No SQL", "No budget", "No Tempo", "No PMF"
+])
 
   document.addEventListener('mousedown', handleClickOutside);
 
@@ -682,6 +685,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
        }
       setRefreshate(false);
       setOriginalData((prevData) => [...prevData, ...filteredTableLead]);
+      setLeadsPdf((prevData) => [...prevData, ...filteredTableLead])
     } catch (error) {
       console.error(error);
     }
@@ -754,6 +758,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
        }
       setRefreshate(false);
       setOriginalData((prevData) => [...prevData, ...filteredTableLead]);
+      setLeadsPdf((prevData) => [...prevData, ...filteredTableLead])
     } catch (error) {
       console.error(error);
     }
@@ -957,18 +962,169 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
   }, [calendarOpen])
 
 
-  const [toggles, SETtoggles] = useState({
-    dacontattare: true,
-    inlavorazione: false,
-    noninteressato: true,
-    opportunita: true,
-    invalutazione: false,
-    venduto: true,
-    nonValido: false,
-    nonRisponde: false,
-    irraggiungibile: true,
-    iscrizionePosticipata: false,
-  })
+  const [esiti, setEsiti] = useState([]);
+  const [manageEsiti, setManageEsiti] = useState(false)
+  const [toggles, SETtoggles] = useState({})
+  const [popoverVisible, setPopoverVisible] = useState({});
+
+  useEffect(() => {
+    fetchEsiti();
+  }, []);
+
+  const fetchEsiti = async () => {
+    try {
+      const response = await axios.get(`/esiti/${userFixId}`);
+      const esitiOrdinati = response.data.esiti.sort((a, b) => a.posizione - b.posizione);
+      setEsiti(esitiOrdinati);
+      
+      const initialToggles = {};
+      esitiOrdinati.forEach(esito => {
+        initialToggles[esito.nome.toLowerCase().replace(/\s+/g, '')] = true;
+      });
+      SETtoggles(initialToggles);
+    } catch (error) {
+      console.error('Errore nel recupero degli esiti:', error);
+    }
+  };
+  const [nuovoEsito, setNuovoEsito] = useState('');
+
+const handleDragStartEsito = (e, index) => {
+  e.dataTransfer.setData('text/plain', index);
+};
+
+const handleDragOverEsito = (e) => {
+  e.preventDefault();
+};
+
+const handleDropEsito = async (e, newIndex) => {
+  e.preventDefault();
+  const oldIndex = parseInt(e.dataTransfer.getData('text/plain'));
+  if (oldIndex === newIndex) return;
+
+  const newEsiti = [...esiti];
+  const [movedEsito] = newEsiti.splice(oldIndex, 1);
+  newEsiti.splice(newIndex, 0, movedEsito);
+
+  // Aggiorna le posizioni
+  newEsiti.forEach((esito, index) => {
+    esito.posizione = index + 1;
+  });
+
+  setEsiti(newEsiti);
+
+  try {
+    await Promise.all(newEsiti.map(esito => 
+      axios.put(`/esiti/${esito._id}`, { posizione: esito.posizione, userId: userFixId })
+    ));
+  } catch (error) {
+    console.error('Errore nell\'aggiornamento delle posizioni:', error);
+  }
+};
+
+const handleAddEsito = async () => {
+  if (!nuovoEsito.trim()) return;
+
+  try {
+    const response = await axios.post('/esiti/create', {
+      nome: nuovoEsito,
+      codice_colore: '#000000', // Colore predefinito
+      posizione: esiti.length + 1,
+      userId: userFixId,
+    });
+
+    setEsiti([...esiti, response.data.esito]);
+    toast.success("Esito aggiunto con successo")
+    setNuovoEsito('');
+  } catch (error) {
+    console.error('Errore nella creazione dell\'esito:', error);
+  }
+};
+
+const handleDeleteClick = (esitoId, esitoNome) => {
+  const hasLeads = originalData.some(lead => lead.status === esitoNome);
+  if (hasLeads) {
+    setPopoverVisible(prev => ({ ...prev, [esitoId]: true }));
+  } else {
+    handleDeleteEsito(esitoId, esitoNome);
+  }
+};
+const handleDeleteEsito = async (esitoId, esitoNome) => {
+  // Controlla se ci sono lead con questo esito
+  const leadsConQuestoEsito = originalData.filter(lead => lead.status === esitoNome);
+  
+  if (leadsConQuestoEsito.length > 0) {
+    return;
+  }
+
+  try {
+    await axios.delete(`/esiti/${esitoId}`, { data: { userId: state.user._id } });
+    setEsiti(esiti?.filter(esito => esito._id !== esitoId));
+    toast.success("Esito eliminato");
+  } catch (error) {
+    console.error('Errore nell\'eliminazione dell\'esito:', error);
+    toast.error('Si è verificato un errore durante l\'eliminazione dell\'esito');
+  }
+};
+const handleEsitoNameChange = (esitoId, newName) => {
+  setEsiti(prevEsiti => prevEsiti.map(esito => {
+    if (esito._id === esitoId) {
+      return { ...esito, nome: newName, isModified: true, oldName: esito.oldName || esito.nome };
+    }
+    return esito;
+  }));
+};
+
+const handleSaveEsitoName = async (esitoId) => {
+  try {
+    const esitoToUpdate = esiti.find(esito => esito._id === esitoId);
+    if (!esitoToUpdate) {
+      throw new Error('Esito non trovato');
+    }
+
+    const response = await axios.put(`/esiti/${esitoId}`, {
+      nome: esitoToUpdate.nome,
+      userId: userFixId
+    });
+
+    // Aggiorna lo stato degli esiti
+    setEsiti(prevEsiti => prevEsiti.map(esito => {
+      if (esito._id === esitoId) {
+        const updatedEsito = { ...esito, isModified: false };
+        delete updatedEsito.oldName;
+        return updatedEsito;
+      }
+      return esito;
+    }));
+
+    // Funzione per aggiornare i dati delle lead
+    const updateLeadData = (prevData) => prevData.map(lead => {
+      if (lead.status === esitoToUpdate.oldName) {
+        return { ...lead, status: esitoToUpdate.nome };
+      }
+      return lead;
+    });
+
+    const updatedFilteredData = updateLeadData(filteredData);
+    const updatedOriginalData = updateLeadData(originalData);
+
+    setFilteredData(updatedFilteredData);
+    setOriginalData(updatedOriginalData);
+    SETtoggles(prevToggles => {
+      const newToggles = { ...prevToggles };
+      if (esitoToUpdate.oldName) {
+        delete newToggles[esitoToUpdate.oldName.toLowerCase().replace(/\s+/g, '')];
+      }
+      newToggles[esitoToUpdate.nome.toLowerCase().replace(/\s+/g, '')] = true;
+      return newToggles;
+    });
+    setRefreshate(true)
+    
+    toast.success('Nome esito aggiornato con successo');
+  } catch (error) {
+    console.error('Errore nell\'aggiornamento del nome dell\'esito:', error);
+    toast.error('Errore nell\'aggiornamento del nome dell\'esito');
+  }
+};
 
 
   const formatDate = (originalDate) => {
@@ -1144,6 +1300,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
         onClose={JustClosePopup}
         lead={selectedLead}
         onUpdateLead={handleUpdateLead}
+        esiti={esiti}
         setPopupModify={() => setPopupModify(false)}
         deleteLead={deleteLead}
         popupRef={popupRef}
@@ -1248,7 +1405,7 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
             />
             <span className="switch-label">Recall</span>
           </div>
-          {/*<button onClick={handleClearFilter} className="button-filter rimuovi-button">Rimuovi filtri</button>*/}
+          <button onClick={() => setManageEsiti(true)} className="button-filter">Gestisci esiti</button>
         </div>
         <div className="leadslinks secondLink">
               <button id="visualbtt" onClick={handletogglegrid} className="">
@@ -1308,6 +1465,93 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
           }}
           />
          </div>}
+         {manageEsiti &&
+            <div className="popup-container">
+              <div className="add-lead-popup" id="manageEsiti">
+                <div className='popup-top'>
+                <svg id="modalclosingicon" onClick={() => setManageEsiti(false)} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
+                  <h4>Gestisci Esiti</h4>
+                </div>
+                
+                <div className="esiti-list esiti-list-manage">
+                  {esiti?.sort((a, b) => a.posizione - b.posizione).map((esito, index) => (
+                    <div key={esito._id} className={esito.fix ? "esito-item": "esito-item-fix"} draggable={true} onDragStart={(e) => handleDragStartEsito(e, index)} onDragOver={handleDragOverEsito} onDrop={(e) => handleDropEsito(e, index)}>
+                      {esito.fix ? (
+                        <span>{esito.nome == "Non interessato" ? "Lead persa" : esito.nome}</span>
+                      ) : (
+                        <>
+                          <input 
+                            type="text" 
+                            value={esito.nome} 
+                            onChange={(e) => handleEsitoNameChange(esito._id, e.target.value)}
+                          />
+                          {esito.isModified && (
+                            <button className="salva-cambio-nome" onClick={() => handleSaveEsitoName(esito._id)}>Salva</button>
+                          )}
+                        </>
+                      )}
+                      <div>
+                          <svg
+                          xmlns="http://www.w3.org/2000/svg" 
+                          width="24" 
+                          height="24" 
+                          viewBox="0 0 24 24" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          strokeWidth="2" 
+                          strokeLinecap="round" 
+                          strokeLinejoin="round" 
+                          className="drag-icon"
+                          style={{ marginRight: '10px', cursor: 'move' }}
+                        >
+                          <line x1="8" y1="6" x2="21" y2="6"></line>
+                          <line x1="8" y1="12" x2="21" y2="12"></line>
+                          <line x1="8" y1="18" x2="21" y2="18"></line>
+                          <line x1="3" y1="6" x2="3.01" y2="6"></line>
+                          <line x1="3" y1="12" x2="3.01" y2="12"></line>
+                          <line x1="3" y1="18" x2="3.01" y2="18"></line>
+                        </svg>
+                      {!esito.fix && (
+                        <Popover
+                          content={
+                            <div>
+                              <p>Se hai delle lead con questo esito, non sarà possibile eliminarlo.</p>
+                              <p>Sposta le lead in altri esiti prima di eliminare questo.</p>
+                            </div>
+                          }
+                          title="Attenzione, stai eliminando l'esito"
+                          //trigger="click"
+                          visible={popoverVisible[esito._id]}
+                          onVisibleChange={(visible) => setPopoverVisible(prev => ({ ...prev, [esito._id]: visible }))}
+                        >
+                          <svg
+                            style={{cursor: "pointer", zIndex: '100000'}} 
+                            onClick={() => handleDeleteClick(esito._id, esito.nome)} 
+                            xmlns="http://www.w3.org/2000/svg"
+                            height="1em" 
+                            viewBox="0 0 448 512"
+                          >
+                            <path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z"/>
+                          </svg>
+                        </Popover>
+                      )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="add-esito">
+                  <input 
+                    type="text" 
+                    value={nuovoEsito} 
+                    onChange={(e) => setNuovoEsito(e.target.value)} 
+                    placeholder="Nome nuovo esito"
+                  />
+                  <button onClick={handleAddEsito}>Aggiungi</button>
+                </div>
+              </div>
+            </div>
+          }
       <Suspense fallback={<div>Loading...</div>}>
         {popupMotivi && (
           <div className="shadow-popup">
@@ -1339,49 +1583,43 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
       )}
 
 
-      {popupModifyEsito && (
-        <div className='popup-container'>
-                         <div style={{marginTop: '100px'}} className="choose-esito-popup popup-esito3">
-                         <div className='top-choose-esito'>
-                         <h4>Modifica l'esito di {selectedLead.name}</h4>
-                         </div>
+          {popupModifyEsito && (
+            <div className='popup-container'>
+              <div style={{marginTop: '100px'}} className="choose-esito-popup popup-esito3">
+                <div className='top-choose-esito'>
+                  <h4>Modifica l'esito di {selectedLead.name}</h4>
+                </div>
 
-                         <svg id="modalclosingicon-popup" onClick={() => { setPopupModifyEsito(false)}} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
-                              <div className='esiti-option-div' style={{ display: 'flex', justifyContent: 'center', overflowY: 'scroll' }}>
-                                 <div className={esito === "Da contattare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da contattare')}>
-                                     <span><span>o</span></span>
-                                     Da contattare
-                                 </div>
-                                 <div className={esito === "Da richiamare" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Da richiamare')}>
-                                     <span><span>o</span></span>
-                                     Da richiamare
-                                 </div>
-                                 <div className={esito === "Non interessato" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Non interessato')}>
-                                     <span><span>o</span></span>
-                                     Lead persa
-                                     {esito === "Non interessato" && (
-                                         <select className="selectMotivo" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
-                                         <option value='' disabled>Seleziona motivo</option>
-                                         {motivoLeadPersaList.map((motivoOption, index) => (
-                                             <option key={index} value={motivoOption}>{motivoOption}</option>
-                                         ))}
-                                         </select>
-                                     )}
-                                 </div>
-                                 <div className={esito === "Opportunità" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Opportunità')}>
-                                     <span><span>o</span></span>
-                                     Opportunità
-                                 </div>
-                                 <div className={esito === "Venduto" ? "selected-option-motivo esito-option" : "esito-option"} onClick={() => setEsito('Venduto')}>
-                                     <span><span>o</span></span>
-                                     Venduto
-                                 </div>
-                             </div>
-                         <button style={{ fontSize: "14px" }} className='btn-orie' onClick={updateLeadEsito}>Salva modifiche</button>
-                         </div>
-                         </div>
-      )
-      }
+                <svg id="modalclosingicon-popup" onClick={() => { setPopupModifyEsito(false)}} xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 384 512"><path d="M342.6 150.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L192 210.7 86.6 105.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L146.7 256 41.4 361.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L192 301.3 297.4 406.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L237.3 256 342.6 150.6z" /></svg>
+                <div className='esiti-option-div' style={{ display: 'flex', justifyContent: 'center', overflowY: 'scroll' }}>
+                  {esiti?.map((esitoOption) => (
+                    <div 
+                      key={esitoOption._id}
+                      className={esito === esitoOption.nome ? "selected-option-motivo esito-option" : "esito-option"} 
+                      onClick={() => setEsito(esitoOption.nome)}
+                    >
+                      <span><span>o</span></span>
+                      {esitoOption.nome === "Non interessato" ? "Lead persa" : esitoOption.nome}
+                      {esitoOption.nome === "Non interessato" && esito === "Non interessato" && (
+                        <select className="selectMotivo" value={motivo} onChange={(e) => setMotivo(e.target.value)}>
+                          <option value='' disabled>Seleziona motivo</option>
+                          {motivoLeadPersaList.map((motivoOption, index) => (
+                            <option key={index} value={motivoOption}>{motivoOption}</option>
+                          ))}
+                          {userFixId === "66d175318a9d02febe47d4a9" && (
+                            motivoListSalesPark.map((motivoOption, index) => (
+                              <option key={index} value={motivoOption}>{motivoOption}</option>
+                            ))
+                          )}
+                        </select>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                <button style={{ fontSize: "14px" }} className='btn-orie' onClick={updateLeadEsito}>Salva modifiche</button>
+              </div>
+            </div>
+          )}
       {toggleGrid ?
         <div style={{ borderRadius: '2px', padding: '30px 20px', maxHeight: '68vh',  }} className="table-big-container">
           <div className="table-filters">
@@ -1454,155 +1692,52 @@ const [motivoLeadPersaList, setMotivoLeadPersaList] = useState([
 
         :
 
-        <div className="sectionswrapper"
-          ref={secref}
-        >
-          <div className="secwrap"
+        <div className="sectionswrapper" ref={secref}>
+        {esiti?.map((esito) => (
+          <div
+            key={esito._id}
+            className="secwrap"
             onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Da contattare")}
+            onDrop={(e) => handleDrop(e, esito.nome)}
             onDragEnd={handleDragEnd}
           >
             <LeadHeader
               handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Da contattare"}
-              refreshate={false}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.dacontattare && filteredData && filteredData.filter(x => x.status == "Da contattare").reverse().map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                  nuovaEtichetta={nuovaEtichetta}
-                  setNuovaEtichetta={setNuovaEtichetta}
-                  selezionOrientatore={openChangeOrientatore}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Da richiamare")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Da richiamare"}
-              refreshate={false}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.irraggiungibile && filteredData && filteredData.filter(x => x.status == "Da richiamare").reverse().map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                  nuovaEtichetta={nuovaEtichetta}
-                  setNuovaEtichetta={setNuovaEtichetta}
-                  selezionOrientatore={openChangeOrientatore}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Non interessato")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Lead persa"}
+              type={esito.nome}
+              refreshate={esito.nome == "Non interessato" ? refreshate : false}
+              toggles={toggles}
               getOtherLeads={getOtherLeads}
               getOtherLeadsOri={getOtherLeadsOri}
-              refreshate={refreshate}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
+              SETtoggles={SETtoggles}
+              filteredData={filteredData}
+            />
             <div className="entries">
-              {toggles.noninteressato && filteredData && filteredData.filter(x => x.status == "Non interessato").reverse().map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                  nuovaEtichetta={nuovaEtichetta}
-                  setNuovaEtichetta={setNuovaEtichetta}
-                  selezionOrientatore={openChangeOrientatore}
-                />
-              )}
+              {toggles[esito.nome.toLowerCase().replace(/\s+/g, '')] && 
+               filteredData && 
+               filteredData.filter(x => x.status === esito.nome)
+                .reverse()
+                .map((row, k) => (
+                  <LeadEntry
+                    key={row.id}
+                    id={JSON.stringify(row)}
+                    index={k}
+                    handleRowClick={handleRowClick}
+                    data={row}
+                    handleModifyPopup={handleModifyPopup}
+                    secref={secref}
+                    handleModifyPopupEsito={handleModifyPopupEsito}
+                    handleDelete={handleDelete}
+                    campagna={row.campagna}
+                    nuovaEtichetta={nuovaEtichetta}
+                    setNuovaEtichetta={setNuovaEtichetta}
+                    selezionOrientatore={openChangeOrientatore}
+                  />
+                ))
+              }
             </div>
           </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Opportunità")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Opportunità"}
-              refreshate={false}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.opportunita && filteredData && filteredData.filter(x => x.status == "Opportunità")
-              .reverse()
-              .sort((a, b) => parseInt(a.tentativiChiamata) - parseInt(b.tentativiChiamata))
-              .map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                  nuovaEtichetta={nuovaEtichetta}
-                  setNuovaEtichetta={setNuovaEtichetta}
-                  selezionOrientatore={openChangeOrientatore}
-                />
-              )}
-            </div>
-          </div>
-          <div className="secwrap"
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "Venduto")}
-            onDragEnd={handleDragEnd}
-          >
-            <LeadHeader
-              handleModifyPopupEsito={(r) => handleModifyPopupEsito(r)}
-              type={"Venduto"}
-              refreshate={false}
-              toggles={toggles} SETtoggles={SETtoggles} filteredData={filteredData} />
-            <div className="entries">
-              {toggles.venduto && filteredData && filteredData.filter(x => x.status == "Venduto").reverse().map((row, k) =>
-                <LeadEntry
-                  id={JSON.stringify(row)}
-                  index={k}
-                  handleRowClick={handleRowClick} data={row}
-                  handleModifyPopup={handleModifyPopup}
-                  secref={secref}
-                  handleModifyPopupEsito={handleModifyPopupEsito}
-                  handleDelete={handleDelete}
-                  campagna={row.campagna}
-                  nuovaEtichetta={nuovaEtichetta}
-                  setNuovaEtichetta={setNuovaEtichetta}
-                  selezionOrientatore={openChangeOrientatore}
-                />
-              )}
-            </div>
-          </div>
-        </div>
+        ))}
+      </div>
       }
     </div>
     </>
