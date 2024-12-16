@@ -50,16 +50,16 @@ const Lead = require('../models/lead');
     if (newLeads.length > 0) {
       LeadFacebook.insertMany(newLeads)
         .then(() => {
-          console.log('Dati dei lead Bluedental salvati nel database', newLeads);
+          console.log('Dati dei lead Salespark salvati nel database', newLeads);
         })
         .catch((error) => {
-          console.error('Errore nel salvataggio dei lead Bluedental nel database:', error);
+          console.error('Errore nel salvataggio dei lead Salespark nel database:', error);
         });
     } else {
-      console.log('Nessun nuovo lead Bluedental da salvare nel database');
+      console.log('Nessun nuovo lead Salespark da salvare nel database');
     }
   } else {
-    console.log('Dati Lead Bluedental non validi');
+    console.log('Dati Lead Salespark non validi');
   }
 };
 
@@ -165,9 +165,9 @@ const Lead = require('../models/lead');
         const logs = [];
         if (Array.isArray(dataFromFacebook)) {
           for (const element of dataFromFacebook) {
-            if (element.id === "120212580101710769") {
+            //if (element.id === "120212580101710769") {
               const { account_id, ads, effective_status, id, name, objective, adsets, status } = element;
-              console.log(element);
+              console.log(element.name);
               if (ads && ads.data && ads.data.length > 0) {
                 for (const ad of ads.data) {
                   if (ad.leads && ad.leads.data && ad.leads.data.length > 0) {
@@ -191,12 +191,12 @@ const Lead = require('../models/lead');
                   }
                 }
               }              
-            }
+            //}
           }
         } else {
           console.error("dataFromFacebook non è un array");
         }
-        saveLeadFromFacebookAndInstagram(logs);
+        //saveLeadFromFacebookAndInstagram(logs);
       })
       .catch(error => {
         console.error('Errore:', error);
