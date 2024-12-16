@@ -44,9 +44,9 @@ const calculateAndAssignLeadsEveryDay = async () => {
       };
 
       for (const field of leadWithoutUser.fieldData) {
-        if (field.name === "full name") {
+        if (field.name === "full name" || field.name === "first_name") {
           userData.first_name = field.values[0];
-        } else if (field.name === "cognome") {
+        } else if (field.name === "last_name") {
           userData.last_name = field.values[0];
         } else if (field.name === "email") {
           userData.email = field.values[0];
