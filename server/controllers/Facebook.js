@@ -185,7 +185,7 @@ const Lead = require('../models/lead');
                           adsets: adsets.data[0].name,
                         };
                         logs.push(log);
-                        console.log(logs);
+                        //console.log(logs);
                       }
                     }
                   }
@@ -196,7 +196,7 @@ const Lead = require('../models/lead');
         } else {
           console.error("dataFromFacebook non è un array");
         }
-        //saveLeadFromFacebookAndInstagram(logs);
+        saveLeadFromFacebookAndInstagram(logs);
       })
       .catch(error => {
         console.error('Errore:', error);

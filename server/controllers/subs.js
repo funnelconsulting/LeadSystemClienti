@@ -44,13 +44,13 @@ const calculateAndAssignLeadsEveryDay = async () => {
       };
 
       for (const field of leadWithoutUser.fieldData) {
-        if (field.name === "nome") {
+        if (field.name === "full name") {
           userData.first_name = field.values[0];
         } else if (field.name === "cognome") {
           userData.last_name = field.values[0];
-        } else if (field.name === "e-mail") {
+        } else if (field.name === "email") {
           userData.email = field.values[0];
-        } else if (field.name === "numero_di_telefono") {
+        } else if (field.name === "phone_number") {
           userData.phone_number = field.values[0];
         } else if (field.name === "utm_source") {
           userData.utm_source = field.values[0];
@@ -421,12 +421,13 @@ cron.schedule('8,49,18 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () 
   console.log('Prendo i lead di salespark da meta');
 });
 
-getSalesparkLead();
+//getSalesparkLead();
+//calculateAndAssignLeadsEveryDay();
 
-/*cron.schedule('15,58,25,40 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () => {
+cron.schedule('15,58,25,40 8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23 * * *', () => {
   calculateAndAssignLeadsEveryDay();
   console.log('Assegno i lead di salespark');
-});*/
+});
 
 /*
 cron.schedule('47 7,8,9,10,11,12,14,15,16,17,18,19,20,21,22,23 * * *', () => {
