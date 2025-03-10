@@ -236,6 +236,8 @@ exports.getDataFromWordpress = async (req, res) => {
           res.status(200).json({ success: true });
       } else {
         console.log('Lead already exists');
+        existingLeadAss.esito = 'Da contattare';
+        await existingLeadAss.save();
         res.status(200).json({ success: true });
       }
 
